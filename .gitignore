@@ -128,3 +128,17 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+
+# phpStorm
+/.idea
+
+# docker
+/docker/mysql/db
+/docker/nginx/logs
+/docker/php/bash_history
+
+
+###> env ###
+/.env.local
+/.env.*.local
