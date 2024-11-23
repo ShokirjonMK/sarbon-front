@@ -1,0 +1,88 @@
+
+
+// -------------- theme variable -------------------------------------------
+:root {
+  --flat-border: #3c444e;
+  --flat-text: #768390;
+  --flat-h_text: #adbac7;
+  // --flat-active_text: #abb2bf;
+  --flat-active_text: #CDD9E5;
+  --flat-placeholder: #454b59;
+  --flat-blue: #116fe9;
+  --flat-light_blue: #1a73e8;
+  --flat-shadow_blue: #1e3969;
+  --flat-bg: #171b1f;
+  --flat-card: #22272e;
+  --flat-element: #2d333b;
+  // --flat-bg: #1A2226;
+  // --flat-card: #262D31;
+  // --flat-element: #33393B;
+  --menu-background: "red";
+
+}
+
+:root {
+  --blue-border: #3c444e;
+  --blue-text: #768390;
+  --blue-h_text: #adbac7;
+  --blue-active_text: #CDD9E5;
+  --blue-placeholder: #454b59;
+  --blue-blue: #116fe9;
+  --blue-light_blue: #1a73e8;
+  --blue-shadow_blue: #1e3969;
+  --blue-bg: #0E1621;
+  --blue-card: #17212B;
+  // --blue-element: #1F2936;
+  --blue-element: #242F3D;
+}
+
+:root {
+  --dark-border: #454a50;
+  --dark-text: #898e94;
+  --dark-h_text: #b8c0c7;
+  --dark-active_text: #b2b6be;
+  --dark-placeholder: #575a5f;
+  --dark-blue: #2276e4;
+  --dark-light_blue: #2276e4;
+  --dark-shadow_blue: #26406d;
+  // --dark-bg: #1f2124;
+  --dark-bg: #171717;
+  // --dark-card: #292A2D;
+  --dark-card: #1e1e1e;
+  // --dark-element: #3C4043;
+  --dark-element: #292929;
+}
+
+:root {
+  --light-border: #D0D7DE;
+  --light-text: #57606A;
+  --light-h_text: #24292F;
+  --light-active_text: #24292F;
+  --light-placeholder: #b0b6c0;
+  --light-blue: #0075FF;
+  --light-light_blue: #0075FF;
+  --light-shadow_blue: #ADD7FB;
+  // --light-bg: #ffffff;
+  // --light-card: #f4f7fa;
+  // --light-element: #e3e7eb;
+  --light-bg: #F7F7F7;
+  --light-card: #ffffff;
+  // --light-element: #f2f2f2;
+  --light-element: #f0f0f0;
+  --sarbon-main-color: #015965;
+  --sarbon-sidebar-menu: #014e58;
+
+}
+
+
+// --------------- other variables --------------------------
+
+:root {
+  --sidebar-large-width: 253px;
+  --sidebar-small-width: 80px;
+  // --sidebar-none-width: 0px;
+
+  --animation-duration: 0.25s;
+
+  --header: 75px;
+}

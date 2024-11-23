@@ -1,0 +1,35 @@
+.file_modal{
+  display: inline-block;
+  // display: block;
+  min-width: 50%;
+  max-width: 90% ;
+  margin: 0 auto;
+  border-radius: .5rem;
+}
+
+.file-box{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 400px;
+  max-width: 500px;
+  padding: 1rem 2rem;
+  margin: 1rem auto;
+  background-color: #E6F7FF;
+  border-radius: 1rem;
+
+  .file-name{
+    margin-left: 1rem;
+    font-weight: 500;
+  }
+
+  .download{
+    width: 2rem ;
+    height: 2rem;
+    border-radius: 50%;
+    background-color: #88d9ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

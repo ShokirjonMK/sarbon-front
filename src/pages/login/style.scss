@@ -1,0 +1,34 @@
+@import "../../assets/styles/theme";
+
+.login-wrapper{
+  background: url(../../assets/images/login-bg.jpg) no-repeat;
+  background-size: cover;
+}
+
+.loader-main {
+  width : 200px;
+  height: 200px;
+  border: 8px dotted;
+  border-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  animation: rotation 2.5s linear infinite;
+}
+.loader-main > img {
+  display: block;
+  animation: no-spin 2.5s linear infinite;
+}
+
+@keyframes no-spin {
+  0% {
+    transform: rotate(360deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes rotation {
+  0% { transform: rotate(0deg) }
+  100% { transform: rotate(360deg) }
+}

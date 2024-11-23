@@ -1,0 +1,42 @@
+.title-vertical{
+    // text-align: center;
+    transform: rotate(180deg);
+    /* Safari */
+    -webkit-transform: rotate(180deg);
+
+    /* Firefox */
+    -moz-transform: rotate(180deg);
+
+    /* IE */
+    -ms-transform: rotate(180deg);
+
+    /* Opera */
+    -o-transform: rotate(180deg);
+
+    writing-mode: vertical-lr;
+    text-orientation: mixed;
+}
+
+.time-table-box{
+    &:hover .time-table-button{
+        // display: inline-block;
+        opacity: 1;
+    }
+    .time-table-button{
+        // display: none;
+        opacity: 0;
+    }
+}
+
+
+
+.time-table-list{
+    tbody {
+        .ant-table-row:nth-child(9n+1){
+            border-bottom: 3px solid rgb(63, 63, 63) !important;
+            td{
+                border-bottom: 3px solid rgb(83, 83, 83) !important;
+            }
+        }
+    }
+}

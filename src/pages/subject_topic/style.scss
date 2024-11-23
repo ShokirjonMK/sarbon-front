@@ -1,0 +1,9 @@
+.my-row-class:hover p{
+  color: blue;
+  cursor: pointer;
+}
+
+.my-row-class:hover .actions>span{
+  background-color: white;
+  border-radius: 50%;
+}

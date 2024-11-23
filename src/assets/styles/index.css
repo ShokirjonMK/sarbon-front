@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.card-box-shadow{
+  border-radius: 16px;
+  box-shadow: 0px 0px 50px 0px rgba(7, 21, 38, 0.06);
+}
+
+@layer components {
+  .content-card {
+    @apply p-6 m-5 bg-white rounded-2xl card-box-shadow;
+  }
+}
+
+
+body {
+  margin: 0;
+  font-family: "Outfit", sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+*{
+  margin: 0;
+}

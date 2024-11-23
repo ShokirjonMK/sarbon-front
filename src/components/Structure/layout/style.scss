@@ -1,0 +1,91 @@
+/** @format */
+
+@import "../../../assets/styles/theme";
+@import "../../../assets/styles/sidebar";
+
+.layout {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100vh;
+  // background-color: $bg;
+  // color: $text;
+  overflow: hidden;
+  // text-align: center;
+
+
+  .content {
+    position: relative;
+    width: calc(100vw - $sidebar);
+    height: calc(100vh - var(--header));
+    overflow-y: scroll;
+    margin-top: var(--header);
+    margin-left: $sidebar;
+    transition: var(--animation-duration) linear;
+    // background-color: #f0f0f0;
+
+    *::selection {
+      // background: #1f386a;
+      // color: #ffffff;
+      // -webkit-user-select: none; /* Safari */
+      // -ms-user-select: none; /* IE 10 and IE 11 */
+      // user-select: none; /* Standard syntax */
+
+      // -webkit-user-select: none; /* Safari */
+      // -ms-user-select: none; /* IE 10 and IE 11 */
+      // user-select: none; /* Standard syntax */
+
+    }
+  }
+
+  h1 {
+    font-size: 5rem;
+    margin: 3rem auto;
+    // color: #2089d9;
+  }
+}
+
+.no-layout {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: $bg;
+  color: $text;
+  overflow: hidden;
+  text-align: center;
+
+  *::selection {
+
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+
+  }
+
+  .content {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    transition: 0.15s linear;
+  }
+
+  h1 {
+    font-size: 5rem;
+    margin: 3rem auto;
+    color: #2089d9;
+  }
+}
+
+.extra-layout {
+  .ant-menu,
+  .ant-menu-sub,
+  .ant-menu-inline{
+    border-inline-end: none !important;
+  }
+  .ant-menu-item {
+    height: 38px;
+  }
+}

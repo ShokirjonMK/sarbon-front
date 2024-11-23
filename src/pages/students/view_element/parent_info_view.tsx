@@ -1,0 +1,104 @@
+import { Button, Form, FormInstance, Modal, Row, Table } from "antd";
+import { FC, ReactNode, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { UseMutationResult } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+import FormUIBuilder from "components/FormUIBuilder";
+import { IStudent } from "models/student";
+import { parent_form_data } from "../step_element/parent_info";
+import checkPermission from "utils/check_permission";
+import ViewInput from "components/ViewInput";
+
+interface DataType {
+  name: string;
+  value: ReactNode;
+}
+
+type ParentInfoViewPropsType = {
+  data: IStudent | undefined,
+  saveMutation: UseMutationResult<any, AxiosError<any, any>, void, unknown>,
+  form: FormInstance
+}
+
+const ParentInfoView: FC<ParentInfoViewPropsType> = ({ data, saveMutation, form }): JSX.Element => {
+
+  const { t } = useTranslation();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const tableData: DataType[] = [
+    {
+      name: t("Father F.L"),
+      value: data?.father_fio ?? "-",
+    },
+    {
+      name: t("Father number"),
+      value: data?.father_number ?? "-",
+    },
+    {
+      name: t("Father info"),
+      value: data?.father_info ?? "-",
+    },
+    {
+      name: t("Mather F.L"),
+      value: data?.mather_fio ?? "-",
+    },
+    {
+      name: t("Mather number"),
+      value: data?.mather_number ?? "-",
+    },
+    {
+      name: t("Mather info"),
+      value: data?.mather_info ?? "-",
+    },
+  ]
+
+  useEffect(() => {
+    if (saveMutation.isSuccess) setIsModalOpen(false)
+  }, [saveMutation.isSuccess])
+
+  return (
+    <div className="px-[24px] pt-[30px] pb-[10px]">
+      <div className="flex justify-between items-center mb-[12px]">
+        <p className="font-medium text-[16px]">{t("Parent information")}</p>
+        { checkPermission("student_update") ? <Button onClick={() => setIsModalOpen(true)}>{t("Edit")}</Button> : null}
+      </div>
+
+      <div className="grid grid-cols-3 gap-x-4">
+        {
+          tableData?.map((item, index) => (
+            <ViewInput
+              key={index}
+              label={item?.name} 
+              value={item?.value} 
+              placeholder={item?.name}
+            />
+          ))
+        }
+      </div>
+
+
+      {/* edit form */}
+      <Modal
+        title={t("Parent information")}
+        okText={t("Submit")}
+        cancelText={t("Cancel")}
+        width={1000}
+        open={isModalOpen}
+        onOk={() => form.submit()}
+        onCancel={() => setIsModalOpen(false)}
+      >
+        <Form
+          form={form}
+          name="basic"
+          layout="vertical"
+          onFinish={(values) => saveMutation.mutate(values)}
+        >
+          <Row gutter={[24, 0]} >
+            <FormUIBuilder data={parent_form_data} form={form} load={true} />
+          </Row>
+        </Form>
+      </Modal>
+    </div>
+  )
+}
+export default ParentInfoView;

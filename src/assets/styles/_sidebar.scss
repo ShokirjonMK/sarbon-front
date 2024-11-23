@@ -1,0 +1,23 @@
+
+@import "./variable.scss";
+
+
+// ------------- default variable ----------------------
+:root {
+  --sidebar: var(--sidebar-large-width);
+}
+
+
+// ------------ change sidebar width --------------------
+[data-sidebar="large"] {
+  --sidebar: var(--sidebar-large-width);
+}
+[data-sidebar="small"] {
+  --sidebar: var(--sidebar-small-width);
+}
+// [data-sidebar="none"] {
+//   --sidebar: var(--sidebar-none-width);
+// }
+
+
+$sidebar: var(--sidebar);

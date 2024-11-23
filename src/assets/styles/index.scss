@@ -1,0 +1,487 @@
+/** @format */
+
+@import "./theme";
+
+* {
+  box-sizing: border-box;
+}
+
+.image-upload{
+  .ant-upload-list-item{
+    padding: 0 !important;
+    width: 120px !important;
+    height: 120px !important;
+    &::before{
+      width: 100% !important;
+      height: 100% !important;
+    }
+  }
+
+  .ant-upload-select{
+    width: 120px !important;
+    height: 120px !important;
+  }
+}
+
+.input-mask{
+  height: 32px;
+  width: 100%;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #d9d9d9;
+  border-radius: 8px;
+  padding: 4px 11px;
+  &:focus-visible{
+    border-color: #0a3180;
+    border-radius: 8px;
+    padding: 4px 11px;
+    outline: none;
+  }
+}
+
+// -------------------- scroll style ---------------------
+::-webkit-scrollbar {
+  width: 0.35rem;
+  height: 0.45rem;
+  // &:hover {
+  //   width: 1rem !important;
+  // }
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: $element;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: $placeholder;
+  border-radius: 0.25rem;
+  cursor: pointer !important;
+
+  &:hover {
+    background: $text;
+  }
+}
+
+.table-none-hover{
+  tr{
+    background: unset !important;
+    &:hover{
+      background: transparent !important;
+    }
+  }
+}
+
+.suneditor{
+  .sun-editor{
+    // border: none;
+    border-radius: .5rem;
+    border-color: #ededed;
+
+    .se-resizing-bar{
+      border-radius: 0 0 .5rem .5rem;
+
+    }
+    .se-toolbar{
+      outline: none;
+      border-radius: .5rem .5rem 0 0;
+      // background-color: white;
+    }
+
+    .se-btn-module-border{
+      border: none;
+    }
+
+    .se-btn{
+      border-radius: .5rem;
+      &:enabled:hover{
+
+      }
+    }
+  }
+}
+
+// ----------------- button style ---------------------
+.e-btn {
+  font-size: 20px;
+  transition: 0.3s;
+  background-color: $element;
+  color: $text;
+  outline: none;
+  border-radius: 6px;
+  border: none;
+  border: 1px solid $element;
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  cursor: pointer;
+  &:active {
+    transition: 0.15s;
+    // background-color: #15232E;
+    border-color: $blue;
+    box-shadow: 0 0 1px 3px $shadow_blue;
+  }
+  &:focus {
+    border-color: $blue;
+  }
+
+  &:hover {
+    border-color: $blue;
+    color: $blue;
+  }
+}
+
+.ant-btn{
+  box-shadow: none !important;
+}
+.e-btn.e-btn-text{
+  color: #eff2f7;
+
+  &:focus {
+    border-color: $blue;
+  }
+  &:hover {
+    border-color: $border;
+    color: #eff2f7;
+  }
+  &:active {
+    border-color: $blue;
+    box-shadow: 0 0 1px 3px $shadow_blue;
+  }
+
+}
+
+// -------------------- input style -------------------------
+.e-input {
+  width: 320px;
+  height: 2.5rem;
+  // background-color: #212b37;
+  background-color: $card;
+  border: 1px solid $border;
+  border-radius: 6px;
+  color: $h_text;
+  padding: 0.25rem 0.5rem;
+  outline: none;
+  font-size: 18px;
+  &::placeholder {
+    color: $placeholder;
+  }
+
+  &:focus {
+    transition: 0.3s;
+    background-color: $bg;
+    border-color: $blue;
+    box-shadow: 0 0 1px 2px $shadow_blue;
+  }
+  &:hover {
+    border-color: $blue;
+  }
+
+  &[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+}
+
+
+//  -------- responsive table style start  --------
+
+.responsiveTable{
+  table{
+    border-collapse: collapse;
+  }
+}
+.responsiveTable {
+  border-collapse: collapse;
+  thead,
+  tbody,
+  tfoot,
+  tr,
+  td,
+  th {
+      border: 1px solid #eff2f7;
+  }
+
+  td,
+  th {
+      padding: 0.7rem 1rem;
+  }
+}
+
+//  -------- responsive table sm style start  --------
+
+.responsiveTableSm{
+  table{
+    border-collapse: collapse;
+  }
+}
+.responsiveTableSm {
+  border-collapse: collapse;
+  thead,
+  tbody,
+  tfoot,
+  tr,
+  td,
+  th {
+      border: 1px solid #eff2f7;
+  }
+
+  td,
+  th {
+      padding: 4px 15px;
+  }
+
+}
+
+
+.table-striped>tbody>tr:nth-of-type(odd) {
+  // background-color: #f7f7f7;
+  background-color: #f9f9f9;
+}
+
+.table-hover {
+  tr {
+      &:hover {
+          background-color: #f7f7f7 !important;
+      }
+  }
+}
+
+
+// ----------------- table action (view, edit, delete) style ------------------
+.actions{
+  min-width: 70px;
+  max-width: 170px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  color: $text;
+  gap: 10px;
+  .view{
+    font-size: 15px;
+    cursor: pointer;
+  }
+  .edit{
+    font-size: 15px;
+    cursor: pointer;
+  }
+  .delete{
+    font-size: 15px;
+    cursor: pointer;
+    color: rgb(243, 52, 52);
+  }
+}
+
+.actions_th{
+  min-width: 70px;
+  max-width: 150px;
+}
+
+.table_footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  @media (max-width: 786px) {
+      display: block;
+      text-align: center;
+      & > div:nth-child(1) {
+          margin-bottom: 10px;
+      }
+  }
+}
+
+// ------------------------ other style ---------------------------------------
+
+// border style
+.e-border {
+  border: 1px solid $border;
+}
+.e-border-blue {
+  border: 1px solid $blue;
+}
+
+.e-card {
+  border-radius: 0.5rem;
+  background-color: $card;
+  padding: 0.5rem;
+}
+.e-card-shadow {
+  // box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
+  // box-shadow: 4px 4px 50px -19px rgba(34, 60, 80, .1);
+  // border-radius: 16px;
+  -webkit-box-shadow: 0px 9px 20px rgba(46, 35, 94, 0.07);
+  box-shadow: 0px 9px 20px rgba(46, 35, 94, 0.07);
+}
+
+// background color style
+.bg {
+  background-color: $bg;
+}
+.bg-card {
+  background-color: $card ;
+}
+.bg-element {
+  background-color: $element !important;
+}
+.color-blue {
+  color: $blue;
+}
+
+//  flex
+.d-f {
+  display: flex;
+  align-items: center;
+}
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// sceleton loading
+.e-skeleton {
+  background: $card;
+  background: linear-gradient(110deg, $card 6%, $element 18%, $card 33%);
+  border-radius: 5px;
+  background-size: 200% 100%;
+  animation: 1.5s skeleton linear infinite;
+}
+@keyframes skeleton {
+  to {
+    background-position-x: -200%;
+  }
+}
+
+.hr{
+  background-color: $border;
+  border: none;
+  height: 1px;
+  outline: none;
+}
+
+
+// ------------------- antd style -------------------------------
+
+.ant-pagination{
+
+  .ant-pagination-item, .ant-select-selector, input{
+    background-color: #fff !important;
+    border-color: #d9d9d9;
+
+  }
+  .ant-pagination-item-active {
+    border-color: #0a3180;
+  }
+}
+// .ant-table-cell{
+//   padding-top: 12px !important;
+//   padding-bottom: 12px !important;
+// }
+
+.ant-drawer-content-wrapper{
+  max-width: 90% !important;
+}
+
+
+.test-list-actions-wrapper{
+
+  .test-list-actions{
+    display: none;
+  }
+  &:hover .test-list-actions{
+    display: flex;
+  }
+}
+
+.selected-text::selection {
+	background: #1f386a !important;
+	color: #fff !important;
+}
+
+
+.se-a4-sized{
+  .sun-editor {
+    width: 210mm !important;
+    min-height: 297mm !important;
+  }
+}
+
+
+.ant-table-wrapper{
+  .ant-table-tbody{
+    td, tr{
+      border-bottom: 1px dashed #ddd !important;
+    }
+  }
+  th{
+    font-size: 16px !important;
+    padding: 6px 8px !important;
+  }
+  .ant-table-row{
+    &:nth-child(odd){
+      background-color: #f9f9f9 !important;
+      td{
+        background-color: #f9f9f9 !important;
+      }
+    }
+    td{
+      font-size: 16px !important;
+      padding: 6px 8px !important;
+    }
+  }
+}
+
+.ant-input-affix-wrapper, .ant-select-selector, .ant-input-number{
+  border-style: dashed !important;
+}
+.ant-input-compact-first-item{
+  border-style: dashed !important;
+}
+
+@page {
+  size: A4;
+  margin: 0;
+}
+
+@media print {
+  // body * {
+  //   visibility: hidden;
+  // }
+  // .printable-content,
+  // .printable-content * {
+  //   visibility: visible;
+  // }
+  // .remove-on-print {
+  //   display: none !important;
+  // }
+
+  .responsiveTable{
+    table{
+      border-collapse: collapse;
+    }
+  }
+  .responsiveTable {
+    border-collapse: collapse;
+    thead,
+    tbody,
+    tfoot,
+    tr,
+    td,
+    th {
+        border: 1px solid #eff2f7;
+    }
+  
+    td,
+    th {
+        padding: 0.7rem 1rem;
+    }
+  }
+  
+
+}
