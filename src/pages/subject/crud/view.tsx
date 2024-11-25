@@ -5,6 +5,7 @@ import { StatusBadge } from "components/StatusTag";
 import useGetAllData from "hooks/useGetAllData";
 import dayjs from "dayjs";
 import useBreadCrumb from "hooks/useBreadCrumb";
+import SubjectSemestrs from "../components/subject_semestrs";
 
 interface DataType {
   name: string;
@@ -182,6 +183,7 @@ const ViewSubject: React.FC<{data: ISubject | undefined}> = ({data}): JSX.Elemen
           }
         </div>
       </div>
+      <SubjectSemestrs />
     </div>
   );
 };

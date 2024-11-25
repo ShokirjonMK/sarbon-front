@@ -27,7 +27,6 @@ const UpdateSubjectNew = ({id, setId, refetch, isOpenForm, setisOpenForm}: TypeF
 
   const {t, i18n} = useTranslation()
   const [form] = Form.useForm();
-  const queryClient = useQueryClient();
 
   const formData: TypeFormUIBuilder[] = [
     {

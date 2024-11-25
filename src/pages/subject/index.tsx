@@ -28,12 +28,12 @@ const selectData: TypeFilterSelect[] = [
     url: "kafedras",
     permission: "kafedra_index",
   },
-  {
-    name: "semestr_id",
-    label: "Semestr",
-    url: "semestrs",
-    permission: "semestr_index",
-  },
+  // {
+  //   name: "semestr_id",
+  //   label: "Semestr",
+  //   url: "semestrs",
+  //   permission: "semestr_index",
+  // },
 ];
 
 const Subjects: React.FC = (): JSX.Element => {
@@ -54,7 +54,7 @@ const Subjects: React.FC = (): JSX.Element => {
 
   const { data, isLoading, refetch } = useGetAllData<ISubject>({
     queryKey: ["subjects", urlValue.currentPage, urlValue.perPage, searchVal, urlValue.filter],
-    url: `subjects?sort=-id&expand=description,topicsCount,semestr,subjectType,language,parent,parent.eduForm,parent.semestr,kafedra,eduForm,eduSemestrExamsTypes,eduSemestrSubjectCategoryTimes${urlValue.q ? "&query=" + searchVal : ""}${urlValue.filter ? "&filter=" + JSON.stringify(urlValue.filter) : ""}`,
+    url: `subjects?sort=-id&expand=description,eduType,kafedra${urlValue.q ? "&query=" + searchVal : ""}${urlValue.filter ? "&filter=" + JSON.stringify(urlValue.filter) : ""}`,
     urlParams: { "per-page": urlValue.perPage, page: urlValue.currentPage },
     options: {
       onSuccess: (res) => {
@@ -169,56 +169,61 @@ const Subjects: React.FC = (): JSX.Element => {
             <Link
               to={`/subjects/view/${e?.id}`}
               className="text-black hover:text-[#0a3180] underline cursor-pointer max-md:text-xs"
-            >{e?.name} <span className="text-blue-900 font-bold"> - {e?.eduForm?.name}</span></Link>
-          ) : (<span className="max-md:text-xs">{e?.name} <span className="text-blue-900 font-bold"> - {e?.eduForm?.name}</span></span>),
+            >{e?.name}</Link>
+          ) : (<span className="max-md:text-xs">{e?.name}</span>),
         fixed: "left",
         width: width > 756 ? 240 : 130,
       },
-      {
-        title: t("Semestr"),
-        render: (e: any) => <span>{e?.semestr?.name}</span>,
-        width: 100,
-      },
+      // {
+      //   title: t("Semestr"),
+      //   render: (e: any) => <span>{e?.semestr?.name}</span>,
+      //   width: 100,
+      // },
       {
         title: t("Kafedra"),
         render: (e: any) => <span>{e?.kafedra?.name}</span>,
         width: 180,
       },
       {
-        title: t("Credit"),
-        render: (e: any) => <span>{e?.credit}</span>,
-        width: 90,
-      },
-      {
-        title: t("Parent"),
-        render: (e: any) => <Popover content={<div>
-          <p><span className="text-black opacity-50">{t("Semestr")}:</span>&nbsp;&nbsp;{e?.parent?.semestr?.name}</p>
-          <p><span className="text-black opacity-50">{t("Edu form")}:</span>&nbsp;&nbsp;{e?.parent?.eduForm?.name}</p>
-        </div>} title={e?.parent?.name}>
-          <span>{e?.parent?.name}</span>
-        </Popover>,
+        title: t("Edu type"),
+        render: (e: any) => <span>{e?.eduType?.name}</span>,
         width: 180,
       },
-      {
-        title: t("Subject type"),
-        render: (e: any) => <span>{e?.subjectType?.name}</span>,
-        width: 100,
-      },
-      ...subjectCategoryTime,
-      width > 756 ?
-      {
-        title: t("Mavzular soni"),
-        render: (e: any) => <p>{e?.topicsCount}</p>,
-        align: "center",
-        width: 90,
-        fixed: "right",
-      }
-      :{
-        title: t("Mavzular soni"),
-        render: (e: any) => <p>{e?.topicsCount}</p>,
-        align: "center",
-        width: 90,
-      },
+      // {
+      //   title: t("Credit"),
+      //   render: (e: any) => <span>{e?.credit}</span>,
+      //   width: 90,
+      // },
+      // {
+      //   title: t("Parent"),
+      //   render: (e: any) => <Popover content={<div>
+      //     <p><span className="text-black opacity-50">{t("Semestr")}:</span>&nbsp;&nbsp;{e?.parent?.semestr?.name}</p>
+      //     <p><span className="text-black opacity-50">{t("Edu form")}:</span>&nbsp;&nbsp;{e?.parent?.eduForm?.name}</p>
+      //   </div>} title={e?.parent?.name}>
+      //     <span>{e?.parent?.name}</span>
+      //   </Popover>,
+      //   width: 180,
+      // },
+      // {
+      //   title: t("Subject type"),
+      //   render: (e: any) => <span>{e?.subjectType?.name}</span>,
+      //   width: 100,
+      // },
+      // ...subjectCategoryTime,
+      // width > 756 ?
+      // {
+      //   title: t("Mavzular soni"),
+      //   render: (e: any) => <p>{e?.topicsCount}</p>,
+      //   align: "center",
+      //   width: 90,
+      //   fixed: "right",
+      // }
+      // :{
+      //   title: t("Mavzular soni"),
+      //   render: (e: any) => <p>{e?.topicsCount}</p>,
+      //   align: "center",
+      //   width: 90,
+      // },
       width > 756 ?
       {
         title: t("Status"),
@@ -243,7 +248,7 @@ const Subjects: React.FC = (): JSX.Element => {
           <Actions
             id={e?.id}
             url={"subjects"}
-            onClickEdit={() => navigate(`/subjects/update/${e?.id}`)}
+            onClickEdit={() => { setisOpenForm(true); setId(e?.id)}}
             onClickView={() => navigate(`/subjects/view/${e?.id}`)}
             refetch={refetch}
             viewPermission={"subject_view"}
@@ -263,7 +268,7 @@ const Subjects: React.FC = (): JSX.Element => {
             id={e?.id}
             url={"subjects"}
             // onClickEdit={() => navigate(`/subjects/update/${e?.id}`)}
-            onClickEdit={() => { setisOpenForm(true); setId(e?.id);}}
+            onClickEdit={() => { setisOpenForm(true); setId(e?.id)}}
             onClickView={() => navigate(`/subjects/view/${e?.id}`)}
             refetch={refetch}
             viewPermission={"subject_view"}
@@ -282,7 +287,7 @@ const Subjects: React.FC = (): JSX.Element => {
         <div className="d-f gap-3 justify-end mb-2" >
           <ExcelBtn onClick={exportExcel} loading={loading} />
           <CreateBtn onClick={() => { setisOpenForm(true); setId(undefined); }} permission={"subject_create"} />
-          <Link to={"/subjects/create"} style={{textDecoration:"none"}}><CreateBtn onClick={() => navigate("/subjects/create")} permission={"subject_create"}/></Link>
+          {/* <Link to={"/subjects/create"} style={{textDecoration:"none"}}><CreateBtn onClick={() => navigate("/subjects/create")} permission={"subject_create"}/></Link> */}
         </div>
         <Row gutter={[12, 12]}>
           <Col xs={24} sm={24} md={12} lg={8} xl={6}>

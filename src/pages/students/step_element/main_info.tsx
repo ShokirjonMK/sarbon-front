@@ -65,7 +65,7 @@ const StudentMainInfo: FC<{ form: FormInstance, setsaveType: Dispatch<StepType>,
       parent_name: "edu_plan_id",
       render: (e) => e?.unical_name ?? "",
       onchange(e, obj) {
-        seteduPlanAndEduSemestr({edu_semestr: obj?.activeEduSemestr.semestr?.name, edu_plan: eduPlanAndEduSemestr?.edu_plan});
+        seteduPlanAndEduSemestr({edu_semestr: obj?.activeEduSemestr?.semestr?.name, edu_plan: eduPlanAndEduSemestr?.edu_plan});
       },
       span
     },
