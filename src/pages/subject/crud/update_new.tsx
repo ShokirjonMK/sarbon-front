@@ -12,6 +12,8 @@ import { Notification } from "utils/notification";
 import { validationErrors } from "utils/validation_error";
 import { updateData } from "./request";
 import MultipleInput from "components/MultipleInput";
+import FormUIBuilder, { TypeFormUIBuilder } from "components/FormUIBuilder";
+import { ISubject } from "models/subject";
 
 type TypeFormProps = {
   id: number | undefined;
@@ -27,23 +29,49 @@ const UpdateSubjectNew = ({id, setId, refetch, isOpenForm, setisOpenForm}: TypeF
   const [form] = Form.useForm();
   const queryClient = useQueryClient();
 
+  const formData: TypeFormUIBuilder[] = [
+    {
+      name: "kafedra_id",
+      label: "Kafedra",
+      required: true,
+      type: "select",
+      url: "kafedras",
+      span: 24
+    },
+    {
+      name: "edu_type_id",
+      label: "Edu type",
+      required: true,
+      type: "select",
+      url: "edu-types",
+      filter: {status: 1},
+      span: 24
+    },
+    {
+      name: "status",
+      label: "Status",
+      type: "switch",
+      span: 24
+    },
+  ]
+
   React.useEffect(() => {
     if (!id) {
       form.resetFields()
     }
   }, [isOpenForm])
 
-  useGetOneData<IGroup>({
+  useGetOneData<ISubject>({
     queryKey: ["subjects", id],
     url: `subjects/${id}?expand=description,`,
     options: {
       onSuccess: (res) => {
         form.setFieldsValue({
-          unical_name: res?.data?.unical_name,
-          faculty_id: res?.data?.faculty_id,
-          direction_id: res?.data?.direction_id, 
-          edu_plan_id: res?.data?.edu_plan_id,
-          language_id: res?.data?.language_id
+          [`name[${i18n.language}]`]: res.data?.name,
+          [`description[${i18n.language}]`]: res.data?.description,
+          kafedra_id: res?.data?.kafedra_id,
+          edu_type_id: res.data?.edu_type_id,
+          status: res.data?.status ? true : false
         })
       },
       refetchOnWindowFocus: false,
@@ -55,7 +83,6 @@ const UpdateSubjectNew = ({id, setId, refetch, isOpenForm, setisOpenForm}: TypeF
   const { mutate, isLoading } = useMutation({
     mutationFn: (newVals) => updateData(id, newVals),
     onSuccess: async (res) => {
-      queryClient.setQueryData(["groups"], res);
       refetch();
       Notification("success", id ? "update" : "create", res?.message)
       if (id) setisOpenForm(false)
@@ -72,7 +99,7 @@ const UpdateSubjectNew = ({id, setId, refetch, isOpenForm, setisOpenForm}: TypeF
       <Drawer
       title={
         <div className="flex items-center justify-between">
-          <TitleModal>{id ? t("Update group") : t("Create group")}</TitleModal>
+          <TitleModal>{id ? t("Update subject") : t("Create subject")}</TitleModal>
           <IoClose
             onClick={() => {setisOpenForm(false); setId(undefined) }}
             className="text-[24px] cursor-pointer text-[#00000073]"
@@ -96,34 +123,33 @@ const UpdateSubjectNew = ({id, setId, refetch, isOpenForm, setisOpenForm}: TypeF
       >
         <Spin spinning={false && !!id} >
           <Row>
-            <Row gutter={[12, 12]} >
-                {!id ? <MultipleInput />
-                  : <>
-                    <Col span={24}>
-                      <Form.Item
-                        name={`name[${i18n?.language}]`}
-                        label={t("Name")}
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please input name"
-                          }
-                        ]}
-                      >
-                        <Input className='w-full' />
-                      </Form.Item>
-                    </Col>
-                    <Col span={24} >
-                      <Form.Item
-                        name={`description[${i18n?.language}]`}
-                        label={t("Description")}
-                      >
-                        <Input.TextArea rows={2} className='w-full' />
-                      </Form.Item>
-                    </Col>
-                  </>
-                }
-              </Row>'
+              {!id ? <MultipleInput />
+                : <>
+                  <Col span={24}>
+                    <Form.Item
+                      name={`name[${i18n?.language}]`}
+                      label={t("Name")}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please input name"
+                        }
+                      ]}
+                    >
+                      <Input className='w-full' />
+                    </Form.Item>
+                  </Col>
+                  <Col span={24} >
+                    <Form.Item
+                      name={`description[${i18n?.language}]`}
+                      label={t("Description")}
+                    >
+                      <Input.TextArea rows={2} className='w-full' />
+                    </Form.Item>
+                  </Col>
+                </>
+              }
+              <FormUIBuilder data={formData} form={form} load={!!Number(id)} />
           </Row>
         </Spin>
 

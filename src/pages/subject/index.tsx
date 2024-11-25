@@ -262,7 +262,8 @@ const Subjects: React.FC = (): JSX.Element => {
           <Actions
             id={e?.id}
             url={"subjects"}
-            onClickEdit={() => navigate(`/subjects/update/${e?.id}`)}
+            // onClickEdit={() => navigate(`/subjects/update/${e?.id}`)}
+            onClickEdit={() => { setisOpenForm(true); setId(e?.id);}}
             onClickView={() => navigate(`/subjects/view/${e?.id}`)}
             refetch={refetch}
             viewPermission={"subject_view"}
@@ -280,6 +281,7 @@ const Subjects: React.FC = (): JSX.Element => {
       <div className="content-card" >
         <div className="d-f gap-3 justify-end mb-2" >
           <ExcelBtn onClick={exportExcel} loading={loading} />
+          <CreateBtn onClick={() => { setisOpenForm(true); setId(undefined); }} permission={"subject_create"} />
           <Link to={"/subjects/create"} style={{textDecoration:"none"}}><CreateBtn onClick={() => navigate("/subjects/create")} permission={"subject_create"}/></Link>
         </div>
         <Row gutter={[12, 12]}>
@@ -313,7 +315,7 @@ const Subjects: React.FC = (): JSX.Element => {
 
 
         <UpdateSubjectNew
-          id={1}
+          id={id}
           isOpenForm={isOpenForm}
           setisOpenForm={setisOpenForm}
           setId={setId}

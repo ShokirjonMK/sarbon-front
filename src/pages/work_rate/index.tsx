@@ -49,10 +49,10 @@ const WorkRate: React.FC = (): JSX.Element => {
         search={true}
         isMain={false}
         permissions={{
-          view_: "work-rate_view_",
-          delete_: "work-rate_delete_",
-          update_: "work-rate_update_",
-          create_: "work-rate_create_",
+          view_: "work-rate_view",
+          delete_: "work-rate_delete",
+          update_: "work-rate_update",
+          create_: "work-rate_create",
         }}
         formUIData={formData}
       />
