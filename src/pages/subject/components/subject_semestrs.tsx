@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { Button, Drawer, Form, Input, Row, Spin } from "antd";
+import { Button, Drawer, Form, Input, Row, Spin, Tag } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
 import { AxiosError } from "axios";
 import Actions from "components/Actions";
@@ -44,6 +44,7 @@ const formData: TypeFormUIBuilder[] = [
     url: "edu-years",
     type: "select",
     filter: {status: "all"},
+    render: (e) => <div>{e?.name}{ e?.status ? <Tag color="success" className="ml-2" >Active</Tag> : null}</div>,
     span
   },
   {

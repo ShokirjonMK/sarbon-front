@@ -5,13 +5,11 @@ import { AxiosError } from "axios";
 import { validationErrors } from "utils/validation_error";
 import { Notification } from "utils/notification";
 import useGetOneData from "hooks/useGetOneData";
-import HeaderExtraLayout from "components/HeaderPage/headerExtraLayout";
 import { useTranslation } from "react-i18next";
 import useUrlQueryParams from "hooks/useUrlQueryParams";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from 'react'
 import dayjs from "dayjs";
-import { _generateUserAccess, generateTeacherAccess } from "utils/generate_access";
 import TeacherMainInfo from "../step_element/main_info";
 import TeacherPassportInfo from "../step_element/passport_info";
 import TeacherAddressInfo from "../step_element/address_info";
@@ -56,8 +54,6 @@ const UpdateTeacher = () => {
   const navigate = useNavigate();
   const [saveType, setsaveType] = useState<StepType>()
   const { user_id } = useParams();
-  const [userAccessdata, setUserAccessData] = useState<any>()
-  const [teacherAccessdata, setTeacherAccessData] = useState<any>()
 
   const { data } = useGetOneData({
     queryKey: ["users", user_id],
@@ -95,12 +91,6 @@ const UpdateTeacher = () => {
           partiya_id: res?.data?.profile?.partiya_id,
           user_access: res?.data?.userAccess,
         })
-        if (Array.isArray(res?.data?.userAccess)) {
-          setUserAccessData(_generateUserAccess(res?.data?.userAccess));
-        }
-        if (Array.isArray(res?.data?.teacherAccess)) {
-          setTeacherAccessData(generateTeacherAccess(res?.data?.teacherAccess));
-        }
       },
       refetchOnWindowFocus: false,
       retry: 0,
@@ -190,7 +180,7 @@ const UpdateTeacher = () => {
                   : urlValue?.filter_like["user-block"] === "address-info" ?
                     <TeacherAddressInfo form={form} setsaveType={setsaveType} />
                     : urlValue?.filter_like["user-block"] === "job-info" ?
-                      <TeacherProfessionInfo form={form} setsaveType={setsaveType} userAccessdata={userAccessdata} teacherAccessdata={teacherAccessdata} /> : ""
+                      <TeacherProfessionInfo form={form} setsaveType={setsaveType} roles={data?.data?.role} /> : ""
             }
           </Form>
         </div>
