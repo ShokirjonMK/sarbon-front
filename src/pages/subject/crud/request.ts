@@ -43,7 +43,7 @@ export const updateSubjectSemestr = async (
     }
   }
 
-  const _url = id ? `/subjects/${id}` : "/subjects";
+  const _url = id ? `/subject-semestrs/${id}` : "/subject-semestrs";
   const response = await instance({
     url: _url,
     method: id ? "PUT" : "POST",

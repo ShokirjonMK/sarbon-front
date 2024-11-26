@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { Button, Divider, Drawer, Form, Row, Spin } from "antd";
+import { Button, Drawer, Form, Row, Spin } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
 import { AxiosError } from "axios";
 import Actions from "components/Actions";
@@ -9,99 +9,94 @@ import { globalConstants } from "config/constants";
 import useGetAllData from "hooks/useGetAllData";
 import useGetData from "hooks/useGetData";
 import useUrlQueryParams from "hooks/useUrlQueryParams";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { Notification } from "utils/notification";
 import { number_order } from "utils/number_orders";
 import { validationErrors } from "utils/validation_error";
 import { updateSubjectSemestr } from "../crud/request";
+import CustomPagination from "components/Pagination";
+import checkPermission from "utils/check_permission";
 
 const span = 24;
 
-export const edu_form_data: TypeFormUIBuilder[] = [
+const formData: TypeFormUIBuilder[] = [
   {
-    name: "faculty_id",
-    label: "Faculty",
-    type: "select",
+    name: "edu_year_id",
+    label: "Edu year",
     required: true,
-    url: "faculties",
-    child_names: ["direction_id", "edu_plan_id", "group_id"],
+    url: "edu-years",
+    type: "select",
+    filter: {status: "all"},
     span
   },
   {
-    name: "direction_id",
-    label: "Direction",
-    type: "select",
+    name: "edu_form_id",
+    label: "Edu form",
     required: true,
-    url: "directions",
-    parent_name: "faculty_id",
-    child_names:['edu_plan_id'],
+    type: "select",
+    url: "edu-forms",
     span
   },
   {
-    name: "edu_plan_id",
-    label: "Education plan",
-    type: "select",
+    name: "semestr_id",
+    label: "Semestr",
     required: true,
-    url: "edu-plans",
-    parent_name: "direction_id",
-    child_names: ["group_id"],
+    type: "select",
+    url: "semestrs",
     span
   },
   {
-    name: "group_id",
-    label: "Group",
-    type: "select",
+    name: "subject_type_id",
+    label: "Subject type",
     required: true,
-    url: "groups",
-    parent_name: "edu_plan_id",
-    render: (e) => e?.unical_name ?? "",
+    url: "subject-types",
+    type: "select",
     span
   },
-]
+  {
+    name: "credit",
+    label: "Credit",
+    required: true,
+    type: "number",
+    span
+  },
+  {
+    name: "status",
+    label: "Status",
+    type: "switch",
+    span
+  },
+];
 
 const SubjectSemestrs = () => {
 
   const { t } = useTranslation();
   const {user_id} = useParams()
+  const {id} = useParams()
   const [form] = Form.useForm();
   const [allData, setAllData] = useState<any[]>([]);
   const [open, setOpen] = useState(false);
-  const [actionType, setactionType] = useState<"update" | 'view'>();
-  const [selectedStudentGroup, setselectedStudentGroup] = useState<any>();
-  const { urlValue } = useUrlQueryParams({ currentPage: 1, perPage: 15 });
+  const [selectedSubjectSemestr, setselectedSubjectSemestr] = useState<any>();
+  const { urlValue } = useUrlQueryParams({ currentPage: 1, perPage: 15 });  
 
-  const { data, refetch: refetchStdGroup, isLoading } = useGetAllData({
-    queryKey: ["student-groups", user_id],
-    url: "student-groups",
+  const { data, refetch, isLoading } = useGetAllData({
+    queryKey: ["subject-semestrs", user_id],
+    url: "subject-semestrs",
     urlParams: { 
       "per-page": urlValue.perPage, 
       page: urlValue.currentPage, 
-      filter: JSON.stringify({student_id: user_id}),
-      expand: 'group,eduPlan,semestr,faculty,eduYear'
+      filter: JSON.stringify({subject_id: id}),
+      expand: 'eduYear,semestr,subjectType,eduForm,kafedra'
     },
     options: {
       refetchOnWindowFocus: false,
+      enabled: (!!id),
       retry: 0,
       onSuccess: (res) => {
         setAllData(res?.items);
       }
-    }
-  })
-
-  const { data: studentSemestrSubjects, isLoading: subjectsLoading } = useGetData({
-    queryKey: ["student-semestr-subjects", user_id, selectedStudentGroup?.edu_semestr_id],
-    url: "student-semestr-subjects",
-    urlParams: { 
-      "per-page": 0,
-      filter: JSON.stringify({student_id: user_id, edu_semestr_id: selectedStudentGroup?.edu_semestr_id}),
-      expand: 'eduSemestrSubject.subject,studentVedomst,studentVedomst.studentMark,semestr,studentVedomst.studentMark.examType'
-    },
-    options: {
-      refetchOnWindowFocus: false,
-      retry: 0,
-      enabled: (!!selectedStudentGroup?.edu_semestr_id && actionType === "view")
     }
   })
 
@@ -113,29 +108,33 @@ const SubjectSemestrs = () => {
       width: 45,
     },
     {
-      title: t('Group'),
-      dataIndex: 'group',
-      render: (e) => e?.unical_name
-    },
-    {
-      title: t('Faculty'),
-      dataIndex: 'faculty',
+      title: t("Kafedra"),
+      dataIndex: 'kafedra',
       render: (e) => e?.name
     },
     {
-      title: t('Edu plan'),
-      dataIndex: 'eduPlan',
+      title: t("Edu year"),
+      dataIndex: 'eduYear',
       render: (e) => e?.name
     },
     {
-      title: t('Edu semestr'),
+      title: t('Edu form'),
+      dataIndex: 'eduForm',
+      render: (e) => e?.name
+    },
+    {
+      title: t('Semestr'),
       dataIndex: 'semestr',
       render: (e) => e?.name
     },
     {
-      title: t('Edu year'),
-      dataIndex: 'eduYear',
+      title: t('subject type'),
+      dataIndex: 'subjectType',
       render: (e) => e?.name
+    },
+    {
+      title: t('Credit'),
+      dataIndex: 'credit',
     },
     {
       title: t('Status'),
@@ -149,34 +148,32 @@ const SubjectSemestrs = () => {
       align: "center",
       render: (i, e, index) => <Actions
         id={e?.id}
-        url={'student-groups'}
-        refetch={refetchStdGroup}
+        url={'subject-semestrs'}
+        refetch={refetch}
         onClickEdit={() => {
           setOpen(true);
-          setactionType("update");
-          setselectedStudentGroup(e)
+          setselectedSubjectSemestr(e)
         }}
         onClickView={() => {
           setOpen(true);
-          setactionType("view")
-          setselectedStudentGroup(e)
+          setselectedSubjectSemestr(e)
         }}
-        viewPermission={'student-group_index'}
-        editPermission={index === (Number(data?.items.length) - 1) ? "student-group_update" : "_"}
-        deletePermission={index === (Number(data?.items.length) - 1) ? "student-group_delete" : "_"}
+        viewPermission={'subject-semestr_view'}
+        editPermission={"subject-semestr_update"}
+        deletePermission={"subject-semestr_delete"}
       />,
     },
   ], [data?.items]);
 
-
   const { mutate, isLoading: saveLoading } = useMutation({
-    mutationFn: (data) => updateSubjectSemestr(selectedStudentGroup?.id, data),
+    mutationFn: (data: any) => updateSubjectSemestr(selectedSubjectSemestr?.id, {...data, subject_id: id}),
     onSuccess: async (res) => {
       if (res?.status === 1) {
         Notification("success", "update", res?.message);
-        refetchStdGroup()
-        setOpen(false); 
-        setactionType(undefined)
+        refetch()
+        form.resetFields()
+        setselectedSubjectSemestr(undefined)
+        setOpen(false)
       } else {
         Notification("error", "update", res?.message);
       }
@@ -188,8 +185,25 @@ const SubjectSemestrs = () => {
     retry: 0,
   });
 
+  useEffect(() => {
+    form.setFieldsValue({
+      edu_year_id: selectedSubjectSemestr?.edu_year_id,
+      edu_form_id: selectedSubjectSemestr?.edu_form_id,
+      semestr_id: selectedSubjectSemestr?.semestr_id,
+      subject_type_id: selectedSubjectSemestr?.subject_type_id,
+      credit: selectedSubjectSemestr?.credit,
+      status: selectedSubjectSemestr?.status == 1,
+    })
+  }, [selectedSubjectSemestr, open])
+
   return (
     <div className="pt-[15px] pb-[10px]">
+      <div className="flex justify-end">
+        {
+          checkPermission("subject-semestr_create") ?
+          <Button onClick={() => {setOpen(true); form.resetFields(); setselectedSubjectSemestr(undefined)}} type="primary">Semestr qo'shish</Button> : ""
+        }
+      </div>
         <Table
           columns={columns}
           dataSource={data?.items.length ? data?.items?.sort((a, b) => a?.semestr_id-b?.semestr_id) : allData}
@@ -200,45 +214,35 @@ const SubjectSemestrs = () => {
           rowClassName="py-[12px]"
           scroll={globalConstants?.tableScroll}
         />
-        <Drawer title={actionType === "view" ? `${selectedStudentGroup?.group?.unical_name}, ${selectedStudentGroup?.semestr?.name}` : `Talaba guruhini o'zgartirish. Hozirgi guruhi: ${selectedStudentGroup?.group?.unical_name}`} onClose={() =>{ setOpen(false); setactionType(undefined)}} open={open} width={500}>
-          <Spin spinning={actionType === "view" ? subjectsLoading : false} >
-              {
-                actionType === "update" ? 
-                <Form
-                  form={form}
-                  name="basic"
-                  layout="vertical"
-                  onFinish={(values) => mutate(values)}
-                  >
-                    <Row gutter={[24, 0]} >
-                      <FormUIBuilder data={edu_form_data} form={form} load={false} />
-                    </Row>
-                    <div className="flex justify-end">
-                      <Button type="primary" htmlType="submit" loading={saveLoading}>{t("Save")}</Button>
-                    </div>
-                </Form>
-                : <div>
-                  {
-                    studentSemestrSubjects?.items?.map((subject: any, index: number) => (
-                      <div key={index} className="bg-slate-50 rounded-lg mb-4 p-2" style={{border: '2px solid #f0f0f0'}} >
-                          <h4 className="text-[#595959]">{subject?.eduSemestrSubject?.subject?.name}</h4>
-                          {
-                            subject?.studentVedomst?.map((vedomst: any, i:number) => (
-                              <div key={vedomst?.id}>
-                                <Divider orientation="left">{vedomst?.vedomst === 1 ? "1 - shakl" : vedomst?.vedomst === 2 ? "1 - A shakl" : vedomst?.vedomst === 3 ? "1 - B shakl" : ""}</Divider>
-                                {
-                                  vedomst?.studentMark?.map((mark: any) => (
-                                    <p key={mark?.id} className="my-1" >{mark?.examType?.name} - {mark?.ball}</p>
-                                  ))
-                                }
-                              </div>
-                            ))
-                          }
-                      </div>
-                    ))
-                  }
+        {(data?._meta?.totalCount ?? 0) > 10 ? (
+          <CustomPagination
+            totalCount={data?._meta.totalCount}
+            currentPage={urlValue.currentPage}
+            perPage={urlValue.perPage}
+          />
+        ) : undefined}
+
+        <Drawer 
+          title={"Fanga semestr qo'shish"} 
+          onClose={() =>{ setOpen(false)}} 
+          open={open} 
+          width={500}
+        >
+          <Spin spinning={false} >
+            <Form
+              form={form}
+              name="basic"
+              layout="vertical"
+              initialValues={{status: true}}
+              onFinish={(values) => mutate(values)}
+              >
+                <Row gutter={[24, 0]}>
+                  <FormUIBuilder data={formData} form={form} load={!!Number(id)} />
+                </Row>
+                <div className="flex justify-end">
+                  <Button type="primary" htmlType="submit" loading={saveLoading}>{t("Save")}</Button>
                 </div>
-              }
+            </Form>
           </Spin>
         </Drawer>
     </div>
@@ -246,7 +250,8 @@ const SubjectSemestrs = () => {
 }
 export default SubjectSemestrs;
 
-// student-group_index
-// student-group_delete
-// student-group_create
-// student-group_update
+// subject-semestr_view
+// subject-semestr_index
+// subject-semestr_delete
+// subject-semestr_create
+// subject-semestr_update

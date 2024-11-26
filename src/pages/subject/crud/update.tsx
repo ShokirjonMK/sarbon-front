@@ -84,21 +84,6 @@ const UpdateSubject: React.FC = (): JSX.Element => {
       filter: {status: 1},
       span
     },
-    // {
-    //   name: "parent_id",
-    //   label: "Parent",
-    //   required: false,
-    //   type: "select",
-    //   url: "subjects",
-    //   // expand: "eduForm",
-    //   query_key: "subjects_parent",
-    //   parent_name: "semestr_id",
-    //   second_parent: "edu_form_id",
-    //   // render(e) {
-    //   //   return <>{e?.name} <span className="text-blue-900 font-bold"> - {e?.eduForm?.name}</span></>
-    //   // },
-    //   span
-    // },
     {
       name: "subject_type_id",
       label: "Subject type",

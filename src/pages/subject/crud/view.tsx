@@ -6,6 +6,7 @@ import useGetAllData from "hooks/useGetAllData";
 import dayjs from "dayjs";
 import useBreadCrumb from "hooks/useBreadCrumb";
 import SubjectSemestrs from "../components/subject_semestrs";
+import checkPermission from "utils/check_permission";
 
 interface DataType {
   name: string;
@@ -183,7 +184,10 @@ const ViewSubject: React.FC<{data: ISubject | undefined}> = ({data}): JSX.Elemen
           }
         </div>
       </div>
-      <SubjectSemestrs />
+      {
+        checkPermission("subject-semestr_index") ?
+          <SubjectSemestrs /> : ""
+      }
     </div>
   );
 };
