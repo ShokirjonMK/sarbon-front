@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { Button, Drawer, Form, Row, Spin } from "antd";
+import { Button, Drawer, Form, Input, Row, Spin } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
 import { AxiosError } from "axios";
 import Actions from "components/Actions";
@@ -22,6 +22,21 @@ import checkPermission from "utils/check_permission";
 const span = 24;
 
 const formData: TypeFormUIBuilder[] = [
+  // {
+  //   name: "name",
+  //   label: "Name",
+  //   required: true,
+  //   type: "input",
+  //   span
+  // },
+  {
+    name: "description",
+    label: "Description",
+    required: true,
+    type: "textarea",
+    row: 3,
+    span
+  },
   {
     name: "edu_year_id",
     label: "Edu year",
@@ -108,6 +123,10 @@ const SubjectSemestrs = () => {
       width: 45,
     },
     {
+      title: t("Name"),
+      dataIndex: 'name',
+    },
+    {
       title: t("Kafedra"),
       dataIndex: 'kafedra',
       render: (e) => e?.name
@@ -187,6 +206,8 @@ const SubjectSemestrs = () => {
 
   useEffect(() => {
     form.setFieldsValue({
+      name: selectedSubjectSemestr?.name,
+      description: selectedSubjectSemestr?.description,
       edu_year_id: selectedSubjectSemestr?.edu_year_id,
       edu_form_id: selectedSubjectSemestr?.edu_form_id,
       semestr_id: selectedSubjectSemestr?.semestr_id,
@@ -195,6 +216,11 @@ const SubjectSemestrs = () => {
       status: selectedSubjectSemestr?.status == 1,
     })
   }, [selectedSubjectSemestr, open])
+
+  useEffect(() => {
+    const name = form.getFieldValue("name");
+    console.log("namenamename", name);
+  }, [form])
 
   return (
     <div className="pt-[15px] pb-[10px]">
@@ -236,6 +262,19 @@ const SubjectSemestrs = () => {
               initialValues={{status: true}}
               onFinish={(values) => mutate(values)}
               >
+                <Form.Item
+                  label="Nomi"
+                  name="name"
+                  rules={[{ required: true, message: 'Nomini kiriting!' }]}
+                >
+                  <Input 
+                    onInput={(e: any) => {
+                      const capitalizedValue = e.target.value.toUpperCase();
+                      e.target.value = capitalizedValue;
+                    }}
+                    maxLength={10}
+                  />
+                </Form.Item>
                 <Row gutter={[24, 0]}>
                   <FormUIBuilder data={formData} form={form} load={!!Number(id)} />
                 </Row>
