@@ -38,7 +38,7 @@ const EduSemestrView = () => {
 
   const { data, refetch, isFetching } = useGetOneData<IEduSemestr>({
     queryKey: ['edu-semestrs', edu_semestr_id],
-    url: `edu-semestrs/${edu_semestr_id}?expand=createdBy,updatedBy,description,eduYear,eduType,eduPlan,semestr,course,eduSemestrSubjects,eduSemestrSubjects.subject,eduSemestrSubjects.subjectType`,
+    url: `edu-semestrs/${edu_semestr_id}?expand=createdBy,updatedBy,description,eduYear,eduType,eduPlan,semestr,course,eduSemestrSubjects,eduSemestrSubjects.subject,eduSemestrSubjects.subjectType,eduSemestrSubjects.eduSemestrSubjectCategoryTimes.subjectCategory,eduSemestrSubjects.eduSemestrExamsTypes.examsType`,
     options: {
       refetchOnWindowFocus: false,
       retry: 1,

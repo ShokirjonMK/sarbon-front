@@ -22,3 +22,13 @@ export async function changeEduSemestr(id: number | undefined | string, data: an
     return response.data;
 }
 
+export async function refreshEduSemestr(id: number | undefined | string) {
+
+    const formdata = new FormData();
+
+    formdata.append("edu_semestr_id", String(id))
+    
+    const response = await instance({ url: `/edu-semestr/student-subjects`, method: "POST", data: formdata });
+    return response.data;
+}
+

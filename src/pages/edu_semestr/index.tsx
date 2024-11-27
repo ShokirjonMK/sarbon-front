@@ -4,15 +4,16 @@ import useGetAllData from "hooks/useGetAllData";
 import useUrlQueryParams from "hooks/useUrlQueryParams";
 import CustomPagination from "components/Pagination";
 import { number_order } from "utils/number_orders";
-import { Switch, Table } from "antd";
+import { Spin, Switch, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Actions from "components/Actions";
 import { globalConstants } from "config/constants";
 import checkPermission from "utils/check_permission";
-import { changeEduSemestr } from "./crud/request";
+import { changeEduSemestr, refreshEduSemestr } from "./crud/request";
 import UpdateEduSemestr from "./crud/update";
 import { useMutation } from "@tanstack/react-query";
+import { HiOutlineRefresh } from "react-icons/hi";
 
 const EduSemestr = () => {
 
@@ -44,6 +45,11 @@ const EduSemestr = () => {
     onSuccess: async (res) => {
       refetch();
     },
+    retry: 0,
+  });
+
+  const { mutate: refreshMutate, isLoading: refreshLoader } = useMutation({
+    mutationFn: (edu_semestr_id: number) => refreshEduSemestr(edu_semestr_id),
     retry: 0,
   });
 
@@ -80,6 +86,11 @@ const EduSemestr = () => {
       render: (i, e) => e?.start_date?.slice(0, 10) + " - " + e?.end_date?.slice(0, 10)
     },
     {
+      title: t('Fan refresh'),
+      align: "center",
+      render: (e) => <HiOutlineRefresh onClick={() => refreshMutate(e?.id)} className="text-[22px] text-blue-600 cursor-pointer hover:-rotate-90 hover:scale-125 transition-[1000]" />
+    },
+    {
       title: t('Confirmation'),
       dataIndex: "is_checked",
       render: (i, e) => <Switch onChange={(event) => { mutate({ id: e?.id, obj: { is_checked: event } }); setselectedItem({ id: e?.id, type: "checked" }) }} loading={(muatationLoader || isFetching) && selectedItem?.id === e?.id && selectedItem?.type === 'checked'} checkedChildren="on" unCheckedChildren="Off" checked={i === 1} disabled={!checkPermission("edu-semestr_update")} />,
@@ -110,7 +121,7 @@ const EduSemestr = () => {
   ], [data?.items, muatationLoader, isFetching]);
 
   return (
-    <div>
+    <Spin spinning={isFetching || muatationLoader || refreshLoader}>
       <div>
         <h3 className="text-[16px] font-medium mb-[24px]">{t('Educational semesters')}</h3>
         <Table
@@ -133,7 +144,7 @@ const EduSemestr = () => {
         setisOpenForm={setisOpenForm}
         refetch={refetch}
       />
-    </div>
+    </Spin>
   )
 }
 

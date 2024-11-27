@@ -36,6 +36,28 @@ const EduSemestrSubject = ({ eduSemestrs, isEduSemestrFetching, eduSemestrRefetc
       dataIndex: 'credit'
     },
     {
+      title: t('Ball taqsimoti'),
+      dataIndex: 'eduSemestrExamsTypes',
+      render: (e) => <div>
+        {e?.map((i: any) => {
+          return `${i?.examsType?.name?.split(" ").map((t: string) => (
+            t[0][0]
+          )).join("")}-${i?.max_ball}`
+        }).join(" / ")}
+      </div>
+    },
+    {
+      title: t('Soat taqsimoti'),
+      dataIndex: 'eduSemestrSubjectCategoryTimes',
+      render: (e) => <div>
+        {e?.map((i: any) => {
+          return `${i?.subjectCategory?.name?.split(" ").map((t: string) => (
+            t[0][0]
+          )).join("")}-${i?.hours}`
+        }).join(" / ")}
+      </div>
+    },
+    {
       title: t('Total score'),
       dataIndex: 'max_ball'
     },
@@ -56,7 +78,8 @@ const EduSemestrSubject = ({ eduSemestrs, isEduSemestrFetching, eduSemestrRefetc
     // },
     {
       title: t('Total hour'),
-      dataIndex: 'auditory_time'
+      dataIndex: 'eduSemestrSubjectCategoryTimes',
+      render: (e) => e?.reduce((acc: number, cur: any) => acc+= cur?.hours, 0)
     },
     {
       title: t('Status'),
