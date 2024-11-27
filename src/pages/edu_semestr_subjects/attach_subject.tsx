@@ -9,10 +9,8 @@ import { ColumnsType } from "antd/es/table";
 import { useParams } from "react-router-dom";
 import { globalConstants } from "config/constants";
 import checkPermission from "utils/check_permission";
-import StatusTag from "components/StatusTag";
 import { attachSubject } from "./request";
 import { useMutation } from "@tanstack/react-query";
-import useGetOneData from "hooks/useGetOneData";
 import SearchInput from "components/SearchInput";
 import useBreadCrumb from "hooks/useBreadCrumb";
 import FilterSelect, { TypeFilterSelect } from "components/FilterSelect";
@@ -85,9 +83,8 @@ const AttachEduSemestrSubject = (): JSX.Element => {
   })
 
   const { mutate, isLoading: mutateLoading } = useMutation({
-    mutationFn: (values: { event: boolean, subject_semestr_id: any, edu_semestr_subject_id: any }) => attachSubject(values?.event, semestr_id, values?.subject_semestr_id, values?.edu_semestr_subject_id),
+    mutationFn: (values: { event: boolean, subject_semestr_id: any, edu_semestr_subject_id: any }) => attachSubject(values?.event, edu_semestr_id, values?.subject_semestr_id, values?.edu_semestr_subject_id),
     onSuccess: (res) => {
-      console.log("res", res?.data?.id);
       if(res?.status == 1) {
         if(res?.data?.id) {
           window.open(`/edu-plans/semestrs/subject/update/${res?.data?.id}`, "_blank")
@@ -168,7 +165,7 @@ const AttachEduSemestrSubject = (): JSX.Element => {
   useBreadCrumb({pageTitle: "Attach subject to edu semester", breadcrumb: [
     {name: "Home", path: '/'},
     {name: "Edu plans", path: '/edu-plans'},
-    { name: "Edu semestrs", path: `/edu-plans/semestrs/view/${edu_plan_id}/${semestr_id}` },
+    { name: "Edu semestrs", path: `/edu-plans/semestrs/view/${edu_plan_id}/${edu_semestr_id}` },
     { name: "Attach subject to edu semester", path: '/edu-plans' }
   ]})
 
