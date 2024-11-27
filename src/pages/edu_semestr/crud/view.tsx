@@ -11,6 +11,7 @@ import { StatusBadge } from "components/StatusTag";
 import EduSemestrSubject from "pages/edu_semestr_subjects";
 import UpdateEduSemestr from "./update";
 import dayjs from "dayjs";
+import useBreadCrumb from "hooks/useBreadCrumb";
 
 interface DataType {
   name: string;
@@ -149,20 +150,20 @@ const EduSemestrView = () => {
     }
   ];
 
+  const pageTitle = data?.data?.name ? data?.data?.name : t("Edu semestr view")
+
+  useBreadCrumb({pageTitle: pageTitle, breadcrumb: [
+      {name: "Home", path: '/'},
+      {name: "Edu plans", path: '/edu-plans'},
+      {name: pageTitle, path: '/edu-plans/semestrs'},
+  ]})
+
   return (
-    <div>
-      <HeaderExtraLayout
-        title={data?.data?.name ? data?.data?.name : t("Edu semestr view")}
-        isBack={true}
-        breadCrumbData={[
-          { name: "Home", path: '/' },
-          { name: "Edu plans", path: '/edu-plans' },
-          { name: data?.data?.name ? data?.data?.name : t("Edu semestr view"), path: '/edu-plans/semestrs' }
-        ]}
-        btn={checkPermission("edu-semestr_update") ? <Button onClick={() => { setisOpenForm(true); setId(Number(edu_semestr_id)) }} className="ml-3">{t("Edit")}</Button> : ""}
-      />
-      <div className="px-[24px] py-[20px]">
-        <div className="table-none-hover">
+    <div className="content-card">
+      <div className="flex justify-end mb-4">
+        {checkPermission("edu-semestr_update") ? <Button onClick={() => { setisOpenForm(true); setId(Number(edu_semestr_id)) }}>{t("Edit")}</Button> : ""}
+      </div>
+      <div className="table-none-hover">
           <Table
             columns={columns}
             bordered
@@ -171,9 +172,15 @@ const EduSemestrView = () => {
             pagination={false}
           />
         </div>
-      </div>
 
-      {checkPermission("edu-semestr-subject_view") ? <EduSemestrSubject eduSemestrs={data?.data} eduSemestrRefetch={refetch} isEduSemestrFetching={isFetching} /> : ""}
+      {
+        checkPermission("edu-semestr-subject_view") ? 
+          <EduSemestrSubject 
+            eduSemestrs={data?.data} 
+            eduSemestrRefetch={refetch} 
+            isEduSemestrFetching={isFetching} 
+          /> : ""
+      }
 
       <UpdateEduSemestr
         id={id}

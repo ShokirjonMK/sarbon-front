@@ -92,6 +92,7 @@ export interface IEduSemestr extends IBasic {
   end_date: string
   start_date: string
   status: number
+  semestr_id: number
   type: number
   eduSemestrSubjects: ISubject[]
 }

@@ -11,6 +11,7 @@ import { IEduPlan } from "models/education";
 import { StatusBadge } from "components/StatusTag";
 import DeleteData from "components/deleteData";
 import dayjs from "dayjs";
+import useBreadCrumb from "hooks/useBreadCrumb";
 
 interface DataType {
   name: string;
@@ -157,18 +158,17 @@ const EduPlanView = () => {
     }
   ];
 
+  const pageTitle = data?.data?.name ? data?.data?.name : t("Edu plan view")
+  useBreadCrumb({pageTitle: pageTitle, breadcrumb: [
+    {name: "Home", path: '/'},
+    {name: "Edu plans", path: '/edu-plans'},
+    {name: pageTitle, path: '/edu-plans'},
+  ]})
+
   return (
     <div>
-      <HeaderExtraLayout
-        title={data?.data?.name ? data?.data?.name : t("Edu plan view")}
-        isBack={true}
-        breadCrumbData={[
-          { name: "Home", path: '/' },
-          { name: "Edu plans", path: '/edu-plans' },
-          { name: data?.data?.name ? data?.data?.name : t("Edu plan view"), path: '/edu-plans' }
-        ]}
-        btn={
-          <div className="flex">
+      <div className="content-card">
+          <div className="flex justify-end mb-4">
             <DeleteData
               permission={"edu-plan_delete"}
               refetch={() => { }}
@@ -181,9 +181,6 @@ const EduPlanView = () => {
             {checkPermission("edu-plan_update") ? <Button onClick={() => navigate(`/edu-plans/update/${data?.data?.id}`)} className="ml-3">{t("Edit")}</Button> : ""}
 
           </div>
-        } 
-      />
-      <div className="content-card">
         <div className="table-none-hover">
           <Table
             columns={columns}
@@ -194,8 +191,9 @@ const EduPlanView = () => {
           />
         </div>
       </div>
-
-      {checkPermission("edu-semestr_view") ? <EduSemestr /> : ""}
+      <div className="content-card">
+        {checkPermission("edu-semestr_view") ? <EduSemestr /> : ""}
+      </div>
     </div>
   )
 }

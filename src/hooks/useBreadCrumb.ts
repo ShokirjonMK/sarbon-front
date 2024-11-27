@@ -7,7 +7,7 @@ function useBreadCrumb({pageTitle, breadcrumb}:{pageTitle: string, breadcrumb: A
 
   useEffect(() => {
     dispatch(changePage({pageTitle, breadcrumb}))
-  }, [])
+  }, [pageTitle, breadcrumb])
 }
 
 export default useBreadCrumb

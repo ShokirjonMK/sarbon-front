@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { Button, Col, Form, Row, Spin } from "antd";
-import HeaderExtraLayout from "components/HeaderPage/headerExtraLayout";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { submitEduSemestrSubject } from "./request";
@@ -13,6 +12,7 @@ import { TypeFormUIData } from "pages/common/types";
 import FormUIBuilder from "components/FormUIBuilder";
 import SubjectSillabus, { TypeSillabusData } from "pages/subject/components/sillabus";
 import { generateSubjectSillabus } from 'utils/generate_subject_sillabus';
+import useBreadCrumb from 'hooks/useBreadCrumb';
 
 const formData: TypeFormUIData[] = [
     {
@@ -29,6 +29,7 @@ const formData: TypeFormUIData[] = [
         required: true,
         type: "select",
         url: "subject-types",
+        disabled: true,
         span: 6,
       },
     {
@@ -36,6 +37,7 @@ const formData: TypeFormUIData[] = [
         label: "Kredit",
         required: true,
         type: "number",
+        disabled: true,
         span: 6,
     },
     {
@@ -69,7 +71,7 @@ const formData: TypeFormUIData[] = [
           validationErrors(form, error?.response?.data)
         },
         retry: 0,
-      });
+    });
 
     const { data, isFetching: getIsLoading } = useGetOneData({
         queryKey: ['edu-semestr-subjects', id],
@@ -82,7 +84,6 @@ const formData: TypeFormUIData[] = [
                     all_ball_yuklama: res?.data?.all_ball_yuklama,
                     subject_type_id: res?.data?.subject_type_id
                 })
-
                 setSillabusData({
                     ...generateSubjectSillabus(res?.data?.eduSemestrExamsTypes, res?.data?.eduSemestrSubjectCategoryTimes),
                     refetch: true,
@@ -91,49 +92,46 @@ const formData: TypeFormUIData[] = [
             enabled: (!!id && id != '0'),
         }
     });
+    
+    const pageTitle = data?.data?.subject?.name ? data?.data?.subject?.name : "Fan sillabuslarini kiritish";
+
+    useBreadCrumb({pageTitle: pageTitle, breadcrumb: [
+        {name: "Home", path: '/'},
+        {name: "Edu plans", path: '/edu-plans'},
+        {name: "Subjects", path: `/edu-plans/semestrs/view/0/${data?.data?.edu_semestr_id}`},
+        {name: pageTitle, path: '/edu-plans'}
+    ]})
 
     return(
         <Spin spinning={getIsLoading && id != "0"} size="small">
-            <div>
-                <HeaderExtraLayout
-                    title={data?.data?.subject?.name}
-                    isBack={true}
-                    breadCrumbData={[
-                        {name: "Home", path: '/'},
-                        {name: "Edu plans", path: '/edu-plans'},
-                        {name: "Edu semestr", path: `/edu-plans/semestrs/view/0/${data?.data?.edu_semestr_id}`},
-                        {name: data?.data?.subject?.name, path: '/edu-plans'}
-                    ]}
-                />
-                <div className="px-[24px] py-[20px]">
-                    <Form
-                        initialValues={{status: true}}
-                        form={form}
-                        layout="vertical"
-                        onFinish={(values) => mutate(
-                            id == "0" ? values :
-                            {
-                                ...values,
-                                all_ball_yuklama: data?.data?.all_ball_yuklama,
-                            })}
-                    >
-                        <Row gutter={24}>
-                            <Col xxl={16} lg={20}>
-                                <Row gutter={24}>
-                                    <FormUIBuilder data={formData} form={form} load={!!Number(id)} />
-                                </Row>
-                            </Col>
-                            <Col span={24}>
-                                <SubjectSillabus sillabusData={sillabusData} setSillabusData={setSillabusData} />
-                            </Col>
-                        </Row>
+            <div className="content-card">
+                <Form
+                    initialValues={{status: true}}
+                    form={form}
+                    layout="vertical"
+                    onFinish={(values) => mutate(
+                        id == "0" ? values :
+                        {
+                            ...values,
+                            all_ball_yuklama: data?.data?.all_ball_yuklama,
+                        })}
+                >
+                    <Row gutter={24}>
+                        <Col xxl={16} lg={20}>
+                            <Row gutter={24}>
+                                <FormUIBuilder data={formData} form={form} load={!!Number(id)} />
+                            </Row>
+                        </Col>
+                        <Col span={24}>
+                            <SubjectSillabus sillabusData={sillabusData} setSillabusData={setSillabusData} />
+                        </Col>
+                    </Row>
 
-                        <div className="flex justify-end fixed bottom-0 right-0 bg-white w-[100%] px-[24px] py-[16px] shadow-2xl">
-                            <Button htmlType="button" onClick={() => form.resetFields()}>{t("Reset")}</Button>
-                            <Button type="primary" loading={isLoading} className="ml-3" htmlType="submit">{t("Submit")}</Button>
-                        </div>
-                    </Form>
-                </div>
+                    <div className="flex justify-end fixed bottom-0 right-0 bg-white w-[100%] px-[24px] py-[16px] shadow-2xl">
+                        <Button htmlType="button" onClick={() => form.resetFields()}>{t("Reset")}</Button>
+                        <Button type="primary" loading={isLoading} className="ml-3" htmlType="submit">{t("Submit")}</Button>
+                    </div>
+                </Form>
             </div>
         </Spin>
     )

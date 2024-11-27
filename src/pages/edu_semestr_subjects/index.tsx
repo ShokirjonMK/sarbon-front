@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { Button, Switch, Table } from "antd";
+import { Button, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { globalConstants } from "config/constants";
@@ -7,11 +7,9 @@ import StatusTag from "components/StatusTag";
 import { IEduSemestr } from "models/education";
 import Actions from "components/Actions";
 import checkPermission from "utils/check_permission";
-import { useEffect, useState } from "react";
 
 const EduSemestrSubject = ({ eduSemestrs, isEduSemestrFetching, eduSemestrRefetch }: { eduSemestrs?: IEduSemestr, isEduSemestrFetching: boolean, eduSemestrRefetch: any }) => {
 
-  const [vedmostData, setvedmostData] = useState<{[name: number]: {[vedmost_id: number]: number}}>()
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { edu_semestr_id, edu_plan_id } = useParams()
@@ -81,31 +79,28 @@ const EduSemestrSubject = ({ eduSemestrs, isEduSemestrFetching, eduSemestrRefetc
         deletePermission={"edu-semestr-subject_delete"}
       />
     },
-  ]
-
+  ]  
 
   return (
-    <div className="">
-      <div className="px-[24px] py-[20px]">
-        <div className="flex justify-between mb-[24px] items-center">
-          <h3 className="text-[16px] font-medium items-center">{t("Semestr subjects")}</h3>
-          {checkPermission("edu-semestr-subject_create") ?
-            <Link to={`/edu-plans/semestrs/subject/attachment/${edu_plan_id}/${edu_semestr_id}`} >
-              <Button type="primary">{t("Create")}</Button>
-            </Link> : ""
-          }
-        </div>
-        <Table
-          columns={columns}
-          dataSource={eduSemestrs?.eduSemestrSubjects.length ? eduSemestrs?.eduSemestrSubjects : []}
-          pagination={false}
-          loading={isEduSemestrFetching}
-          size="middle"
-          className="mt-3"
-          rowClassName="py-[12px]"
-          scroll={globalConstants?.tableScroll}
-        />
+    <div className="mt-10">
+      <div className="flex justify-between mb-[24px] items-center">
+        <h3 className="text-[16px] font-medium items-center">{t("Semestr subjects")}</h3>
+        {checkPermission("edu-semestr-subject_create") ?
+          <Link to={`/edu-plans/semestrs/subject/attachment/${edu_plan_id}/${eduSemestrs?.semestr_id}/${eduSemestrs?.edu_year_id}/${eduSemestrs?.edu_form_id}/${edu_semestr_id}`} >
+            <Button type="primary">{t("Create")}</Button>
+          </Link> : ""
+        }
       </div>
+      <Table
+        columns={columns}
+        dataSource={eduSemestrs?.eduSemestrSubjects.length ? eduSemestrs?.eduSemestrSubjects : []}
+        pagination={false}
+        loading={isEduSemestrFetching}
+        size="middle"
+        className="mt-3"
+        rowClassName="py-[12px]"
+        scroll={globalConstants?.tableScroll}
+      />
     </div>
   )
 }

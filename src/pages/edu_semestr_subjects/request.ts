@@ -1,12 +1,12 @@
 import instance from "config/_axios";
 import { TypeSillabusData } from "pages/subject/components/sillabus";
 
-export async function attachSubject(event: boolean, edu_semestr_id: any, subject_id: any, edu_semestr_subject_id: any) {
+export async function attachSubject(event: boolean, edu_semestr_id: any, subject_semestr_id: any, edu_semestr_subject_id: any) {
 
     const formdata = new FormData();
 
     formdata.append("edu_semestr_id", edu_semestr_id)
-    formdata.append("subject_id", subject_id)
+    formdata.append("subject_semestr_id", subject_semestr_id)
 
     const url = event ? `/edu-semestr-subjects` : `/edu-semestr-subjects/${edu_semestr_subject_id}`
     const response = await instance({ url, method: event ? "POST" : "DELETE", data: formdata });

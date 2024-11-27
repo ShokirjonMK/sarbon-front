@@ -158,7 +158,8 @@ const SubjectSemestrs = () => {
     },
     {
       title: t('Status'),
-      render: (i, e, index) => <StatusTag status={index === (Number(data?.items.length) - 1) ? 1 : 0} />,
+      dataIndex: 'status',
+      render: (i) => <StatusTag status={i} />,
       align: "center",
     },
     {

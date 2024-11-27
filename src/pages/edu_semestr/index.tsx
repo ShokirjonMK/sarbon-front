@@ -110,8 +110,8 @@ const EduSemestr = () => {
   ], [data?.items, muatationLoader, isFetching]);
 
   return (
-    <div className="">
-      <div className="px-[24px] py-[20px]">
+    <div>
+      <div>
         <h3 className="text-[16px] font-medium mb-[24px]">{t('Educational semesters')}</h3>
         <Table
           columns={columns}

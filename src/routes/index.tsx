@@ -1094,7 +1094,7 @@ export const prived_routes: Array<TypeRoutes> = [
       },
       {
         name: "Edu semestr attachment",
-        path: "/edu-plans/semestrs/subject/attachment/:edu_plan_id/:edu_semestr_id",
+        path: "/edu-plans/semestrs/subject/attachment/:edu_plan_id/:semestr_id/:edu_year_id/:edu_form_id/:edu_semestr_id",
         component: AttachEduSemestrSubject,
         config: {
           permission: "edu-semestr-subject_update",
