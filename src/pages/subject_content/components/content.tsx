@@ -31,9 +31,6 @@ const Content: React.FC<ContentPropsType> = ({ content, click, setClick, addCont
       _click();
     }
   }, [content]);
-
-
-  console.log("content", !content?.file?.split(".")?.reverse()[0]?.includes("pdf") ? content?.description ?? "" : "");
   
   const _click = () => {
     content_ref.current.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });

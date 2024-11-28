@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from "react-i18next";
-import HeaderExtraLayout from "components/HeaderPage/headerExtraLayout";
 import AddContentBtn from './components/add_content_btn';
 import useGetAllData from 'hooks/useGetAllData';
 import { useParams } from 'react-router-dom';
@@ -13,6 +12,7 @@ import { Spin } from 'antd';
 import { useMutation } from '@tanstack/react-query';
 import { requesrData } from './request';
 import { DocumentRegular, ImageRegular, MoviesAndTvRegular, MusicNote2Regular, TextCaseTitleFilled } from '@fluentui/react-icons';
+import useBreadCrumb from 'hooks/useBreadCrumb';
 
 export type ContentType = "TEXT" | "IMAGE" | "AUDIO" | "VIDEO" | "FILE";
 
@@ -132,9 +132,17 @@ const SubjectContent: React.FC = (): JSX.Element => {
     return arr
   }, [types])
 
+  useBreadCrumb({pageTitle: "Fanni ko'rish", breadcrumb: [
+    { name: "Home", path: '/' },
+    { name: "Subjects", path: 'subjects' },
+    { name: "Subject topic", path: `subjects/view/${subject_id}?user-block=topic-info` },
+    { name: "Subject contents", path: 'subject_content' }
+  ]})
+
+
   return (
-    <div className="relative" ref={ref} >
-        <HeaderExtraLayout title={topic?.data?.name ?? t("Subject contents")} isBack
+    <div className="relative content-card" ref={ref} >
+        {/* <HeaderExtraLayout title={topic?.data?.name ?? t("Subject contents")} isBack
           breadCrumbData={[
             { name: "Home", path: '/' },
             { name: "Subjects", path: 'subjects' },
@@ -142,7 +150,7 @@ const SubjectContent: React.FC = (): JSX.Element => {
             { name: "Subject contents", path: 'subject_content' }
           ]}
           className='sticky- top-0 w-full z-20'
-        />
+        /> */}
       <div className="head-content bg sticky top-[-1px] z-50" ref={head_ref} >
           <AddContentBtn types={types} addContent={addContent} order={1} visible={true} notDivider={true} />
       </div>

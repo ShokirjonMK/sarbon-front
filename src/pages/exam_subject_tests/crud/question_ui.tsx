@@ -54,13 +54,13 @@ const FormExamTestQuestionUI = ({ data, refetch, setisEdit, isEdit, isSubject }:
   const { t } = useTranslation();
   const navigate = useNavigate()
   const [form] = Form.useForm();
-  const { subject_id, test_id } = useParams()
+  const { subject_semestr_id, test_id } = useParams()
   const [fileList, setFileList] = useState<UploadFile[]>([] as UploadFile[]);
   const [user_id, setuser_id] = useState<number>()
 
   useEffect(() => {
     form.setFieldsValue({
-      "subject_id": data?.subject_id,
+      "subject_semestr_id": data?.subject_semestr_id,
       "language_id": data?.language_id,
       "exam_type_id": data?.exam_type_id
     })
@@ -85,11 +85,11 @@ const FormExamTestQuestionUI = ({ data, refetch, setisEdit, isEdit, isSubject }:
   });
 
   const { mutate, isLoading } = useMutation({
-    mutationFn: (newVals: any) => submitExamTest(test_id, {subject_id, ...newVals, file: fileList[0]?.originFileObj, type: 1 }),
+    mutationFn: (newVals: any) => submitExamTest(test_id, {subject_semestr_id, ...newVals, file: fileList[0]?.originFileObj, type: 1 }),
     onSuccess: async (res) => {
       setisEdit(false)
       Notification("success", test_id ? "update" : "create", res?.message)
-      isSubject ? navigate(`/tests/view/${res?.data?.id}`) : navigate(`/subject/${subject_id}/exam-tests/update/${res?.data?.id}`)
+      isSubject ? navigate(`/tests/view/${res?.data?.id}`) : navigate(`/subject/${subject_semestr_id}/exam-tests/update/${res?.data?.id}`)
       if (test_id) {
         refetch()
       }

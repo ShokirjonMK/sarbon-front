@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import Table, { ColumnsType } from 'antd/es/table'
-import HeaderExtraLayout from 'components/HeaderPage/headerExtraLayout'
 import useGetAllData from 'hooks/useGetAllData'
 import useUrlQueryParams from 'hooks/useUrlQueryParams'
 import { useTranslation } from 'react-i18next'
@@ -9,6 +8,7 @@ import { number_order } from 'utils/number_orders'
 import { Tag } from 'antd'
 import useGetOneData from 'hooks/useGetOneData'
 import CustomPagination from 'components/Pagination'
+import useBreadCrumb from 'hooks/useBreadCrumb'
 
 const ContentTeachers : React.FC = () : JSX.Element => {
   const {t} = useTranslation()
@@ -96,23 +96,16 @@ const ContentTeachers : React.FC = () : JSX.Element => {
     },
   ];
 
+  useBreadCrumb({pageTitle: "Fanni ko'rish", breadcrumb: [
+    { name: "Home", path: '/' },
+    { name: "Subject", path: 'subjects' },
+    // { name: "Subject topics", path: 'subjects/view/517?user-block=topic-info' },
+    { name: "Subject topic teachers", path: 'subjects' }
+  ]})
+
   return(
     <>
-      <HeaderExtraLayout title={topics?.data?.name}
-        breadCrumbData={[
-          { name: "Home", path: '/' },
-          { name: "Subject", path: 'subjects' },
-          { name: "Subject topics", path: 'subjects/view/517?user-block=topic-info' },
-          { name: "Subject topic teachers", path: 'subjects' }
-        ]}
-        btn={
-          <div className='flex'>
-            {/* <CreateBtn onClick={() => { navigate("/exam-controls/create") }} permission={"exam-control_create"} /> */}
-          </div>
-        }
-        isBack={true}
-      />
-      <div className='py-3 px-6'>
+      <div className='content-card'>
         <Table
           columns={columns}
           dataSource={data?.items.length ? data?.items : allData}

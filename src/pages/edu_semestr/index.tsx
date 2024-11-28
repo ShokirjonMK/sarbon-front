@@ -88,7 +88,11 @@ const EduSemestr = () => {
     {
       title: t('Fan refresh'),
       align: "center",
-      render: (e) => <HiOutlineRefresh onClick={() => refreshMutate(e?.id)} className="text-[22px] text-blue-600 cursor-pointer hover:-rotate-90 hover:scale-125 transition-[1000]" />
+      render: (e) => checkPermission("edu-semestr_student-subject-merge") ? 
+                    <HiOutlineRefresh 
+                      onClick={() => refreshMutate(e?.id)} 
+                      className="text-[22px] text-blue-600 cursor-pointer hover:-rotate-90 hover:scale-125 transition-[1000]" 
+                    /> : <span></span>
     },
     {
       title: t('Confirmation'),

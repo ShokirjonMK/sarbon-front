@@ -1,7 +1,6 @@
 import { Button, Spin } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import HeaderExtraLayout from 'components/HeaderPage/headerExtraLayout';
 import { useState } from 'react';
 import useGetOneData from 'hooks/useGetOneData';
 import FormTestQuestionUI from './question_ui';
@@ -10,11 +9,12 @@ import FormExamTestOptionUI from './option_ui';
 import useGetAllData from 'hooks/useGetAllData';
 import checkPermission from 'utils/check_permission';
 import DeleteData from 'components/deleteData';
+import useBreadCrumb from 'hooks/useBreadCrumb';
 
 const UpdateSubjectExamTest = () => {
 
   const { t } = useTranslation();
-  const { subject_id, test_id } = useParams()
+  const { subject_semestr_id, test_id } = useParams()
   const [options, setOptions] = useState<Array<any>>([]);
   const [isEdit, setisEdit] = useState<boolean>(test_id == "0");
 
@@ -26,7 +26,7 @@ const UpdateSubjectExamTest = () => {
       retry: 0,
       enabled: (test_id != "0"),
     },
-  });
+  });  
 
   const { data: optionsData, refetch: refetchOptions } = useGetAllData<ITestOption>({
     queryKey: ["options", test_id],
@@ -42,33 +42,28 @@ const UpdateSubjectExamTest = () => {
     },
   });
 
+  useBreadCrumb({pageTitle: test_id == "0" ? "Test qo'shish" : "O'zgatirish", breadcrumb: [
+    { name: "Home", path: "/" },
+    { name: `Subjects`, path: `/subjects` },
+    { name: `Exam tests`, path: `/subjects/view/${subject_semestr_id}?user-block=exam-tests` },
+    { name: test_id == "0" ? "Test qo'shish" : "O'zgatirish", path: `/subject/tests/${subject_semestr_id}/${test_id}` },
+  ]})
+
   return (
     <Spin spinning={isLoading && test_id != "0"} size="small">
-      <div>
-        <HeaderExtraLayout
-          title={test_id == "0" ? "Test qo'shish" : "O'zgatirish"}
-          isBack={`subjects/view/${subject_id}?user-block=exam-tests`}
-          breadCrumbData={[
-            { name: "Home", path: "/" },
-            { name: `Subjects`, path: `/subjects` },
-            { name: `Exam tests`, path: `/subjects/view/${subject_id}?user-block=exam-tests` },
-            { name: test_id == "0" ? "Test qo'shish" : "O'zgatirish", path: `/subject/tests/${subject_id}/${test_id}` },
-          ]}
-          btn={
-            <div className="flex items-center">
-              <DeleteData
-                permission={"test_delete"}
-                refetch={refetch}
-                url={"tests"}
-                id={Number(test_id)}
-                navigateUrl={`/subject/tests/${subject_id}/${test_id}`}
-              >
-                <Button type="primary" className="mr-2" danger ghost>{t("Delete")}</Button>
-              </DeleteData>
-              {checkPermission("test_update") ? <Button onClick={() => setisEdit(true)} htmlType="submit" >{t("Edit")}</Button> : ""}
-            </div>
-          }
-        />
+      <div className='content-card'>
+        <div className="flex items-center justify-end mb-3">
+          <DeleteData
+            permission={"test_delete"}
+            refetch={refetch}
+            url={"tests"}
+            id={Number(test_id)}
+            navigateUrl={`/subject/tests/${subject_semestr_id}/${test_id}`}
+          >
+            <Button type="primary" className="mr-2" danger ghost>{t("Delete")}</Button>
+          </DeleteData>
+          {checkPermission("test_update") ? <Button onClick={() => setisEdit(true)} htmlType="submit" >{t("Edit")}</Button> : ""}
+        </div>
         <div className="pb-[24px]">
           <FormTestQuestionUI data={data?.data} refetch={refetch} isEdit={isEdit} setisEdit={setisEdit} />
           {

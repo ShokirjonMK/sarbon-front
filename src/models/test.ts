@@ -14,6 +14,7 @@ export interface ITestQuestion {
     updated_by: number,
     exam_type_id: number | null
     subject_id: number | null
+    subject_semestr_id: number | null
     language_id: number | null
     examType?: IExamType
     subject?: ISubject

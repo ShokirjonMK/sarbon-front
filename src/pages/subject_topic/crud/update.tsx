@@ -1,6 +1,6 @@
 import React from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Button, Drawer, Form, Switch } from 'antd';
+import { Button, Drawer, Form } from 'antd';
 import { TitleModal } from 'components/Titles';
 import { globalConstants } from 'config/constants';
 import useGetOneData from 'hooks/useGetOneData';
@@ -11,9 +11,9 @@ import { submitData } from './request';
 import { Notification } from 'utils/notification';
 import { AxiosError } from 'axios';
 import { validationErrors } from 'utils/validation_error';
-import TopicFormUI from './form_ui';
 import { useParams } from 'react-router-dom';
-import dayjs from 'dayjs';
+import { TypeFormUIData } from 'pages/common/types';
+import FormUIBuilder from 'components/FormUIBuilder';
 
 type TypeFormProps = {
   topic_id: number | undefined;
@@ -23,18 +23,56 @@ type TypeFormProps = {
   setId: React.Dispatch<React.SetStateAction<number | undefined>>;
 };
 
-const formatTime = (seconds: number): string => {
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-  const remainingSeconds = seconds % 60;
 
-  const formattedHours = hours.toString().padStart(2, '0');
-  const formattedMinutes = minutes.toString().padStart(2, '0');
-  const formattedSeconds = remainingSeconds.toString().padStart(2, '0');
-  return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
-};
+const formData: TypeFormUIData[] = [
+  {
+    name: "name",
+    label: "Name",
+    required: true,
+    type: "input",
+    maxLength: 200,
+    span: 24,
+  },
+  {
+    name: "hours",
+    label: "Hour",
+    required: true,
+    type: "number",
+    max: 10,
+    span: 24,
+  },
+  {
+    name: "lang_id",
+    label: "Ta'lim tili",
+    render: (e) => e?.name ?? "",
+    required: true,
+    type: "select",
+    expand_name:"lang",
+    url: "langs",
+    span: 24,
+  },
+  {
+    name: "subject_category_id",
+    label: "Occupation category",
+    expand_name: "subjectCategory",
+    render: (e) => e?.name ?? "",
+    expand: "subjectCategory",
+    url: "subject-categories",
+    type: "select",
+    required: true,
+    span: 24,
+  },
+  {
+    name: "description",
+    label: "Description",
+    type: "textarea",
+    maxLength: 500,
+    span: 24,
+  },
+];
 
-const UpdateTopic = ({topic_id,setId,refetch,isOpenForm,setisOpenForm}: TypeFormProps) => {
+const UpdateTopic = ({topic_id, setId,refetch,isOpenForm,setisOpenForm}: TypeFormProps) => {
+
   const { t } = useTranslation();
   const {id} = useParams();
   const [form] = Form.useForm();
@@ -58,14 +96,8 @@ const UpdateTopic = ({topic_id,setId,refetch,isOpenForm,setisOpenForm}: TypeForm
           teacher_access_id: res?.data?.teacher_access_id,
           subject_id: res?.data?.subject_id,
           lang_id: res?.data?.lang_id,
-          subject_category_id: res?.data?.subject_category_id,
+          subject_category_id: res?.data?.subjectCategory?.id,
           parent_id: res?.data?.parent_id,
-          status: res?.data?.status === 1, 
-          allotted_time: dayjs(formatTime(Number(res?.data?.allotted_time)), 'HH:mm:ss') ,
-          duration_reading_time: dayjs(formatTime(Number(res?.data?.duration_reading_time)), 'HH:mm:ss'),
-          attempts_count: res?.data?.attempts_count,
-          test_count: res?.data?.test_count,
-          min_percentage: res?.data?.min_percentage
         });
       },
       refetchOnWindowFocus: false,
@@ -73,7 +105,6 @@ const UpdateTopic = ({topic_id,setId,refetch,isOpenForm,setisOpenForm}: TypeForm
       enabled: isOpenForm && !!topic_id,
     },
   });
-
 
   const { mutate, isLoading } = useMutation({
     mutationFn: (newVals) => submitData(topic_id, newVals, Number(id)),
@@ -125,14 +156,8 @@ const UpdateTopic = ({topic_id,setId,refetch,isOpenForm,setisOpenForm}: TypeForm
         autoComplete="off"
         onFinish={(values) => mutate(values)}
       >
-          <TopicFormUI id={id} form={form} subject_category_id={data?.data?.subject_category_id} />
+          <FormUIBuilder data={formData} form={form} load={id ? true : false} />
           
-          <Form.Item name="status" valuePropName="checked" >
-            <Switch
-              checkedChildren="Active"
-              unCheckedChildren="InActive"
-            />
-          </Form.Item>
           <div className="flex">
             <Button htmlType="button" danger onClick={() => form.resetFields()}>{t('Reset')}</Button>
             <Button className='mx-3' onClick={() => setisOpenForm(false)}>{t('Cancel')}</Button>

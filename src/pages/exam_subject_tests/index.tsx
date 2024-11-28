@@ -42,7 +42,7 @@ const SubjectExamTest: React.FC = (): JSX.Element => {
 
   const { data, isLoading, refetch } = useGetAllData<ITestQuestion>({
     queryKey: ["tests", id, urlValue.perPage, urlValue.currentPage],
-    urlParams: { "per-page": urlValue.perPage, page: urlValue.currentPage, filter: { subject_id: id, type: 2 } },
+    urlParams: { "per-page": urlValue.perPage, page: urlValue.currentPage, filter: { subject_semestr_id: id, type: 2 } },
     url: `tests?sort=-id&expand=options`,
     options: {
       refetchOnWindowFocus: false,

@@ -2,7 +2,7 @@ import { message } from "antd";
 import instance from "config/_axios";
 import dayjs from "dayjs";
 
-export async function submitData(id: number | undefined, data: any, subject_id:number) {
+export async function submitData(id: number | undefined, data: any, subject_semestr_id:number) {
     const formdata = new FormData();
         for (const key in data) {
             const totalHour = Number(dayjs(data[key]).format("HH"))*3600+Number(dayjs(data[key]).format("mm"))*60+Number(dayjs(data[key]).format("ss"))
@@ -17,8 +17,8 @@ export async function submitData(id: number | undefined, data: any, subject_id:n
             }
         }
 
-        if(subject_id){
-            formdata.append("subject_id", subject_id.toString())
+        if(subject_semestr_id){
+            formdata.append("subject_semestr_id", subject_semestr_id.toString())
         }
 
 

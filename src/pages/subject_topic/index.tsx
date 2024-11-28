@@ -67,9 +67,10 @@ const Row = ({ children, ...props }: RowProps) => {
 };
 
 const SubjectTopic: React.FC = (): JSX.Element => {
+  
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { id: subject_id, teacher_id } = useParams()
+  const { id: subject_semestr_id, teacher_id } = useParams()
   const { urlValue, writeToUrl } = useUrlQueryParams({
     currentPage: 1,
     perPage: 10,
@@ -78,19 +79,15 @@ const SubjectTopic: React.FC = (): JSX.Element => {
   const [searchVal, setSearchVal] = useState<string>("");
   const [isOpenForm, setisOpenForm] = useState<boolean>(false);
   const [id, setId] = useState<number | undefined>();
-  const [visibleView, setVisibleView] = useState<boolean>(false);
   const [allData, setallData] = useState<ISubjectTopic[]>([]);
   const [lang_id, setLang] = useState<string>("");
   const [category, setCategory] = useState<string>("");
 
-  const user = useAppSelector(s => s.auth.user);
-
-  console.log("user", user);
-  
+  const user = useAppSelector(s => s.auth.user);  
 
   const { data, refetch, isFetching } = useGetAllData<ISubjectTopic>({
     queryKey: ["subject-topics", urlValue.perPage, urlValue.currentPage, searchVal, lang_id, category],
-    url: `subject-topics?sort=order&expand=description,teacherAccess,subject,subjectCategory,lang&filter={"subject_id":${subject_id}}`,
+    url: `subject-topics?sort=order&expand=description,teacherAccess,subject,subjectCategory,lang&filter={"subject_semestr_id":${subject_semestr_id}}`,
     urlParams: { "per-page": urlValue.perPage, page: urlValue.currentPage, query: searchVal, lang_id, category, },
     options: {
       refetchOnWindowFocus: false,
@@ -103,8 +100,8 @@ const SubjectTopic: React.FC = (): JSX.Element => {
   });
 
   const { data: langName } = useGetData<ISubjectTopic>({
-    queryKey: ["languages"],
-    url: "languages",
+    queryKey: ["langs"],
+    url: "langs",
     options: { staleTime: Infinity, refetchOnWindowFocus: false, retry: 0 },
   });
 
@@ -148,7 +145,7 @@ const SubjectTopic: React.FC = (): JSX.Element => {
           title: <SearchInput duration={globalConstants.debounsDuration} setSearchVal={setSearchVal} />,
           render: (i, e) => checkPermission("subject-content_index") ? (
             <Link
-              to={`/subjects/${subject_id}/topic-view/${e?.id}`}
+              to={`/subjects/${subject_semestr_id}/topic-view/${e?.id}`}
               className="text-black hover:text-[#0a3180] underline cursor-pointer"
             >{e?.name} </Link>
           ) : (<span>{e?.name}</span>),
@@ -223,10 +220,10 @@ const SubjectTopic: React.FC = (): JSX.Element => {
       children: [
         {
           title: <span></span>,
-          dataIndex: 'subject_id',
+          dataIndex: 'subject_semestr_id',
           render: (i, e) => {
             if (e?.subject_category_id == globalConstants.lectureIdForTimeTable)
-              return checkPermission("test_index") ? <Link to={`/subject/tests/${subject_id}/${e?.id}`}>Test</Link> : null
+              return checkPermission("test_index") ? <Link to={`/subject/tests/${subject_semestr_id}/${e?.id}`}>Test</Link> : null
           }
         }
       ]
@@ -268,7 +265,7 @@ const SubjectTopic: React.FC = (): JSX.Element => {
                 setisOpenForm(true);
                 setId(e?.id);
               }}
-              onClickView={() => navigate(`/subjects/${subject_id}/topic-view/${e?.id}`)}
+              onClickView={() => navigate(`/subjects/${subject_semestr_id}/topic-view/${e?.id}`)}
               viewPermission={"subject-topic_view"}
               editPermission={"subject-topic_update"}
               deletePermission={"subject-topic_delete"}
@@ -295,7 +292,7 @@ const SubjectTopic: React.FC = (): JSX.Element => {
   };
 
   const { mutate } = useMutation({
-    mutationFn: ({ id, order }: { id: number, order: number }) => submitTopicOrderData(id, { order }, Number(subject_id)),
+    mutationFn: ({ id, order }: { id: number, order: number }) => submitTopicOrderData(id, { order }, Number(subject_semestr_id)),
     onSuccess: async (res) => {
       refetch();
       Notification("success", id ? "update" : "create", res?.message)
@@ -332,7 +329,7 @@ const SubjectTopic: React.FC = (): JSX.Element => {
         buttons={
           checkPermission("subject-topic_create") ?
           <>
-            <input type="file" accept=".xls,.xlsx" onChange={(e) => importTopic({id: subject_id ?? "", file: e?.target?.files ? e.target.files[0] ?? "" : ""})} className="hidden" style={{ display: "none" }} id="excel_import" />
+            <input type="file" accept=".xls,.xlsx" onChange={(e) => importTopic({id: subject_semestr_id ?? "", file: e?.target?.files ? e.target.files[0] ?? "" : ""})} className="hidden" style={{ display: "none" }} id="excel_import" />
             <label htmlFor="excel_import" className="d-f cursor-pointer text-[#52C41A] rounded-lg border border-solid border-[#52C41A] px-3 py-1" >
             <ArrowUploadFilled fontSize={16} color="#52C41A" />&nbsp;&nbsp;Import excel
             </label>

@@ -162,6 +162,7 @@ import TimeTableView from "pages/time-table/crud/view";
 import ControlExam from "pages/control_exam";
 import NewExamControlUpdate from "pages/control_exam/crud/update";
 import NewControlExamView from "pages/control_exam/crud/view";
+import SubjectSemestrInfo from "pages/subject_semestrs/components/subject_semestr_info";
 
 export const public_routes: Array<TypeRoutes> = [
   {
@@ -867,6 +868,7 @@ export const prived_routes: Array<TypeRoutes> = [
       isMenu: true,
     },
     submenu: [
+      // subjects 
       {
         name: "Subjects",
         path: "/subjects",
@@ -907,9 +909,24 @@ export const prived_routes: Array<TypeRoutes> = [
           isMenu: false,
         },
       },
+
+      // subject semests 
+
+      {
+        name: "View subject",
+        path: "/subjects/semestrs/view/:id/:subject_id",
+        component: SubjectSemestrInfo,
+        config: {
+          permission: "subject_view",
+          structure: "layout",
+          isMenu: false,
+        },
+      },
+
+
       {
         name: "Subject exam test update",
-        path: "/subject/:subject_id/exam-tests/update/:test_id",
+        path: "/subject/:subject_semestr_id/exam-tests/update/:test_id",
         component: UpdateSubjectExamTest,
         config: {
           permission: "subject_view",

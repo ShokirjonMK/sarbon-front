@@ -5,8 +5,8 @@ import { StatusBadge } from "components/StatusTag";
 import useGetAllData from "hooks/useGetAllData";
 import dayjs from "dayjs";
 import useBreadCrumb from "hooks/useBreadCrumb";
-import SubjectSemestrs from "../components/subject_semestrs";
 import checkPermission from "utils/check_permission";
+import SubjectSemestrs from "pages/subject_semestrs";
 
 interface DataType {
   name: string;
