@@ -23,29 +23,29 @@ const FormTestQuestionUI = ({ data, refetch, setisEdit, isEdit }: { data: ITestQ
   const { t } = useTranslation();
   const navigate = useNavigate()
   const [form] = Form.useForm();
-  const { subject_id, topic_id, test_id } = useParams()
+  const { subject_semestr_id, topic_id, test_id } = useParams()
   const [fileList, setFileList] = useState<UploadFile[]>([] as UploadFile[]);
 
   useEffect(() => {
     form.setFieldsValue({
       level: data?.level,
     });
-    if (data?.file) {
+    if (data?.testBody?.file) {
       setFileList([{
         uid: '-1',
         name: 'image.png',
         status: 'done',
-        url: FILE_URL + data?.file,
+        url: FILE_URL + data?.testBody?.file,
       }])
     }
   }, [data])
 
   const { mutate, isLoading } = useMutation({
-    mutationFn: (newVals: any) => submitTest(test_id, { ...newVals, topic_id, file: fileList[0]?.originFileObj, subject_id }),
+    mutationFn: (newVals: any) => submitTest(test_id, { ...newVals, topic_id, file: fileList[0]?.originFileObj, subject_semestr_id }),
     onSuccess: async (res) => {
       setisEdit(false)
       Notification("success", test_id ? "update" : "create", res?.message)
-      navigate(`/subject/tests/update/${subject_id}/${topic_id}/${res?.data?.id}`)
+      navigate(`/subject/tests/update/${subject_semestr_id}/${topic_id}/${res?.data?.id}`)
       if (test_id) {
         refetch()
       }
@@ -58,8 +58,8 @@ const FormTestQuestionUI = ({ data, refetch, setisEdit, isEdit }: { data: ITestQ
   });
 
   const { data: Language, isFetching } = useGetData({
-    queryKey: ["language"],
-    url: "languages"
+    queryKey: ["langs"],
+    url: "langs"
   });
 
   return (
@@ -135,7 +135,7 @@ const FormTestQuestionUI = ({ data, refetch, setisEdit, isEdit }: { data: ITestQ
                   ]}
                 >
                   <SunEditor
-                    setContents={data?.text}
+                    setContents={data?.testBody?.text}
                     height="100px"
                     autoFocus={true}
                     placeholder={t("Enter content text") ?? ""}
@@ -166,11 +166,11 @@ const FormTestQuestionUI = ({ data, refetch, setisEdit, isEdit }: { data: ITestQ
               </p>
               <Divider className="my-2" />
               <div className="sm:flex justify-between">
-                <p dangerouslySetInnerHTML={{ __html: data?.text ?? "" }} />
+                <p dangerouslySetInnerHTML={{ __html: data?.testBody?.text ?? "" }} />
                 <img
                   width={122}
                   className="rounded-md"
-                  src={FILE_URL + data?.file}
+                  src={FILE_URL + data?.testBody?.file}
                   alt=""
                 />
               </div>

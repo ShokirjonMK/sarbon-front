@@ -92,9 +92,9 @@ const SubjectTopicTest: React.FC = (): JSX.Element => {
                 </div>
                 <p className='flex items-center'>
                   <Avatar style={{ color: '#000', backgroundColor: '#eeeeee' }} className='mr-2'>{number_order( urlValue.currentPage, urlValue.perPage, Number(index), isLoading)}</Avatar>
-                  <p dangerouslySetInnerHTML={{__html: item?.text ?? ""}} />
+                  <p dangerouslySetInnerHTML={{__html: item?.testBody?.text ?? ""}} />
                 </p>
-                {item?.file ? <img width={200} className='ml-[50px] mt-4' src={FILE_URL + item?.file} alt="" /> : ""}
+                {item?.testBody?.file ? <img width={200} className='ml-[50px] mt-4' src={FILE_URL + item?.testBody?.file} alt="" /> : ""}
                 <div className='pl-5 pt-4'>
                   {
                     item?.options?.map(option => (

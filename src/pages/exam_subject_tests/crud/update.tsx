@@ -14,13 +14,16 @@ import useBreadCrumb from 'hooks/useBreadCrumb';
 const UpdateSubjectExamTest = () => {
 
   const { t } = useTranslation();
-  const { subject_semestr_id, test_id } = useParams()
+  const { subject_semestr_id, test_id, subject_id } = useParams()
   const [options, setOptions] = useState<Array<any>>([]);
   const [isEdit, setisEdit] = useState<boolean>(test_id == "0");
 
   const { data, refetch, isLoading } = useGetOneData<ITestQuestion>({
     queryKey: ["tests", test_id],
     url: `tests/${test_id}`,
+    urlParams: {
+      expand: "testBody",
+    },
     options: {
       refetchOnWindowFocus: false,
       retry: 0,
@@ -45,7 +48,8 @@ const UpdateSubjectExamTest = () => {
   useBreadCrumb({pageTitle: test_id == "0" ? "Test qo'shish" : "O'zgatirish", breadcrumb: [
     { name: "Home", path: "/" },
     { name: `Subjects`, path: `/subjects` },
-    { name: `Exam tests`, path: `/subjects/view/${subject_semestr_id}?user-block=exam-tests` },
+    { name: `Fanni ko'rish`, path: `/subjects/view/${subject_id}` },
+    { name: `Exam tests`, path: `/subjects/semestrs/view/${subject_semestr_id}/${subject_id}?user-block=exam-tests` },
     { name: test_id == "0" ? "Test qo'shish" : "O'zgatirish", path: `/subject/tests/${subject_semestr_id}/${test_id}` },
   ]})
 

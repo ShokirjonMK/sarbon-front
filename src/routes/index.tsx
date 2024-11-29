@@ -926,7 +926,7 @@ export const prived_routes: Array<TypeRoutes> = [
 
       {
         name: "Subject exam test update",
-        path: "/subject/:subject_semestr_id/exam-tests/update/:test_id",
+        path: "/subject/:subject_semestr_id/:subject_id/exam-tests/update/:test_id",
         component: UpdateSubjectExamTest,
         config: {
           permission: "subject_view",

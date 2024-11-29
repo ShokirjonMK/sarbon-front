@@ -22,6 +22,7 @@ import { importExamTestToExcel, updateExamTestStatus } from '../crud/request';
 import FilterSelect, { TypeFilterSelect } from 'components/FilterSelect';
 import { TypeFormUIData } from 'pages/common/types';
 import FormUIBuilder from 'components/FormUIBuilder';
+import useBreadCrumb from 'hooks/useBreadCrumb';
 
 const selectData: TypeFilterSelect[] = [
   {
@@ -38,7 +39,17 @@ const selectData: TypeFilterSelect[] = [
     url: "subjects",
     permission: "subject_index",
     parent_name: "kafedra_id",
+    child_names: ["subject_semestr_id"],
     span: { xs: 24, sm: 24, md: 12, lg: 8, xl: 6 },
+  },
+  {
+    name: "subject_semestr_id",
+    label: "Subject semestr",
+    url: `subject-semestrs?expand=eduYear,semestr,subjectType,eduForm`,
+    span: { xs: 24, sm: 24, md: 12, lg: 8, xl: 6 },
+    permission: "subject_index",
+    parent_name: "subject_id",
+    render: (e) => `${e?.name}, ${e?.eduForm?.name}, ${e?.eduYear?.name}, ${e?.semestr?.name}, ${e?.subjectType?.name}`
   },
   {
     name: "exam_type_id",
@@ -66,10 +77,22 @@ const formData: TypeFormUIData[] = [
     type: "select",
     url: `subjects`,
     required: true,
-    expand: 'semestr, eduForm',
+    expand: 'semestr,eduForm',
     span: 24,
     parent_name: "kafedra_id",
+    child_names: ["subject_semestr_id"],
     render: (e) => `${e?.name} ${e?.eduForm?.name} ${e?.semestr?.name}`
+  },
+  {
+    name: "subject_semestr_id",
+    label: "Subject semestr",
+    type: "select",
+    url: `subject-semestrs`,
+    expand: 'eduYear,semestr,subjectType,eduForm',
+    required: true,
+    span: 24,
+    parent_name: "subject_id",
+    render: (e) => `${e?.name}, ${e?.eduForm?.name}, ${e?.eduYear?.name}, ${e?.semestr?.name}, ${e?.subjectType?.name}`
   },
   {
     name: "exam_type_id",
@@ -82,6 +105,7 @@ const formData: TypeFormUIData[] = [
 ];
 
 const Tests: React.FC = (): JSX.Element => {
+
   const { t } = useTranslation();
   const [testId, settestId] = useState<number>();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -102,8 +126,17 @@ const Tests: React.FC = (): JSX.Element => {
   });
 
   const { data, isLoading, refetch } = useGetAllData<ITestQuestion>({
-    queryKey: ["tests", urlValue.perPage, urlValue.currentPage, urlValue.filter.subject_id, urlValue.filter?.exam_type_id],
-    urlParams: { "per-page": urlValue.perPage, page: urlValue.currentPage, filter: { subject_id: urlValue.filter?.subject_id, exam_type_id: urlValue.filter?.exam_type_id, type: 2 } },
+    queryKey: ["tests", urlValue.perPage, urlValue.currentPage, urlValue.filter.subject_id, urlValue.filter?.exam_type_id, urlValue.filter?.subject_semestr_id],
+    urlParams: { 
+      "per-page": urlValue.perPage, 
+      page: urlValue.currentPage, 
+      filter: { 
+        subject_id: urlValue.filter?.subject_id,
+        subject_semestr_id: urlValue.filter?.subject_semestr_id,
+        exam_type_id: urlValue.filter?.exam_type_id, 
+        type: 2,
+      } 
+    },
     url: `tests?sort=-id&expand=options,examsType,subject`,
   });
 
@@ -132,31 +165,23 @@ const Tests: React.FC = (): JSX.Element => {
     retry: 0,
   });
 
+  
+  useBreadCrumb({pageTitle: t("Tests"), breadcrumb: [
+    { name: "Home", path: '/' },
+    { name: "Tests", path: 'Tests' }
+  ]})
+
   return (
-    <div className="">
-      <HeaderExtraLayout title={`Tests`} isBack
-        breadCrumbData={[
-          { name: "Home", path: '/' },
-          { name: "Tests", path: 'Tests' }
-        ]}
-        btn={
-          <div className="flex justify-end items-center mb-3">
-            {/* <>
-            <input type="file" accept=".xls,.xlsx" onChange={(e) => importExamTest({id: id ?? "", file: e?.target?.files ? e.target.files[0] ?? "" : ""})} className="hidden" style={{ display: "none" }} id="excel_import" />
-            <label htmlFor="excel_import" className="d-f cursor-pointer text-[#52C41A] rounded-lg border border-solid border-[#52C41A] px-3 py-1" >
-            <ArrowUploadFilled fontSize={16} color="#52C41A" />&nbsp;&nbsp;Import excel
-            </label>
-          </> */}
-            { checkPermission("test_create") ? <Button onClick={() => setIsModalOpen(true)}>{t('Test import')}</Button> : null}
-            <CreateBtn
-              onClick={() => navigate(`/tests/create`)}
-              permission={"test_create"}
-              className='ml-3'
-              text='Test create'
-            />
-          </div>
-        }
-      />
+    <div className="content-card">
+      <div className="flex justify-end items-center mb-3">
+          { checkPermission("test_create") ? <Button onClick={() => setIsModalOpen(true)}>{t('Test import')}</Button> : null}
+          <CreateBtn
+            onClick={() => navigate(`/tests/create`)}
+            permission={"test_create"}
+            className='ml-3'
+            text='Test create'
+          />
+      </div>
       <Row gutter={[12, 12]} className="my-3 px-4">
         {selectData?.map((e, i) => (
           <FilterSelect
@@ -202,9 +227,9 @@ const Tests: React.FC = (): JSX.Element => {
                 </div>
                 <p className='flex items-center'>
                   <Avatar style={{ color: '#000', backgroundColor: '#eeeeee' }} className='mr-2'>{number_order(urlValue.currentPage, urlValue.perPage, Number(index), isLoading)}</Avatar>
-                  <p dangerouslySetInnerHTML={{ __html: item?.text ?? "" }} />
+                  <p dangerouslySetInnerHTML={{ __html: item?.testBody?.text ?? "" }} />
                 </p>
-                {item?.file ? <img width={200} className='ml-[50px] mt-4' src={FILE_URL + item?.file} alt="" /> : ""}
+                {item?.testBody?.file ? <img width={200} className='ml-[50px] mt-4' src={FILE_URL + item?.testBody?.file} alt="" /> : ""}
                 <div className='pl-5 pt-4'>
                   {
                     item?.options?.map(option => (
@@ -224,7 +249,11 @@ const Tests: React.FC = (): JSX.Element => {
               currentPage={urlValue.currentPage}
               perPage={urlValue.perPage}
             />
-          ) : <Empty />}
+          ) : ""}
+
+          {
+            data?._meta?.totalCount == 0 ? <Empty /> : ""
+          }
         </div>
         <Modal title={t("Exam test")} open={isModalOpen} onOk={() => setIsModalOpen(false)} onCancel={() => setIsModalOpen(false)} footer={false}>
           <Form

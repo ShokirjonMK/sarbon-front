@@ -10,10 +10,10 @@ export async function submitExamTest(id: string | undefined, data: any) {
     formdata.append("type", '2');
     if(data["exam_type_id"]) formdata.append("exam_type_id", data["exam_type_id"]);
 
-    if(data["file"]) formdata.append("file", data["file"])
+    if(data["upload"]) formdata.append("upload", data["upload"])
 
-    const url = id ? `/tests/${id}` : `/tests`
-    const response = await instance({ url, method: id ? "PUT" : "POST", data: formdata });
+    const url = (!!id) ? `/tests/${id}` : `/tests`
+    const response = await instance({ url, method: (!!id) ? "PUT" : "POST", data: formdata });
     return response.data;
 }
 
@@ -40,13 +40,15 @@ export async function submitExamTestOption(id: number | undefined, data: any) {
     return response.data;
 }
 
-export async function importExamTestToExcel(subject_semestr_id: string | number | undefined, file: any, exam_type_id: string | number | undefined) {
-    if(!(subject_semestr_id && file)) return message.error("File yuklanmagan");
 
+export async function importExamTestToExcel(subject_semestr_id?: number | string, file?: any, exam_type_id?: number, language_id?: number) {
+    
+    if(!file) return message.error("File yuklanmagan");
     const formdata = new FormData();
 
-    formdata.append("subject_semestr_id", subject_semestr_id.toString());
+    formdata.append("subject_semestr_id", String(subject_semestr_id));
     formdata.append("exam_type_id", String(exam_type_id));
+    formdata.append("language_id", String(language_id));
     formdata.append("upload", file);
     formdata.append("type", '2');
 

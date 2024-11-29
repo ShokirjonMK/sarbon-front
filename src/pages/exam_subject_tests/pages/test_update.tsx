@@ -1,7 +1,6 @@
 import { Button, Spin } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import HeaderExtraLayout from 'components/HeaderPage/headerExtraLayout';
 import { useState } from 'react';
 import useGetOneData from 'hooks/useGetOneData';
 import { ITestOption, ITestQuestion } from 'models/test';
@@ -10,6 +9,7 @@ import checkPermission from 'utils/check_permission';
 import DeleteData from 'components/deleteData';
 import FormExamTestOptionUI from '../crud/option_ui';
 import FormExamTestQuestionUI from '../crud/question_ui';
+import useBreadCrumb from 'hooks/useBreadCrumb';
 
 const TestUpdate = () => {
 
@@ -20,7 +20,7 @@ const TestUpdate = () => {
 
   const { data, refetch, isLoading } = useGetOneData<ITestQuestion>({
     queryKey: ["tests", test_id],
-    url: `tests/${test_id}`,
+    url: `tests/${test_id}?expand=testBody,subject`,
     options: {
       enabled: !!test_id,
     },
@@ -38,32 +38,27 @@ const TestUpdate = () => {
     },
   });
 
+  useBreadCrumb({pageTitle: !test_id ? "Test qo'shish" : "O'zgatirish", breadcrumb: [
+    { name: "Home", path: "/" },
+    { name: `Tests`, path: `/tests` },
+    { name: !test_id ? "Test qo'shish" : "O'zgatirish", path: `/tests/view/${test_id}` },
+  ]})
+
   return (
     <Spin spinning={isLoading && !!test_id} size="small">
-      <div>
-        <HeaderExtraLayout
-          title={!test_id ? "Test qo'shish" : "O'zgatirish"}
-          isBack={`tests`}
-          breadCrumbData={[
-            { name: "Home", path: "/" },
-            { name: `Tests`, path: `/tests` },
-            { name: !test_id ? "Test qo'shish" : "O'zgatirish", path: `/tests/view/${test_id}` },
-          ]}
-          btn={
-            <div className="flex items-center">
-              {test_id ? <DeleteData
-                permission={"test_delete"}
-                refetch={refetch}
-                url={"tests"}
-                id={Number(test_id)}
-                navigateUrl={`/tests`}
-              >
-                <Button type="primary" className="mr-2" danger ghost>{t("Delete")}</Button>
-              </DeleteData> : null}
-              {(checkPermission("test_update") && test_id) ? <Button onClick={() => setisEdit(true)} htmlType="submit" >{t("Edit")}</Button> : ""}
-            </div>
-          }
-        />
+      <div className='content-card'>
+        <div className="flex items-center justify-end">
+          {test_id ? <DeleteData
+            permission={"test_delete"}
+            refetch={refetch}
+            url={"tests"}
+            id={Number(test_id)}
+            navigateUrl={`/tests`}
+          >
+            <Button type="primary" className="mr-2" danger ghost>{t("Delete")}</Button>
+          </DeleteData> : null}
+          {(checkPermission("test_update") && test_id) ? <Button onClick={() => setisEdit(true)} htmlType="submit" >{t("Edit")}</Button> : ""}
+        </div>
         <div className="pb-[24px]">
           <FormExamTestQuestionUI data={data?.data} refetch={refetch} isEdit={isEdit} setisEdit={setisEdit} isSubject={true} />
           {
