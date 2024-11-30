@@ -15,7 +15,6 @@ import useGetAllData from "hooks/useGetAllData";
 import { TypeFormUIData } from "pages/common/types";
 import MultipleInput from "components/MultipleInput";
 import FormUIBuilder from "components/FormUIBuilder";
-import TeacherAccess from "pages/teacher/components/teacherAccess";
 import { generateTeacherAccess } from "utils/generate_access";
 import IUsers from "models/user";
 import { cf_filterOption } from "utils/others_functions";
@@ -147,8 +146,6 @@ const KafedraUpdate = ({ id, setId, refetch, isOpenForm, setisOpenForm }: TypeFo
           autoComplete="off"
           onFinish={(values) => mutate(values)}
         >
-          {/* <KafedraFormUI id={id} form={form} teacherAccess={teacherAccess} setTeacherAccess={setTeacherAccess} /> */}
-
           {!id ? (
             <MultipleInput layout="vertical" />
           ) : (
@@ -197,8 +194,6 @@ const KafedraUpdate = ({ id, setId, refetch, isOpenForm, setisOpenForm }: TypeFo
                 }
               </Select>  
             </Form.Item>
-
-            {is_teacher ? <TeacherAccess teacher_access_list={teacherAccess} setTeacherAccessList={setTeacherAccess} edit={true} /> : null}
           </div>
 
           <Divider />

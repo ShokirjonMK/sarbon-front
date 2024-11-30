@@ -125,9 +125,9 @@ const TeacherAccessInfoUserViewNew = ({ user_id }: { user_id: number | string | 
     if (teacherAccessData?.items?.length){
         let arr: any = []
         for (const item of teacherAccessData?.items) {
-            if(arr?.some((i: any) => (i?.subject_id === item?.subject_id) && (i?.language_id === item?.language_id))){
+            if(arr?.some((i: any) => (i?.subjectSemestr?.id === item?.subjectSemestr?.id) && (i?.language_id === item?.language_id))){
                 arr = arr?.map((i: any) => {
-                    if((i?.subject_id === item?.subject_id) && (i?.language_id === item?.language_id)){
+                    if((i?.subjectSemestr?.id === item?.subjectSemestr?.id) && (i?.language_id === item?.language_id)){
                         return {...i, inArr: [...i?.inArr, item]}
                     }
                     return i
@@ -160,14 +160,14 @@ const TeacherAccessInfoUserViewNew = ({ user_id }: { user_id: number | string | 
         render: (e: any) => e?.name,
     },
     {
-      title: t("Fan semestri"),
-      dataIndex: "subjectSemestr",
-      render: (e: any) => `${e?.name} / ${e?.eduForm?.name} / ${e?.subjectType?.name} / Kredit - ${e?.credit}`,
-    },
-    {
       title: t("Kafedra"),
       dataIndex: "subject",
       render: (e: any) => e?.kafedra?.name,
+    },
+    {
+      title: t("Fan semestri"),
+      dataIndex: "subjectSemestr",
+      render: (e: any) => `${e?.name} / ${e?.eduForm?.name} / ${e?.subjectType?.name} / Kredit - ${e?.credit}`,
     },
     {
       title: t("Languages"),
@@ -224,8 +224,6 @@ const TeacherAccessInfoUserViewNew = ({ user_id }: { user_id: number | string | 
         <p className="font-medium text-[16px]">Biriktirilgan fanlar</p>
         { checkPermission("teacher-access_create") ? <Button onClick={() => setIsModalOpen(true)}>{t("Create")}</Button> : null}
       </div>
-
-      {/* <TeacherAccess teacher_access_list={teacherAccess} setTeacherAccessList={setTeacherAccess} edit={false} /> */}
 
       <Table
         dataSource={teacherAccess}
