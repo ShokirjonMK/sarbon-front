@@ -77,24 +77,24 @@ const SubjectInfo: React.FC = (): JSX.Element => {
             key: "main-info", label: t("Basic information"), children:
               <ViewSubject data={data?.data} />
           },
-          {
-            key: 'topic-info', label: t("Topics"), children:
-              <>
-                <SubjectTopic />
-              </>
-          },
-          {
-            key: 'exam-tests', label: t("Exam tests"), children:
-              <>
-                <SubjectExamTest />
-              </>
-          },
-          {
-            key: 'exam-questions', label: t("Exam questions"), children:
-              <>
-                <SubjectExamQuestions />
-              </>
-          },
+          // {
+          //   key: 'topic-info', label: t("Topics"), children:
+          //     <>
+          //       <SubjectTopic />
+          //     </>
+          // },
+          // {
+          //   key: 'exam-tests', label: t("Exam tests"), children:
+          //     <>
+          //       <SubjectExamTest />
+          //     </>
+          // },
+          // {
+          //   key: 'exam-questions', label: t("Exam questions"), children:
+          //     <>
+          //       <SubjectExamQuestions />
+          //     </>
+          // },
         ]}
       />
     </div>

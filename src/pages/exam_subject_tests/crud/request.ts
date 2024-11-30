@@ -11,9 +11,10 @@ export async function submitExamTest(id: string | undefined, data: any) {
     if(data["exam_type_id"]) formdata.append("exam_type_id", data["exam_type_id"]);
 
     if(data["upload"]) formdata.append("upload", data["upload"])
-
-    const url = (!!id) ? `/tests/${id}` : `/tests`
-    const response = await instance({ url, method: (!!id) ? "PUT" : "POST", data: formdata });
+    
+    const isPut = (typeof id == "undefined" || typeof id == null || id == "0")
+    const url = isPut ? `/tests` : `/tests/${id}`
+    const response = await instance({ url, method: isPut ? "POST" : "PUT", data: formdata });
     return response.data;
 }
 

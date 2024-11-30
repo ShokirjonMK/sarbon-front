@@ -77,11 +77,10 @@ const formData: TypeFormUIData[] = [
     type: "select",
     url: `subjects`,
     required: true,
-    expand: 'semestr,eduForm',
     span: 24,
     parent_name: "kafedra_id",
     child_names: ["subject_semestr_id"],
-    render: (e) => `${e?.name} ${e?.eduForm?.name} ${e?.semestr?.name}`
+    render: (e) => e?.name
   },
   {
     name: "subject_semestr_id",
@@ -98,6 +97,14 @@ const formData: TypeFormUIData[] = [
     name: "exam_type_id",
     label: "Exam types",
     url: "exams-types",
+    required: true,
+    type: "select",
+    span: 24,
+  },
+  {
+    name: "language_id",
+    label: "Languages",
+    url: "langs",
     required: true,
     type: "select",
     span: 24,
@@ -137,7 +144,7 @@ const Tests: React.FC = (): JSX.Element => {
         type: 2,
       } 
     },
-    url: `tests?sort=-id&expand=options,examsType,subject`,
+    url: `tests?sort=-id&expand=options,examsType,subject,testBody`,
   });
 
   const { mutate, isLoading: statusLoading } = useMutation({
@@ -153,7 +160,8 @@ const Tests: React.FC = (): JSX.Element => {
   });
 
   const { mutate: importExamTest } = useMutation({
-    mutationFn: ({ file, exam_type_id }: { file: any, exam_type_id?: number }) => importExamTestToExcel(undefined, file, exam_type_id),
+    mutationFn: ({ file, exam_type_id, subject_semestr_id, language_id}: { file: any, exam_type_id?: number, subject_semestr_id: number, language_id: number }) => importExamTestToExcel(subject_semestr_id, file, exam_type_id, language_id),
+    // mutationFn: ({ file, exam_type_id }: { file: any, exam_type_id?: number }) => importExamTestToExcel(undefined, file, exam_type_id),
     onSuccess: async (res) => {
       refetch();
       Notification("success", "create", res?.message)
@@ -259,7 +267,8 @@ const Tests: React.FC = (): JSX.Element => {
           <Form
             form={form}
             layout="vertical"
-            onFinish={(vals: any) => importExamTest({ exam_type_id: vals?.exam_type_id, file: test_file })}
+            onFinish={(vals: any) => importExamTest({ ...vals, file: test_file })}
+            // onFinish={(vals: any) => importExamTest({ exam_type_id: vals?.exam_type_id, file: test_file })}
             className='my-4'
           >
             <FormUIBuilder data={formData} form={form} />

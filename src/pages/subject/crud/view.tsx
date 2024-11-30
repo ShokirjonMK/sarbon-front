@@ -84,30 +84,30 @@ const ViewSubject: React.FC<{data: ISubject | undefined}> = ({data}): JSX.Elemen
     {
       name: t("Kafedra"),
       value: data?.kafedra?.name,
-      name2: t("Semestr"),
-      value2: data?.semestr?.name,
+      name2: "",
+      value2: "",
     },
-    {
-      name: t("Edu form"),
-      value: data?.eduForm?.name,
-      name2: t("Edu type"),
-      value2: data?.eduType?.name,
-    },
-    {
-      name: t("Credit"),
-      value: data?.credit,
-      name2: t("Status"),
-      value2: <StatusBadge status={data?.status} />,
-    },
-    {
-      name: t("Score distribution"),
-      value: getSillabus(data?.edu_semestr_exams_types ?? "{}", "ball"),
-      name2: t("Distribution of hours"),
-      value2: getSillabus(
-        data?.edu_semestr_subject_category_times ?? "{}",
-        "hour"
-      ),
-    },
+    // {
+    //   name: t("Edu form"),
+    //   value: data?.eduForm?.name,
+    //   name2: t("Edu type"),
+    //   value2: data?.eduType?.name,
+    // },
+    // {
+    //   name: t("Credit"),
+    //   value: data?.credit,
+    //   name2: t("Status"),
+    //   value2: <StatusBadge status={data?.status} />,
+    // },
+    // {
+    //   name: t("Score distribution"),
+    //   value: getSillabus(data?.edu_semestr_exams_types ?? "{}", "ball"),
+    //   name2: t("Distribution of hours"),
+    //   value2: getSillabus(
+    //     data?.edu_semestr_subject_category_times ?? "{}",
+    //     "hour"
+    //   ),
+    // },
     {
       name: t("CreatedBy"),
       value: (
