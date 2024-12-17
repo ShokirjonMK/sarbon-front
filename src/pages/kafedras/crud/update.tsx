@@ -15,8 +15,8 @@ import useGetAllData from "hooks/useGetAllData";
 import { TypeFormUIData } from "pages/common/types";
 import MultipleInput from "components/MultipleInput";
 import FormUIBuilder from "components/FormUIBuilder";
-import TeacherAccess from "pages/teacher/components/teacherAccess";
-import { generateTeacherAccess } from "utils/generate_access";
+// import TeacherAccess from "pages/teacher/components/teacherAccess";
+// import { generateTeacherAccess } from "utils/generate_access";
 import IUsers from "models/user";
 import { cf_filterOption } from "utils/others_functions";
 
@@ -89,7 +89,7 @@ const KafedraUpdate = ({ id, setId, refetch, isOpenForm, setisOpenForm }: TypeFo
           user_id: res?.data?.leader?.id,
         })
         setIsTeacher(checkTeacher(res?.data?.leader?.id))
-        setTeacherAccess(generateTeacherAccess(res.data?.leader?.teacherAccess));
+        // setTeacherAccess(generateTeacherAccess(res.data?.leader?.teacherAccess));
 
       },
       refetchOnWindowFocus: false,
@@ -100,7 +100,7 @@ const KafedraUpdate = ({ id, setId, refetch, isOpenForm, setisOpenForm }: TypeFo
 
   const checkTeacher = (id: number) => {
     const teacher = kafedraHead?.items?.find(e => e?.id === id);
-    setTeacherAccess(generateTeacherAccess(teacher?.teacherAccess));
+    // setTeacherAccess(generateTeacherAccess(teacher?.teacherAccess));
 
     return teacher?.role?.includes("teacher")
   }
@@ -198,7 +198,7 @@ const KafedraUpdate = ({ id, setId, refetch, isOpenForm, setisOpenForm }: TypeFo
               </Select>  
             </Form.Item>
 
-            {is_teacher ? <TeacherAccess teacher_access_list={teacherAccess} setTeacherAccessList={setTeacherAccess} edit={true} /> : null}
+            {/* {is_teacher ? <TeacherAccess teacher_access_list={teacherAccess} setTeacherAccessList={setTeacherAccess} edit={true} /> : null} */}
           </div>
 
           <Divider />
