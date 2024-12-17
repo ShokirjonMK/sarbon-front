@@ -19,7 +19,7 @@ import { renderFullName } from "utils/others_functions";
 import checkPermission from "utils/check_permission";
 import UserAccessInfoUserViewNew from "pages/users/view_steps/profession_step/user_access_info_new";
 import TeacherAccessInfoUserViewNew from "pages/users/view_steps/profession_step/teacher_access_info_new";
-import JobInfoUserView from "pages/users/view_steps/profession_step-old/job_info";
+import JobInfoUserView from "pages/users/view_steps/profession_step/job_info";
 
 const ViewTeacher = () => {
 
