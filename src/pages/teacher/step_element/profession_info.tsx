@@ -1,11 +1,12 @@
-import { Button, Divider, Form, FormInstance, Row } from "antd";
+import { Button, Divider, FormInstance, Row } from "antd";
 import { useTranslation } from 'react-i18next';
-import { Dispatch, useEffect, useState } from 'react';
+import { Dispatch } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import UserAccess from "pages/users/components/user_access";
-import TeacherAccess from "../components/teacherAccess";
 import FormUIBuilder, { TypeFormUIBuilder } from "components/FormUIBuilder";
 import { StepType } from "../crud/update";
+import checkPermission from "utils/check_permission";
+import TeacherAccessInfoUserViewNew from "pages/users/view_steps/profession_step/teacher_access_info_new";
+import UserAccessInfoUserViewNew from "pages/users/view_steps/profession_step/user_access_info_new";
 
 const second_data: TypeFormUIBuilder[] = [
     {
@@ -50,26 +51,12 @@ const second_data: TypeFormUIBuilder[] = [
     }
 ]
 
-const TeacherProfessionInfo = ({form, setsaveType, userAccessdata, teacherAccessdata, isLoading}: {form: FormInstance, setsaveType: Dispatch<StepType>, userAccessdata: any, teacherAccessdata: any, isLoading?: boolean}) => {
+const TeacherProfessionInfo = ({form, setsaveType, isLoading, roles}: {form: FormInstance, setsaveType: Dispatch<StepType>, isLoading?: boolean, roles: string[]}) => {
 
     const { t } = useTranslation();
     const navigate = useNavigate()
     const { user_id } = useParams();
-    const [teacher_access_list, setTeacherAccessList] = useState<any>();
-    const [userAccess, setUresAccess] = useState<any>();
-
-    useEffect(() => {
-        setUresAccess(userAccessdata)
-        setTeacherAccessList(teacherAccessdata)
-    }, [userAccessdata, teacherAccessdata])
-
-    useEffect(() => {
-        form.setFieldsValue({
-            teacher_access: JSON.stringify(teacher_access_list),
-            user_access: JSON.stringify(userAccess)
-        })
-    }, [userAccess, teacher_access_list])
-
+    
     return (
         <div>
             <h3 className="text-[20px] font-medium mb-[24px]">4. {t("Professional information")}</h3>
@@ -77,22 +64,15 @@ const TeacherProfessionInfo = ({form, setsaveType, userAccessdata, teacherAccess
               <FormUIBuilder data={second_data} form={form} />
             </Row>
             <Divider />
-            <Form.Item
-                name="user_access"
-            >
-                <UserAccess edit={true} userAccess={userAccess} setUserAccess={setUresAccess} />
-            </Form.Item>
-            <br />
             {
-                form.getFieldValue("role")?.includes("teacher") ?
-                <>
-                    <p className='font-medium mt-[20p x] pb-2'>{t("Fan biriktirish")}</p>
-                    <Form.Item
-                        name="teacher_access"
-                    >
-                        <TeacherAccess edit={true} teacher_access_list={teacher_access_list} setTeacherAccessList={setTeacherAccessList} />
-                    </Form.Item>
-                </> : ""
+                checkPermission("user-access_index") ? 
+                <UserAccessInfoUserViewNew user_id={user_id} roles={roles}/> : ""
+            }
+            <br />
+
+            {
+                form.getFieldValue("role")?.includes("teacher") && checkPermission("teacher-access_get") ?
+                <TeacherAccessInfoUserViewNew user_id={user_id} /> : ""
             }
 
             <div className="flex justify-end mt-[24px]">

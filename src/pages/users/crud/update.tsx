@@ -14,7 +14,6 @@ import UserPersonalInfo from "../create_steps/personal_info";
 import dayjs from "dayjs";
 import UserAddressInfo from "../create_steps/address_info";
 import UserProfessionInfo from "../create_steps/profession_info";
-import { _generateUserAccess, generateTeacherAccess } from "utils/generate_access";
 import { renderFullName } from "utils/others_functions";
 import useBreadCrumb from "hooks/useBreadCrumb";
 
@@ -54,8 +53,6 @@ const UpdateUser = () => {
   const navigate = useNavigate();
   const [saveType, setsaveType] = useState<"address-info" | "main-info" | "personal-info" | "job-info" | "users">()
   const { user_id } = useParams();
-  const [userAccessdata, setUserAccessData] = useState<any>()
-  const [teacherAccessdata, setTeacherAccessData] = useState<any>()
 
   const { data } = useGetOneData({
     queryKey: ["users", user_id],
@@ -93,12 +90,6 @@ const UpdateUser = () => {
           partiya_id: res?.data?.profile?.partiya_id,
           user_access: res?.data?.userAccess,
         })
-        if (Array.isArray(res?.data?.userAccess)) {
-          setUserAccessData(_generateUserAccess(res?.data?.userAccess));
-        }
-        if (Array.isArray(res?.data?.teacherAccess)) {
-          setTeacherAccessData(generateTeacherAccess(res?.data?.teacherAccess));
-        }
       },
       refetchOnWindowFocus: false,
       retry: 0,
@@ -182,7 +173,7 @@ const UpdateUser = () => {
                   : urlValue?.filter_like["user-block"] === "address-info" ?
                     <UserAddressInfo form={form} setsaveType={setsaveType} isLoading={isLoading} />
                     : urlValue?.filter_like["user-block"] === "job-info" ?
-                      <UserProfessionInfo form={form} setsaveType={setsaveType} userAccessdata={userAccessdata} teacherAccessdata={teacherAccessdata} isLoading={isLoading} /> : ""
+                      <UserProfessionInfo form={form} setsaveType={setsaveType} roles={data?.data?.role} isLoading={isLoading} /> : ""
             }
           </Form>
         </div>

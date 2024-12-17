@@ -23,3 +23,24 @@ export async function submitData(id: string | undefined, data: any) {
     return response.data;
 }
   
+export async function saveTeacherAccess(user_id: string | undefined | number, data: any) {
+    const formdata = new FormData();
+    formdata.append("teacher_access", JSON.stringify(data))
+
+    const response = await instance({ url: `teacher-accesses/${user_id}`, method: "PUT", data: formdata });
+    return response.data;
+}
+  
+
+export async function saveUserAccess(user_id: string | undefined | number, data: any) {
+    const formdata = new FormData();
+    formdata.append('user_id', String(user_id))
+    for (const key in data) {
+        if(data[key] != undefined && data[key] != null && data[key] != ''){
+            formdata.append(key, data[key])
+        }
+    }
+
+    const response = await instance({ url: `user-accesses`, method: "POST", data: formdata });
+    return response.data;
+}
