@@ -281,6 +281,7 @@ const Subjects: React.FC = (): JSX.Element => {
         <div className="d-f gap-3 justify-end mb-2" >
           <ExcelBtn onClick={exportExcel} loading={loading} />
           <Link to={"/subjects/create"} style={{textDecoration:"none"}}><CreateBtn onClick={() => navigate("/subjects/create")} permission={"subject_create"}/></Link>
+          <Link to={"/subjects/create"} style={{textDecoration:"none"}}><CreateBtn onClick={() => navigate("/subjects/create")} permission={"subject_create"}/></Link>
         </div>
         <Row gutter={[12, 12]}>
           <Col xs={24} sm={24} md={12} lg={8} xl={6}>
