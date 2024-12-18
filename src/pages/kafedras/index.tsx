@@ -16,6 +16,7 @@ import { globalConstants } from "config/constants";
 import SearchInput from "components/SearchInput";
 import FilterSelect, { TypeFilterSelect } from "components/FilterSelect";
 import { Col } from "antd";
+import useBreadCrumb from "hooks/useBreadCrumb";
 
 const selectData: TypeFilterSelect[] = [
   {
@@ -148,6 +149,11 @@ const Kafedras: React.FC = (): JSX.Element => {
       ),
     },
   ];
+
+  useBreadCrumb({pageTitle: "Kafedra", breadcrumb: [
+    {name: "Home", path: '/'},
+    {name: "Kafedra", path: '/subjects'},
+  ]})
 
   return (
     <>

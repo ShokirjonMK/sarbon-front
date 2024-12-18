@@ -13,6 +13,7 @@ import Actions from "components/Actions";
 import SearchInput from "components/SearchInput";
 import { globalConstants } from "config/constants";
 import checkPermission from "utils/check_permission";
+import useBreadCrumb from "hooks/useBreadCrumb";
 
 const Roles = () => {
 
@@ -69,18 +70,18 @@ const Roles = () => {
     },
   ], [data?.items]);
 
+  useBreadCrumb({pageTitle: "Roles", breadcrumb: [
+    { name: "Home", path: '/' },
+    { name: "Roles", path: '/roles' }
+  ]})
+
   return (
-    <div className="">
-      <HeaderExtraLayout
-        breadCrumbData={[
-          { name: "Home", path: '/' },
-          { name: "Roles", path: '/roles' }
-        ]}
-        title={t("Roles")}
-        btn={<CreateBtn
+    <div className="content-card">
+      <div className="flex justify-end">
+        <CreateBtn
           onClick={() => navigate('/roles/update/0')}
-          permission={"access-control_create-role"} />}
-      />
+          permission={"access-control_create-role"} />
+      </div>
       <div className="px-[24px] py-[20px]">
         <Row gutter={[12, 12]}>
                 <Col xs={24} sm={24} md={12} lg={8} xl={6}>

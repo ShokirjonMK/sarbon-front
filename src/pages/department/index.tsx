@@ -22,6 +22,7 @@ import FilterSelect, { TypeFilterSelect } from "components/FilterSelect";
 import useGetOneData from "hooks/useGetOneData";
 import { globalConstants } from "config/constants";
 import SearchInput from "components/SearchInput";
+import useBreadCrumb from "hooks/useBreadCrumb";
 
 const selectData: TypeFilterSelect[] = [
   {
@@ -176,6 +177,11 @@ const Department: React.FC = (): JSX.Element => {
       value: "tree",
     },
   ];
+
+  useBreadCrumb({pageTitle: "Department", breadcrumb: [
+    {name: "Home", path: '/'},
+    {name: "Department", path: '/structural-unit/department?type=table'},
+  ]})
 
   return (
     <>
