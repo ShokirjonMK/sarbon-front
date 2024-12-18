@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.6244cf49.css",
-    "main.js": "/static/js/main.972cb1b9.js",
+    "main.js": "/static/js/main.22cc6dbe.js",
     "static/js/787.81fdb1ca.chunk.js": "/static/js/787.81fdb1ca.chunk.js",
     "static/media/login-bg.jpg": "/static/media/login-bg.ddf61fa14a1040e26481.jpg",
     "static/media/sarbon_wh_logo.svg": "/static/media/sarbon_wh_logo.30356d8474fd1f6792334e2bcbcd2cd8.svg",
@@ -11,11 +11,11 @@
     "static/media/user.svg": "/static/media/user.ef0521b523f2206eb6a0156180891fba.svg",
     "static/media/sarbon_icon_wt.svg": "/static/media/sarbon_icon_wt.7ddefd1f47f45b4c0dce264038bf7063.svg",
     "main.6244cf49.css.map": "/static/css/main.6244cf49.css.map",
-    "main.972cb1b9.js.map": "/static/js/main.972cb1b9.js.map",
+    "main.22cc6dbe.js.map": "/static/js/main.22cc6dbe.js.map",
     "787.81fdb1ca.chunk.js.map": "/static/js/787.81fdb1ca.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.6244cf49.css",
-    "static/js/main.972cb1b9.js"
+    "static/js/main.22cc6dbe.js"
   ]
 }
