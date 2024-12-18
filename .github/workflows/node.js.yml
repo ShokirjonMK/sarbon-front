@@ -23,6 +23,7 @@ jobs:
         password: ${{ secrets.SERVER_PASSWORD }}
         script: |
           cd /home/apps/sarbon-front/
+          git config pull.rebase false   # merging strategiyasini belgilash
           git reset --hard
           git pull origin main
 
