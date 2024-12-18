@@ -36,7 +36,7 @@ bower_components
 .lock-wscript
 
 # Compiled binary addons (https://nodejs.org/api/addons.html)
-build/Release
+# build/Release
 
 # Dependency directories
 node_modules/
@@ -73,7 +73,7 @@ web_modules/
 .yarn-integrity
 
 # dotenv environment variable files
-.env
+# .env
 .env.development.local
 .env.test.local
 .env.production.local
@@ -128,3 +128,17 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+
+# phpStorm
+/.idea
+
+# docker
+/docker/mysql/db
+/docker/nginx/logs
+/docker/php/bash_history
+
+
+###> env ###
+/.env.local
+/.env.*.local
