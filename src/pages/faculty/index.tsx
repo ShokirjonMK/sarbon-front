@@ -1,8 +1,24 @@
 import SimpleIndexPage from 'pages/common/base_page';
+import { TypeFormUIData } from 'pages/common/types';
 import { useNavigate } from 'react-router-dom';
 
 const Faculties = () => {
+    
     const navigate = useNavigate()
+
+    // const formData: TypeFormUIData[] = [
+    //     {
+    //       name: "dean_deputy_user_id",
+    //       label: "Fakultet zamdekani",
+    //       required: true,
+    //       type: "select",
+    //       url: `users`,
+    //       filter: {"role_name":"dean_deputy", status: 10},
+    //       expand_name:'faculty',
+    //       span: 24,
+    //     },
+    //   ];
+      
 
     return (
         <>
@@ -22,6 +38,7 @@ const Faculties = () => {
                     create_: "faculty_create"
                 }}
                 onView={(id) => navigate(`/structural-unit/faculties/view/${id}`)}
+                // formUIData={formData}
             />
         </>
     )

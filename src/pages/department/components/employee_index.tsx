@@ -32,7 +32,7 @@ const EmployeeIndexPage: React.FC<{ userAccessTypeId: number }> = ({ userAccessT
 
   const [allData, setallData] = useState<IUserAccess[]>();
   const [isOpenForm, setisOpenForm] = useState<boolean>(false);
-  const [employeeId, setEmployeeId] = useState<number | undefined>();
+  const [employee, setEmployee] = useState<any>();
 
   const { data, refetch, isLoading } = useGetAllData<IUserAccess>({
     queryKey: [
@@ -78,10 +78,6 @@ const EmployeeIndexPage: React.FC<{ userAccessTypeId: number }> = ({ userAccessT
     retry: 0,
   });
 
-  // const leadFunc = (checked: boolean) => {
-  //   mutate({id: 179, data: data?.items, table_id: 2, user_access_type_id: 3, teacherAccess: 7, leader: 0})
-  // }
-
   const changeLeader = (_id: number, is_leader: boolean) => {
     if (checkPermission("user-access_update"))
       mutate({ id: _id, data: {}, table_id: id, user_access_type_id: undefined, teacherAccess: undefined, leader: Number(is_leader) })
@@ -102,7 +98,7 @@ const EmployeeIndexPage: React.FC<{ userAccessTypeId: number }> = ({ userAccessT
     {
       title: t('F.I.SH'),
       render: (e) => checkPermission("user_view") ? (
-        <Link to={`/teachers/view/${e?.user?.id}`} className="text-neutral-900 hover:text-[#0a3180] underline cursor-pointer" >
+        <Link to={`/teachers/view/${e?.user?.id}`} className="text-neutral-900 hover:text-[#2F54EB] underline cursor-pointer" >
           {e?.user?.first_name} {e?.user?.last_name} {e?.user?.middle_name}
         </Link>) : (<span>{e?.user?.first_name} {e?.user?.last_name} {e?.user?.middle_name}</span>),
     },
@@ -110,7 +106,7 @@ const EmployeeIndexPage: React.FC<{ userAccessTypeId: number }> = ({ userAccessT
       title: t("Role"),
       dataIndex: "role",
       key: "role",
-      render: (i, e) => e?.user?.role?.map((item: any) => (<Tag>{item}</Tag>))
+      render: (i, e) => e?.user?.role?.map((item: any, i: number) => <Tag key={i} >{item}</Tag>)
     },
     {
       title: t("Ish o'rni va stavkasi"),
@@ -124,7 +120,7 @@ const EmployeeIndexPage: React.FC<{ userAccessTypeId: number }> = ({ userAccessT
       title: t("Leader"),
       dataIndex: "leader",
       key: "leader",
-      render: (i, e) => <Switch onChange={(a) => { changeLeader(e?.id, a) }} checked={e?.is_leader === 1 ? true : false} />,
+      render: (i, e) => <Switch disabled={!checkPermission("user-access_update")} onChange={(a) => { changeLeader(e?.id, a) }} checked={e?.is_leader === 1 ? true : false} />,
     },
     {
       title: t("Actions"),
@@ -137,26 +133,16 @@ const EmployeeIndexPage: React.FC<{ userAccessTypeId: number }> = ({ userAccessT
               <Edit16Filled
                 className="edit text-[#595959] hover:cursor-pointer mr-4"
                 onClick={() => {
-                  setEmployeeId(e?.id);
+                  setEmployee(e);
                   setisOpenForm(true)
                 }}
               />
             </Tooltip>
           ) : null}
-          <DeleteData
-            permission={"user-access_delete"}
-            refetch={refetch}
-            url={"user-accesses"}
-            id={e?.id}
-          >
-            <Delete16Filled className="delete text-[#595959] hover:cursor-pointer" />
-          </DeleteData>
         </div>
       ),
     },
   ];
-
-  
 
 
   return (
@@ -166,14 +152,14 @@ const EmployeeIndexPage: React.FC<{ userAccessTypeId: number }> = ({ userAccessT
         create_permission={"user-access_create"}
         createOnClick={() => {
           setisOpenForm(true);
-          setEmployeeId(undefined);
+          setEmployee(undefined);
         }}
         className="mb-6"
       />
 
       <EmployeeUpdate
-        id={employeeId}
-        setId={setEmployeeId}
+        employee={employee}
+        setEmployee={setEmployee}
         isOpenForm={isOpenForm}
         setisOpenForm={setisOpenForm}
         refetch={refetch}

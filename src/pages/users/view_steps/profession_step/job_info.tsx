@@ -1,11 +1,11 @@
-import { Button, Form, FormInstance, Modal } from "antd";
+import { Button, Form, FormInstance, Modal, Table } from "antd";
+import { ColumnsType } from "antd/es/table";
 import { ReactNode, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { UseMutationResult } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import PrefessionElements from "pages/users/form_elements/profession_elements";
 import checkPermission from "utils/check_permission";
-import ViewInput from "components/ViewInput";
 
 interface DataType {
     name: string;
@@ -19,22 +19,53 @@ const JobInfoUserView = ({data, form, saveMutation} : {data: any, form: FormInst
     const { t } = useTranslation();
     const [isModalOpen, setIsModalOpen] = useState(false);
 
+    const sharedOnCell = (_: DataType, index: number | undefined, type?: "last") => {
+        if(index || index == 0){
+            if (index >= 2) {
+                return { colSpan: 0, rowSpan: 0 };
+            }
+        }
+        return {};
+    };
+
+    const columns: ColumnsType<DataType> = [
+        {
+          title: t("Surname"),
+          dataIndex: "name",
+          rowScope: "row",
+        },
+        {
+          title: t("Value"),
+          dataIndex: "value",
+          onCell: (_, index) => ({
+            colSpan: (index == 2) ? 3 : 1
+          }),
+        },
+        {
+          title: t("Name2"),
+          dataIndex: "value2",
+          onCell: (_, index) => sharedOnCell(_, index),
+          className: "bg-[#FAFAFA]"
+        },
+        {
+          title: t("Name3"),
+          dataIndex: "value3",
+          onCell: (_, index) => sharedOnCell(_, index, "last"),
+        },
+    ];
+
     const tableData: DataType[] = [
       {
         name: t("Diplom type"),
         value: data?.diplomaType?.name,
-      },
-      {
-        name: t("Degree"),
-        value: data?.degree?.name,
+        value2: t("Degree"),
+        value3: data?.degree?.name
       },
       {
         name: t("Academic degree"),
         value: data?.academikDegree?.name,
-      },
-      {
-        name: t("Degree information"),
-        value: data?.degreeInfo?.name,
+        value2: t("Degree information"),
+        value3: data?.degreeInfo?.name
       },
       {
         name: t("Membership party"),
@@ -52,19 +83,13 @@ const JobInfoUserView = ({data, form, saveMutation} : {data: any, form: FormInst
                 <p className="font-medium text-[16px]">{t("Professional information")}</p>
                 { checkPermission("user_update") ? <Button onClick={() => setIsModalOpen(true)}>{t("Edit")}</Button> : null}
             </div>
-
-            <div className="grid xl:grid-cols-3 grid-cols-2 gap-x-4">
-              {
-                tableData?.map((item, index) => (
-                  <ViewInput
-                    key={index}
-                    label={item?.name} 
-                    value={item?.value} 
-                    placeholder={item?.name}
-                  />
-                ))
-              }
-            </div>
+            <Table
+                columns={columns}
+                bordered
+                dataSource={tableData}
+                showHeader={false}
+                pagination={false}
+            />
 
 
             {/* edit form */}

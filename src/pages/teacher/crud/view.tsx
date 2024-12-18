@@ -12,13 +12,14 @@ import HeaderUserView from "pages/users/components/vewHeader";
 import MainInfoUserView from "pages/users/view_steps/main_info/personal_info";
 import PassportInfoUserView from "pages/users/view_steps/main_info/passport_info";
 import AddressInfoUserView from "pages/users/view_steps/main_info/address_info";
-import JobInfoUserView from "pages/users/view_steps/profession_step/job_info";
-import UserAccessInfoUserView from "pages/users/view_steps/profession_step/user_access_info";
-import TeacherAccessInfoUserView from "pages/users/view_steps/profession_step/teacher_access_info";
 import AuthInfoUserView from "pages/users/view_steps/auth_step/auth_info";
 import DeleteData from "components/deleteData";
 import useBreadCrumb from "hooks/useBreadCrumb";
 import { renderFullName } from "utils/others_functions";
+import checkPermission from "utils/check_permission";
+import UserAccessInfoUserViewNew from "pages/users/view_steps/profession_step/user_access_info_new";
+import TeacherAccessInfoUserViewNew from "pages/users/view_steps/profession_step/teacher_access_info_new";
+import JobInfoUserView from "pages/users/view_steps/profession_step/job_info";
 
 const ViewTeacher = () => {
 
@@ -133,10 +134,13 @@ const ViewTeacher = () => {
                     {key: '2', label: t("Professional information"), children:
                         <>
                             <JobInfoUserView data={data?.data} form={form} saveMutation={saveMutation} />
-                            <UserAccessInfoUserView data={data?.data} form={form} saveMutation={saveMutation} />
                             {
-                                data?.data?.role?.includes("teacher") ?
-                                <TeacherAccessInfoUserView data={data?.data} form={form} saveMutation={saveMutation} /> : ""
+                                checkPermission("user-access_index") ? 
+                                <UserAccessInfoUserViewNew user_id={user_id} roles={data?.data?.role}/> : ""
+                            }
+                            {
+                                data?.data?.role?.includes("teacher") && checkPermission("teacher-access_get") ?
+                                <TeacherAccessInfoUserViewNew user_id={user_id} /> : ""
                             }
                         </>
                     },

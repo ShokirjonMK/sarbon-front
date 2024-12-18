@@ -3,3 +3,6 @@
 
 export const MAIN_URL = "https://api.sarbon.university/";
 export const FILE_URL = "https://api.sarbon.university/";
+
+// export const FILE_URL = "https://api.eutas.uz/";
+// export const MAIN_URL = "https://api.eutas.uz/";

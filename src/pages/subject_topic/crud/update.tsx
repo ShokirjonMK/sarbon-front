@@ -11,9 +11,10 @@ import { submitData } from './request';
 import { Notification } from 'utils/notification';
 import { AxiosError } from 'axios';
 import { validationErrors } from 'utils/validation_error';
-import TopicFormUI from './form_ui';
 import { useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
+//@ts-ignore
+import TopicFormUI from './form_ui';
 
 type TypeFormProps = {
   topic_id: number | undefined;

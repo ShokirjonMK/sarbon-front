@@ -15,6 +15,7 @@ import useDebounce from "hooks/useDebounce";
 import EmployeeIndexPage from "pages/department/components/employee_index";
 import DeleteData from "components/deleteData";
 import { globalConstants } from "config/constants";
+import useBreadCrumb from "hooks/useBreadCrumb";
 
 interface DataType {
   name: string;
@@ -25,19 +26,9 @@ interface DataType {
 
 const FacultyView: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const { id: _id } = useParams();
   const [visibleEdit, setVisibleEdit] = useState<boolean>(false);
   const [visibleCreate, setVisibleCreate] = useState<boolean>(false);
-
-  const [allData, setallData] = useState<IFaculty[]>();
-
-  const { urlValue, writeToUrl } = useUrlQueryParams({
-    currentPage: 1,
-    perPage: 10,
-  });
-
-  const searchVal = useDebounce(urlValue.q, globalConstants.debounsDuration);
 
   const { data, refetch, isLoading } = useGetOneData({
     queryKey: ["faculties", _id],
@@ -144,39 +135,33 @@ const FacultyView: React.FC = (): JSX.Element => {
     },
   ];
 
-  return (
-    <div>
-      <HeaderExtraLayout
-        breadCrumbData={[
-          { name: "Home", path: "/" },
-          { name: "Faculty", path: "/structural-unit/faculties" },
-          { name: "Faculty view", path: "" },
-        ]}
-        title={t(`${data?.data?.name}`)}
-        isBack={true}
-        btn={
-          <div className="flex">
-            {checkPermission("faculty_delete") ? (
-              <Tooltip placement="left" title={t("Delete")}>
-                <DeleteData
-                  permission={"faculty_delete"}
-                  refetch={refetch}
-                  navigateUrl="/structural-unit/faculties"
-                  url={"faculties"}
-                  id={Number(_id)}
-                  className="mr-4"
-                >
-                  <Button danger>
-                    {t("Delete")}
-                  </Button>
-                </DeleteData>
-              </Tooltip>
-            ) : null}
-            {checkPermission('faculty_update') ? (<Button onClick={() => setVisibleEdit(true)}>{t("Edit")}</Button>) : null}
-          </div>
-        }
-      />
+  useBreadCrumb({pageTitle: t(data?.data?.name), breadcrumb: [
+    {name: "Home", path: '/'},
+    { name: "Faculty", path: "/structural-unit/faculties" },
+    { name: "Faculty view", path: "" },
+  ]})
 
+  return (
+    <div className="content-card">
+      <div className="flex justify-end">
+        {checkPermission("faculty_delete") ? (
+          <Tooltip placement="left" title={t("Delete")}>
+            <DeleteData
+              permission={"faculty_delete"}
+              refetch={refetch}
+              navigateUrl="/structural-unit/faculties"
+              url={"faculties"}
+              id={Number(_id)}
+              className="mr-4"
+            >
+              <Button danger>
+                {t("Delete")}
+              </Button>
+            </DeleteData>
+          </Tooltip>
+        ) : null}
+        {checkPermission('faculty_update') ? (<Button onClick={() => setVisibleEdit(true)}>{t("Edit")}</Button>) : null}
+      </div>
       {_id ? (
         <SimpleUpdateModal
           id={data?.data?.id}
@@ -198,7 +183,7 @@ const FacultyView: React.FC = (): JSX.Element => {
         />
       ) : null}
 
-      <div className="p-6">
+      <div className="pt-4">
         <Table
           columns={columns}
           bordered

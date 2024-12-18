@@ -11,16 +11,17 @@ import { AxiosError } from "axios";
 import { validationErrors } from "utils/validation_error";
 import dayjs from "dayjs";
 import PassportInfoUserView from "../view_steps/main_info/passport_info";
-import AddressInfoUserView from "../view_steps/main_info/address_info";
-import JobInfoUserView from "../view_steps/profession_step/job_info";
-import UserAccessInfoUserView from "../view_steps/profession_step/user_access_info";
 import DocsUserView from "../view_steps/docs_step/all_files_info";
 import AuthInfoUserView from "../view_steps/auth_step/auth_info";
-import TeacherAccessInfoUserView from "../view_steps/profession_step/teacher_access_info";
 import DeleteData from "components/deleteData";
 import { renderFullName } from "utils/others_functions";
 import TutorGroupsView from "../view_steps/groups_step/tutor_groups";
 import useBreadCrumb from "hooks/useBreadCrumb";
+import checkPermission from "utils/check_permission";
+import UserAccessInfoUserViewNew from "../view_steps/profession_step/user_access_info_new";
+import TeacherAccessInfoUserViewNew from "../view_steps/profession_step/teacher_access_info_new";
+import JobInfoUserView from "../view_steps/profession_step/job_info";
+import AddressInfoUserView from "../view_steps/main_info/address_info";
 
 const UserView = () => {
 
@@ -133,10 +134,13 @@ const UserView = () => {
                     {key: 'prefession-info', label: t("Professional information"), children:
                         <>
                             <JobInfoUserView data={data?.data} form={form} saveMutation={saveMutation} />
-                            <UserAccessInfoUserView data={data?.data} form={form} saveMutation={saveMutation} />
                             {
-                                data?.data?.role?.includes("teacher") ?
-                                <TeacherAccessInfoUserView data={data?.data} form={form} saveMutation={saveMutation} /> : ""
+                                checkPermission("user-access_index") ? 
+                                <UserAccessInfoUserViewNew user_id={user_id} roles={data?.data?.role}/> : ""
+                            }
+                            {
+                                data?.data?.role?.includes("teacher") && checkPermission("teacher-access_get") ?
+                                <TeacherAccessInfoUserViewNew user_id={user_id} /> : ""
                             }
                         </>
                     },

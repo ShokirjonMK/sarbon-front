@@ -35,7 +35,7 @@ const HeaderExtraLayout: FC<THeaderProps> = ({ title, btn, breadCrumbData, isBac
   ]
 
   return (
-    <Fade duration={globalConstants.fadeDuration} direction='down'>
+    // <Fade duration={globalConstants.fadeDuration} direction='down'>
       <div className={`pt-[16px] px-[24px] m-5 card-box-shadow bg-white ${menuType == "menu" ? "pb-[22px]" : "pb-[8px]"} ${className ?? ""}`} style={{ borderBottom: menuType == "menu" ? "1px solid #F0F0F0" : ""}}>
         <CustomBreadcrumb arr={breadCrumbData ?? initialBreadCrumbData} />
         <div className="flex justify-between items-center mt-[14px]">
@@ -48,7 +48,7 @@ const HeaderExtraLayout: FC<THeaderProps> = ({ title, btn, breadCrumbData, isBac
           {btn}
         </div>
       </div>
-    </Fade>
+    // </Fade>
   )
 }
 
