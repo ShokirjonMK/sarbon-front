@@ -23,7 +23,8 @@ jobs:
         password: ${{ secrets.SERVER_PASSWORD }}
         script: |
           cd /home/apps/sarbon-front/
-          git config pull.rebase false   # merging strategiyasini belgilash
+          git config --global user.email "ahrorsulaymanov2@gmail.com"
+          git config --global user.name "Ahror"
           git reset --hard
           git pull origin main
 
