@@ -1,7 +1,6 @@
 import SimpleIndexPage from 'pages/common/base_page'
 import React from 'react'
 
-
 const SubjectType : React.FC = () : JSX.Element => {
   return(
     <>

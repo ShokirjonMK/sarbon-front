@@ -50,6 +50,10 @@ export const EXAMQUESTIONTYPES = [
   { id: 2, name: "Test shaklida" },
 ];
 
+export const SUBJECTCATEGORYTYPES = [
+  { id: 1, name: "Auditoriya soati" },
+  { id: 2, name: "Auditoriya soati emas" },
+];
 
 export const DOCUSERROLES = [
   { id: "rector", name: "Rector" },

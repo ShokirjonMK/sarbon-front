@@ -1,6 +1,18 @@
+import { SUBJECTCATEGORYTYPES } from 'config/constants/staticDatas';
 import SimpleIndexPage from 'pages/common/base_page'
+import { TypeFormUIData } from 'pages/common/types';
 import React from 'react'
 
+const formData: TypeFormUIData[] = [
+  {
+    name: "type",
+    label: "Turi",
+    required: true,
+    type: "select",
+    data: SUBJECTCATEGORYTYPES,
+    span: 24,
+  },
+];
 
 const SubjectCategory : React.FC = () : JSX.Element => {
   return(
@@ -19,6 +31,7 @@ const SubjectCategory : React.FC = () : JSX.Element => {
         update_: "subject-category_update",
         create_: "subject-category_create",
       }}
+      formUIData={formData}
     />
     </>
   )

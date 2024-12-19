@@ -20,10 +20,17 @@ export const formUIDataColums = (data: TypeFormUIData[], t: any) => {
   data?.forEach(e => {
     if(!e?.disabledTable){
       if (e?.type === "select") {
-        arr.push({
-          title: t(e?.label),
-          render: e?.render ? e?.render : (element: any) => element[e?.expand_name ?? e?.name?.split("_id")[0]]?.name
-        })
+        if(e?.data?.length) {
+          arr.push({
+            title: t(e?.label),
+            render: e?.render ? e?.render : (element: any) => e?.data?.find((r) => r?.id == element[e?.name])?.name
+          })
+        } else {
+          arr.push({
+            title: t(e?.label),
+            render: e?.render ? e?.render : (element: any) => element[e?.expand_name ?? e?.name?.split("_id")[0]]?.name
+          })
+        }
       } else {
         arr.push({
           title: t(e?.label),
