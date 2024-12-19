@@ -17,6 +17,7 @@ import UpdateGroup from "./crud/update";
 import SearchInput from "components/SearchInput";
 import { globalConstants } from "config/constants";
 import StatusTag from "components/StatusTag";
+import useBreadCrumb from "hooks/useBreadCrumb";
 
 const selectData: TypeFilterSelect[] = [
   {
@@ -150,22 +151,18 @@ const Group: React.FC = (): JSX.Element => {
     },
   ]
 
-  return (
-    <div className="">
-      <HeaderExtraLayout
-        breadCrumbData={[
-          { name: "Home", path: "/" },
-          { name: "Groups", path: "" },
-        ]}
-        title={t("Groups")}
-        btn={
-          <div className="flex items-center">
-            <CreateBtn onClick={() => { setisOpenForm(true); setId(undefined); }} permission={"group_create"} />
-          </div>
-        }
-      />
+  useBreadCrumb({pageTitle: "Groups", breadcrumb: [
+    { name: "Home", path: "/" },
+    { name: "Groups", path: "" },
+  ]})
 
-      <div className="content-card">
+  return (
+    <div className="content-card">
+      <div className="flex justify-end mb-3">
+        <CreateBtn onClick={() => { setisOpenForm(true); setId(undefined); }} permission={"group_create"} />
+      </div>
+
+      <div>
         <Row gutter={[12, 12]}>
           <Col xs={24} sm={24} md={12} lg={6} xl={6}>
             <SearchInput duration={globalConstants.debounsDuration} setSearchVal={setSearchVal} />

@@ -45,7 +45,7 @@ const ExtraLayout: FC<{ children: React.ReactNode, menus:TypeRoutesSubmenu[] | u
     }, [menus, type])
 
     return (
-        <div className="extra-layout" >
+        <div className="extra-layout content-card pb-0 px-0" >
             <HeaderExtraLayout
                 breadCrumbData={[
                     {name: "Home", path: "/"},
@@ -53,6 +53,7 @@ const ExtraLayout: FC<{ children: React.ReactNode, menus:TypeRoutesSubmenu[] | u
                 ]}
                 title={t(title)}
                 menuType={type}
+                className="p-0 m-0"
             />
 
             {

@@ -14,10 +14,10 @@ const Shtats: React.FC = (): JSX.Element => {
                 search={true}
                 isMain={false}
                 permissions={{
-                    view_: "work-load_view_",
-                    delete_: "work-load_delete_",
-                    update_: "work-load_update_",
-                    create_: "work-load_create_"
+                    view_: "work-load_view",
+                    delete_: "work-load_delete",
+                    update_: "work-load_update",
+                    create_: "work-load_create"
                 }}
             />
         </>

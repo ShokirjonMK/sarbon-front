@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { ICourse, IEduForm } from 'models/education';
 import { Button } from "antd";
 import useGetData from "hooks/useGetData";
+import useBreadCrumb from "hooks/useBreadCrumb";
 
 const TimeTablesNew = () => {
 
@@ -21,16 +22,13 @@ const TimeTablesNew = () => {
     options: { refetchOnWindowFocus: false, retry: 0 },
   });
 
+  useBreadCrumb({pageTitle: "Time tables", breadcrumb: [
+    {name: "Home", path: '/'},
+    {name: "Time tables", path: '/time-tables'}
+  ]})
 
   return (
-    <div className="">
-        <HeaderExtraLayout 
-            breadCrumbData={[
-              {name: "Home", path: '/'},
-              {name: "Time tables", path: '/time-tables'}
-            ]}
-            title={t("Time tables")}
-        />
+    <div className="content-card">
         <div className="p-3">
           {
             courses?.items?.map(item => (

@@ -11,6 +11,7 @@ import useGetAllData from "hooks/useGetAllData";
 import CustomPagination from "components/Pagination";
 import dayjs from "dayjs";
 import { renderFullName } from "utils/others_functions";
+import useBreadCrumb from "hooks/useBreadCrumb";
 
 const selectData: TypeFilterSelect[] = [
   {
@@ -151,17 +152,15 @@ const TimeTableNewByRoom: React.FC = (): JSX.Element => {
     // },
   ]
 
-  return (
-    <div className="">
-      <HeaderExtraLayout
-        breadCrumbData={[
-          { name: "Home", path: "/" },
-          { name: "Time table", path: "" },
-        ]}
-        title={t("Time table")}
-      />
+  useBreadCrumb({pageTitle: "Time table", breadcrumb: [
+    { name: "Home", path: "/" },
+    { name: "Time table", path: "" },
+  ]})
 
-      <div className="p-6">
+  return (
+    <div className="content-card">
+
+      <div>
         <Row gutter={[12, 12]}>
           {
             selectData?.map((e, i) => (
