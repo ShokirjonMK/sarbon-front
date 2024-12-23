@@ -19,6 +19,8 @@ import { excelExport } from "utils/excelExport";
 import instance from "config/_axios";
 import { USERSTATUS } from "config/constants/staticDatas";
 import useBreadCrumb from "hooks/useBreadCrumb";
+import { renderFullName } from "utils/others_functions";
+import { useAppSelector } from "store";
 
 const selectData: TypeFilterSelect[] = [
   // {
@@ -73,6 +75,8 @@ const selectData: TypeFilterSelect[] = [
 
 const Students = () => {
 
+  const role = useAppSelector(state => state.auth.user?.active_role); 
+
   const { t } = useTranslation();
   const [allData, setAllData] = useState<any[]>([]);
   const { urlValue, writeToUrl } = useUrlQueryParams({ currentPage: 1, perPage: 15 });
@@ -103,7 +107,7 @@ const Students = () => {
     }
   });
 
-  const exportExcel = async () => {
+  const exportExcelPasswords = async () => {
     const arr: any = [];
 
     if (urlValue?.filter?.faculty_id) {
@@ -116,14 +120,56 @@ const Students = () => {
 
     res.data.data.items?.forEach((element: any) => {
       arr.push({
-        ["Familiyasi"]: element?.profile?.first_name,
-        ["Ismi"]: element?.profile?.last_name,
-        ["Otasining ismi"]: element?.profile?.middle_name,
+        ["F.I.SH"]: renderFullName(element?.profile),
         ['JSHSHIR']: element?.profile?.passport_pin,
         ['Username']: element?.user?.username,
         ['Password']: element?.usernamePass?.password,
         ['Facultet']: element?.faculty?.name,
         ["Guruh"]: element?.group?.unical_name,
+      })
+    })
+    setLoading(false);
+
+    excelExport(arr, `Talabalar ro'yxati (Fakultet kesimida)`)
+    } else {
+      message.warning("Fakultetni tanlang!!!")
+    }
+  }
+
+  const exportExcelAllData = async () => {
+    const arr: any = [];
+
+    if (urlValue?.filter?.faculty_id) {
+      setLoading(true);
+    const res = await instance({
+      method: "get",
+      url: `students?expand=profile,user,group,faculty`,
+      params: { 
+        "per-page": 0, 
+        filter: JSON.stringify({...urlValue.filter, status: urlValue?.filter_like?.status}),
+        "filter-like": JSON.stringify({ first_name, last_name, middle_name, username, passport_number, passport_pin })
+      }    
+    });
+
+    res.data.data.items?.forEach((element: any) => {
+      arr.push({
+        ["F.I.SH"]: renderFullName(element?.profile),
+        ['Foydalanuvchi nomi']: element?.user?.username,
+        ["Tug'ilgan sanasi"]: element?.profile?.birthday,
+        ['Passport seriya raqam']: element?.profile?.passport_serial + element?.profile?.passport_number,
+        ['Passport berilgan sana']: element?.profile?.passport_given_date,
+        ['Passport berilgan']: element?.profile?.passport_given_by,
+        ['JSHSHIR']: element?.profile?.passport_pin,
+        ['Facultet']: element?.faculty?.name,
+        ["Guruh"]: element?.group?.unical_name,
+        ["Telefon raqami"]: element?.profile?.phone,
+        ["Qo'shimcha telefon raqami"]: element?.profile?.phone_secondary,
+        ['Otasining FIO si']: element?.profile?.father_fio,
+        ['Otasining telefon raqami']: element?.profile?.father_number,
+        ['Otasining haqida']: element?.profile?.father_info,
+        ['Onasining FIO si']: element?.profile?.mather_fio,
+        ['Onasining telefon raqami']: element?.profile?.mather_number,
+        ['Onasining haqida']: element?.profile?.mather_info,
       })
     })
     setLoading(false);
@@ -303,7 +349,14 @@ const Students = () => {
     <div className="">
       <div className="content-card">
         <div className="d-f gap-3 mb-2 justify-end" >
-          <ExcelBtn onClick={exportExcel} loading={loading} />
+          {
+            role !== 'teacher' ? 
+            <>
+              <ExcelBtn onClick={exportExcelPasswords} loading={loading} text="Parollarini eksport qilish" />
+              <ExcelBtn onClick={exportExcelAllData} loading={loading} text="Talabalarni eksport qilish" />
+            </> : ""
+          }
+          {/* <ExcelBtn onClick={exportExcel} loading={loading} /> */}
           <Link to={'/students/create'} style={{textDecoration:"none"}}><CreateBtn onClick={() => navigate('/students/create')} permission={"student_create"} /></Link>
         </div>
         <Row gutter={[12, 12]}>

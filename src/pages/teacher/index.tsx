@@ -17,6 +17,7 @@ import { globalConstants } from "config/constants";
 import { excelExport } from "utils/excelExport";
 import instance from "config/_axios";
 import useBreadCrumb from "hooks/useBreadCrumb";
+import { renderFullName } from "utils/others_functions";
 
 const selectData: TypeFilterSelect[] = [
   {
@@ -109,9 +110,7 @@ const Teacher = () => {
         if (noSubject) {
           if (!element?.isTeacherAccess) {
             arr.push({
-              ["Ismi"]: element?.profile?.last_name,
-              ["Familiyasi"]: element?.profile?.first_name,
-              ["Otasining ismi"]: element?.profile?.middle_name,
+              ["F.I.SH"]: renderFullName(element?.profile),
               ["Holati"]: element?.status === 10 ? "Faol" : "Faol emas",
             });
           }
@@ -128,9 +127,7 @@ const Teacher = () => {
           });
 
           arr.push({
-            ["Ismi"]: element?.profile?.last_name,
-            ["Familiyasi"]: element?.profile?.first_name,
-            ["Otasining ismi"]: element?.profile?.middle_name,
+            ["F.I.SH"]: renderFullName(element?.profile),
             ['Username']: element?.username,
             ['Password']: element?.decryptUser,
             ['JSHSHIR']: element?.profile?.passport_pin,

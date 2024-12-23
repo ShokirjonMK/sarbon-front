@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Col,Row } from "antd";
+import { Col,Row, message } from "antd";
 import useUrlQueryParams from "hooks/useUrlQueryParams";
 import { useTranslation } from "react-i18next";
 import HeaderExtraLayout from "components/HeaderPage/headerExtraLayout";
-import { CreateBtn } from "components/Buttons";
+import { CreateBtn, ExcelBtn } from "components/Buttons";
 import { Link, useNavigate } from "react-router-dom";
 import FilterSelect, { TypeFilterSelect } from "components/FilterSelect";
 import { IGroup } from "models/education";
@@ -17,6 +17,8 @@ import UpdateGroup from "./crud/update";
 import SearchInput from "components/SearchInput";
 import { globalConstants } from "config/constants";
 import StatusTag from "components/StatusTag";
+import instance from "config/_axios";
+import { excelExport } from "utils/excelExport";
 import useBreadCrumb from "hooks/useBreadCrumb";
 
 const selectData: TypeFilterSelect[] = [
@@ -32,6 +34,7 @@ const selectData: TypeFilterSelect[] = [
     label: "Direction",
     url: "directions",
     permission: "direction_index",
+    render: (e) => `${e?.code} - ${e?.name}`,
     parent_name: "faculty_id",
     child_names: ["edu_plan_id"]
   },
@@ -57,10 +60,11 @@ const Group: React.FC = (): JSX.Element => {
   const [isOpenForm, setisOpenForm] = useState<boolean>(false);
   const [allData, setallData] = useState<IGroup[]>();
   const [searchVal, setSearchVal] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false)
 
   const { data, refetch, isLoading } = useGetAllData<IGroup>({
     queryKey: ["groups", urlValue.perPage,urlValue.currentPage,searchVal,urlValue?.filter?.faculty_id,urlValue?.filter?.direction_id,urlValue?.filter?.edu_plan_id,],
-    url: `groups?sort=-id&expand=faculty,eduPlan,languages,direction,lang`,
+    url: `groups?sort=-id&expand=faculty,eduPlan,languages,direction,lang,studentCount`,
     urlParams: {
       "per-page": urlValue.perPage,
       page: urlValue.currentPage, 
@@ -76,6 +80,42 @@ const Group: React.FC = (): JSX.Element => {
       },
     },
   });
+
+
+  
+  const exportExcelPasswords = async () => {
+    const arr: any = [];
+
+    setLoading(true);
+    const res = await instance({
+      method: "get",
+      url: `groups?sort=-id&expand=faculty,eduPlan,languages,direction,lang,studentCount`,
+      params: { 
+        "per-page": 0, 
+        query: searchVal ? searchVal : undefined, 
+        filter: JSON.stringify(Object.keys(urlValue.filter)?.length ? urlValue.filter : undefined),
+      }
+    });
+
+    res.data.data.items?.forEach((element: any) => {
+      arr.push({
+        ["Guruh"]: element?.unical_name,
+        ['Facultet']: element?.faculty?.name,
+        ["Yo'nalish"]: element?.direction?.name,
+        ["Ta'lim rejasi"]: element?.eduPlan?.name,
+        ["Ta'lim tili"]: element?.languages?.name,
+        ["Talabalar soni"]: element?.studentCount,
+        ["Holati"]: element?.status == 1 ? "Faol" : "No faol",        
+      })
+    })
+    setLoading(false);
+
+    excelExport(arr, `Guruhlar`)
+    // if (urlValue?.filter?.faculty_id) {
+    // } else {
+    //   message.warning("Fakultetni tanlang!!!")
+    // }
+  }
 
   const columns: ColumnsType<IGroup> = [
     {
@@ -112,7 +152,7 @@ const Group: React.FC = (): JSX.Element => {
       title: t("Direction"),
       dataIndex: "direction",
       key: "direction",
-      render: (i, e) => <span>{e?.direction?.name}</span>,
+      render: (i, e) => <span>{e?.direction?.code} - {e?.direction?.name}</span>,
     },
     {
       title: t("Edu plan"),
@@ -125,6 +165,12 @@ const Group: React.FC = (): JSX.Element => {
       dataIndex: "lang_id",
       key: "lang_id",
       render: (i, e) => <span>{e?.languages?.name}</span>,
+    },
+    {
+      title: t("Talabalar soni"),
+      dataIndex: "studentCount",
+      key: "studentCount",
+      align: "center"
     },
     {
       title: t("Status"),
@@ -158,25 +204,20 @@ const Group: React.FC = (): JSX.Element => {
 
   return (
     <div className="content-card">
-      <div className="flex justify-end mb-3">
+      <div className="flex justify-end mb-3 gap-4">
+      <ExcelBtn onClick={exportExcelPasswords} loading={loading} text="Guruhlarni eksport qilish" />
         <CreateBtn onClick={() => { setisOpenForm(true); setId(undefined); }} permission={"group_create"} />
       </div>
 
-      <div>
+      <div className="p-6">
         <Row gutter={[12, 12]}>
           <Col xs={24} sm={24} md={12} lg={6} xl={6}>
             <SearchInput duration={globalConstants.debounsDuration} setSearchVal={setSearchVal} />
           </Col>
           {selectData?.map((e, i) => (
             <Col key={i} xs={24} sm={24} md={12} lg={8} xl={4}>
-              <FilterSelect
-                url={e.url}
-                name={e.name}
-                label={e.label}
-                permission={e.permission}
-                parent_name={e?.parent_name}
-                child_names={e?.child_names}
-                value_name={e?.value_name}
+              <FilterSelect 
+                {...e}
                 span={{ xs: 24, sm: 24, xl: 24, lg: 24 }}
               />
             </Col>

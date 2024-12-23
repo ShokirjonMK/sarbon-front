@@ -18,6 +18,7 @@ import { globalConstants } from "config/constants";
 import instance from "config/_axios";
 import { excelExport } from "utils/excelExport";
 import useBreadCrumb from "hooks/useBreadCrumb";
+import { renderFullName } from "utils/others_functions";
 
 const selectData: TypeFilterSelect[] = [
   {
@@ -93,9 +94,7 @@ const Employees = () => {
 
       res.data.data.items?.forEach((element: any) => {
         arr.push({
-          ["Ismi"]: element?.profile?.last_name,
-          ["Familiyasi"]: element?.profile?.first_name,
-          ["Otasining ismi"]: element?.profile?.middle_name,
+          ["F.I.SH"]: renderFullName(element?.profile),
           ['Username']: element?.username,
           ['Password']: element?.decryptUser,
           ['JSHSHIR']: element?.profile?.passport_pin,

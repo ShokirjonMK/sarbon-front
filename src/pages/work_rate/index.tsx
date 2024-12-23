@@ -55,9 +55,9 @@ const WorkRate: React.FC = (): JSX.Element => {
           create_: "work-rate_create",
         }}
         formUIData={formData}
-      />
+      /> 
     </div>
-  );
+  );  
 };
 
 export default WorkRate;
