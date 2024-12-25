@@ -117,7 +117,7 @@ const DocDecreeUpdate: React.FC = (): JSX.Element => {
                   disable={isEdit}
                   setContents={
                     // `<div><h1 style="text-align: center; font-size: 36px; mergin-top: 16px; margin-bottom: 8px">Bildirishnoma</h1></div>`
-                    `<div><h3 style="text-align: center; mergin-top: 16px; margin-bottom: 8px">Toshkent amaliy fanlar universiteti</h3></div>`
+                    `<div><h3 style="text-align: center; mergin-top: 16px; margin-bottom: 8px">Sarbon Universiteti</h3></div>`
                     + `<div><h3 style="text-align: center; mergin-top: 16px; margin-bottom: 8px">______________ (bo'lim, kafedra, fakultet nomi) ______________</h3></div>`
                     + `<div><h3 style="text-align: center; mergin-top: 16px; margin-bottom: 8px">__ -sonli Farmoyish</h3></div>`
                     + `<br/><div style="margin-left: 24px;"><b>_______ (sana) ________</b> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <b>Toshkent sh.</b></div>`

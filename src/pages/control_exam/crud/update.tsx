@@ -16,6 +16,7 @@ import { IFinalExam } from 'models/exam';
 import { renderFullName } from 'utils/others_functions';
 import useUrlQueryParams from 'hooks/useUrlQueryParams';
 import { dateParserToDatePicker } from 'utils/second_to_date';
+import useBreadCrumb from 'hooks/useBreadCrumb';
 
 const span = { xs: 24, md: 24, lg: 12, xl: 12 };
 
@@ -223,17 +224,16 @@ const NewExamControlUpdate: React.FC = (): JSX.Element => {
 
   const title = id ? (data?.data?.name ? data?.data?.name : "Exam control update") : `Exam control create`;
 
+
+  useBreadCrumb({pageTitle: title, breadcrumb: [
+    { name: "Home", path: '/' },
+    { name: "Exam controls", path: '/exam-controls' },
+    { name: title, path: '/exam-controls/create' }
+]})
+
   return (
     <Spin spinning={getIsLoading} >
-      <HeaderExtraLayout title={title}
-        breadCrumbData={[
-          { name: "Home", path: '/' },
-          { name: "Exam controls", path: '/exam-controls' },
-          { name: title, path: '/exam-controls/create' }
-        ]}
-        isBack={true}
-      />
-      <div className="px-[24px] py-[20px]">
+      <div className="content-card">
         <Form
           initialValues={{ status: true, lang_id: 1 }}
           form={form}

@@ -16,6 +16,7 @@ import { IFinalExam } from 'models/exam';
 import { renderFullName } from 'utils/others_functions';
 import useUrlQueryParams from 'hooks/useUrlQueryParams';
 import { dateParserToDatePicker } from 'utils/second_to_date';
+import useBreadCrumb from 'hooks/useBreadCrumb';
 
 const span = { xs: 24, md: 24, lg: 12, xl: 12 };
 
@@ -223,19 +224,17 @@ const NewExamUpdate: React.FC = (): JSX.Element => {
 
   const title = id ? (data?.data?.name ? data?.data?.name : "Final exam update") : `Final exam create`;
 
+  useBreadCrumb({pageTitle: title, breadcrumb: [
+    { name: "Home", path: '/' },
+    { name: "Final exam control", path: '/exams' },
+    { name: title, path: '/exams/create' }
+  ]})
+
   return (
     <Spin spinning={getIsLoading} >
-      <HeaderExtraLayout title={title}
-        breadCrumbData={[
-          { name: "Home", path: '/' },
-          { name: "Final exam control", path: '/exams' },
-          { name: title, path: '/exams/create' }
-        ]}
-        isBack={true}
-      />
-      <div className="px-[24px] py-[20px]">
+      <div className="content-card">
         <Form
-          initialValues={{ status: true }}
+          initialValues={{ status: true, lang_id: 1 }}
           form={form}
           layout="vertical"
           onFinish={(values) => mutate({...values, date: time})}

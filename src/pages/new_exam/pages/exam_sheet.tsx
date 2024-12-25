@@ -116,7 +116,7 @@ const ExamSheet: React.FC = (): JSX.Element => {
               </div>
               <div>
                 <p style={{ fontSize: "12px", textAlign: "center", margin: "0 0 4px 0" }}>O‘ZBEKISTON RESPUBLIKASI OLIY TA’LIM, FAN VA INNOVATSIYALAR VAZIRLIGI</p>
-                <p style={{ fontSize: "12px", textAlign: "center", margin: "0" }}>TOSHKENT AMALIY FANLAR UNIVERSITETI</p>
+                <p style={{ fontSize: "12px", textAlign: "center", margin: "0" }}>Sarbon Universiteti</p>
               </div>
               <br />
               <h2 style={{ fontSize: "12px", textAlign: "center" }}>BAHOLASH QAYDNOMASI  № {data?.data?.eduYear?.start_year}-{data?.data?.eduYear?.end_year}/{data?.data?.semestr_id}-{data?.data?.id}</h2>

@@ -132,7 +132,7 @@ const Teacher = () => {
             ['Password']: element?.decryptUser,
             ['JSHSHIR']: element?.profile?.passport_pin,
             ['Telfon raqam']: element?.profile?.phone,
-            ["Holati"]: element?.status === 10 ? "Faol" : "Faol emas",
+            ["Holati"]: element?.status === 10 ? "Faol" : "Faol emas",  
             ["Kafedra"]: `${element?.userAccessKafedra?.map((e: any, i: number) => `${e?.name}`)}`,
             ["UserAccess"]: `${Object.values(obj)?.map((e: any, i) => `${e?.name}  ${e?.rate}`)}`
           })
@@ -140,7 +140,7 @@ const Teacher = () => {
       })
 
       excelExport(arr, `Xodimlar ro'yxati`)
-    } else {
+    } else {  
       message.error(res.data?.message);
     }
   }

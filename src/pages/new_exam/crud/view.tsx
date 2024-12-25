@@ -17,6 +17,7 @@ import { dateParserToDatePicker } from 'utils/second_to_date';
 import ExamStudentsControl from '../finalExamControl';
 import { FaRegEdit } from 'react-icons/fa';
 import UpdateExamFormType from '../finalExamControl/updateExamFormType';
+import useBreadCrumb from 'hooks/useBreadCrumb';
 
 interface DataType {
   name: ReactNode;
@@ -187,38 +188,37 @@ const NewExamView: React.FC = (): JSX.Element => {
 
   const headerTitle = data?.data?.name ? data?.data?.name : "Yakuniy imtihonni ko'rish";
   
+  useBreadCrumb({pageTitle: headerTitle, breadcrumb: [
+    { name: "Home", path: "/" },
+    { name: "Final exam", path: "/exams" },
+    { name: headerTitle, path: "" },
+  ]})
+
   return (
     <Spin spinning={isLoading}>
-      <HeaderExtraLayout
-        breadCrumbData={[
-          { name: "Home", path: "/" },
-          { name: "Final exam", path: "/exams" },
-          { name: headerTitle, path: "" },
-        ]}
-        isBack={true}
-        title={headerTitle}
-        btn={<div>
-          {(data?.data?.status ?? 0) >= 6 && (checkRole("admin") || checkRole("edu_admin") || checkRole("dean") || checkRole("rector") || checkRole("prorector") || checkRole("mudir") || checkRole("student_internship_department")) ? <Link to={`/exams/${id}/sheet`}><Button >Baholash qaydnomasi</Button></Link> : null}
-          {checkPermission("exam_update") && data?.data?.status === 0 ? <Link to={`/final-exam-controls/update/${id}`}><Button>{t("Update")}</Button></Link> : null}
-        </div>}
-      />
-      <div className='py-3 px-6'>
-        <Table
-          columns={columnsviewTable}
-          bordered
-          dataSource={tableData}
-          showHeader={false}
-          pagination={false}
-          className='mb-4'
-        />
+      <div className='content-card'>
+        <div>
+            {(data?.data?.status ?? 0) >= 6 && (checkRole("admin") || checkRole("edu_admin") || checkRole("dean") || checkRole("rector") || checkRole("prorector") || checkRole("mudir") || checkRole("student_internship_department")) ? <Link to={`/exams/${id}/sheet`}><Button >Baholash qaydnomasi</Button></Link> : null}
+            {checkPermission("exam_update") && data?.data?.status === 0 ? <Link to={`/final-exam-controls/update/${id}`}><Button>{t("Update")}</Button></Link> : null}
+          </div>
+        <div className='py-3 px-6'>
+          <Table
+            columns={columnsviewTable}
+            bordered
+            dataSource={tableData}
+            showHeader={false}
+            pagination={false}
+            className='mb-4'
+          />
+          
+          <Divider />
+          <ExamStudentsControl data={data?.data} />
+          {/* <ExamViewTab examView={data?.data} /> */}
+        </div>
         
-        <Divider />
-        <ExamStudentsControl data={data?.data} />
-        {/* <ExamViewTab examView={data?.data} /> */}
-      </div>
+        <UpdateExamFormType setIsModalOpen={setIsModalOpen} isModalOpen={isModalOpen} data={data?.data} refetch={refetch} />
       
-      <UpdateExamFormType setIsModalOpen={setIsModalOpen} isModalOpen={isModalOpen} data={data?.data} refetch={refetch} />
-    
+      </div>
     </Spin>
   )
 }

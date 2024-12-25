@@ -12,7 +12,7 @@ const StudentStudySheetFirstPage: React.FC<TypeAuthInfoView> = ({ data }) => {
             <div className="border-solid border-slate-50 border shadow-md rounded-md p-4" style={{height: "1500px"}}>
                 <br />
                 <br />
-                <p style={{fontSize: "30px", textAlign: "center"}}>Toshkent Amaliy Fanlar Universiteti</p>
+                <p style={{fontSize: "30px", textAlign: "center"}}>Sarbon Universiteti</p>
                 <br />
                 <h2 style={{fontSize: "35px", textAlign: "center"}}>Talaba o'quv varaqasi</h2>
                 <br />

@@ -115,7 +115,7 @@ const DocNoticeUpdate: React.FC = (): JSX.Element => {
               /> :
                 <SunEditor
                   disable={isEdit}
-                  setContents={`<div style="text-align: right" ><p style="text-align: right" >Toshkent Amaliy Fanlar Universiteti</p><p style="text-align: right" >A.V.Umarovga ________________</p><p style="text-align: right" >________ (Lavozimi) __________</p><p style="text-align: right" >_________ (F.I.SH) ________ dan</p></div>`
+                  setContents={`<div style="text-align: right" ><p style="text-align: right" >Sarbon Universiteti</p><p style="text-align: right" >A.V.Umarovga ________________</p><p style="text-align: right" >________ (Lavozimi) __________</p><p style="text-align: right" >_________ (F.I.SH) ________ dan</p></div>`
                     + `<div><h1 style="text-align: center; font-size: 36px; mergin-top: 16px; margin-bottom: 8px">Bildirishnoma</h1></div>`
                     + `<p style="margin-left: 25px;"></p>`}
                   setDefaultStyle='min-height:279mm'
