@@ -135,7 +135,15 @@ const TimeTableDataNew = () => {
       for (const week of weeks?.items) {
         let i = 1
         for (const para of paras?.items) {
-          arr.push({week_id: week?.id, week_name: <p className='text-lg bg'>{week?.name}</p>, para_id: para?.id, para_name: <p className='text-center'><span className='font-bold text-2xl mx-auto block text-center'>{i}</span><br />{para?.start_time} - {para?.end_time}</p>})
+          arr.push({
+            week_id: week?.id, 
+            week_name: <p className='text-lg bg'>{week?.name}</p>, 
+            para_id: para?.id, 
+            para_name: <p className='text-center'>
+                          <span className='font-bold text-2xl mx-auto block text-center'>{i}</span>
+                          <br />{para?.start_time} - {para?.end_time}
+                      </p>
+          })
           i++
         }
       }

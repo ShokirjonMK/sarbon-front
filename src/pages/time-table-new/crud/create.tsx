@@ -14,6 +14,7 @@ import useGetAllData from 'hooks/useGetAllData';
 import { TIMETABLETYPES } from 'config/constants/staticDatas';
 import { globalConstants } from 'config/constants';
 import { renderFullName } from 'utils/others_functions';
+import useBreadCrumb from 'hooks/useBreadCrumb';
 
 const TimeTableCreateNew = () => {
 
@@ -195,19 +196,16 @@ const TimeTableCreateNew = () => {
         retry: 0,
     });
 
+    useBreadCrumb({pageTitle: "Time table create", breadcrumb: [
+        { name: "Home", path: '/' },
+        { name: "Time tables", path: `/time-tables-new` },
+        { name: "Time table create", path: `/time-tables-new` },
+    ]})
+
     return (
         <Spin spinning={false} size="small">
-            <div>
-                <HeaderExtraLayout
-                    title={"Time table create"}
-                    isBack={true}
-                    breadCrumbData={[
-                        { name: "Home", path: '/' },
-                        { name: "Time tables", path: `/time-tables-new` },
-                        { name: "Time table create", path: `/time-tables-new` },
-                    ]}
-                />
-                <div className="px-[24px] py-[20px]">
+            <div className='content-card'>
+                <div>
                     <Form
                         initialValues={{ status: true }}
                         form={form}

@@ -63,7 +63,8 @@ const AddTimeTableGroup = ({data, refetch}: {data: any, refetch: any}) => {
 
     return (
         <div>
-            {(data?.data?.subject_category_id === globalConstants.lectureIdForTimeTable && checkPermission("timetable_add-group")) ? <Button className="mt-4" type="primary" onClick={() => setisNewGroupForm(prev => !prev)}>Boshqa yo'nalishdan guruh qo'shish</Button> : null}
+            {/* {(data?.data?.subject_category_id === globalConstants.lectureIdForTimeTable && checkPermission("timetable_add-group")) ? <Button className="mt-4" type="primary" onClick={() => setisNewGroupForm(prev => !prev)}>Boshqa yo'nalishdan guruh qo'shish</Button> : null} */}
+            {(checkPermission("timetable_add-group")) ? <Button className="mt-4" type="primary" onClick={() => setisNewGroupForm(prev => !prev)}>Boshqa yo'nalishdan guruh qo'shish</Button> : null}
 
             {isNewGroupForm ? <div className="bg-gray-100 rounded-md px-3 pt-3 mt-3">
             <Form

@@ -5,6 +5,7 @@ import useGetOneData from 'hooks/useGetOneData';
 import HeaderUserView from "pages/users/components/vewHeader";
 import TimeTableNewViewFirstTab from "./view";
 import TimeTableStudentsTransfer from "./students_transfer";
+import useBreadCrumb from "hooks/useBreadCrumb";
 
 const TimeTableNewView = () => {
     
@@ -21,6 +22,12 @@ const TimeTableNewView = () => {
           enabled: !!time_table_id,
       }
   })
+
+  useBreadCrumb({pageTitle: timetableQuery.data?.data?.subject?.name, breadcrumb: [
+    {name: "Home", path: '/'},
+    {name: "Time tables", path: `/time-tables-new/${timetableQuery.data?.data?.course_id}/${timetableQuery.data?.data?.edu_form_id}`},
+    {name: timetableQuery.data?.data?.subject?.name, path: `/time-tables-new`},
+  ]})
 
   return(
     <Spin spinning={timetableQuery.isLoading} size="small">
