@@ -47,6 +47,13 @@ const selectData: TypeFilterSelect[] = [
     permission: "exams-type_index",
     span: { xs: 24, sm: 24, md: 12, lg: 8, xl: 6 },
   },
+  {
+    name: "lang_id",
+    label: "Language",
+    url: "langs",
+    permission: "lang_index",
+    span: { xs: 24, sm: 24, md: 12, lg: 8, xl: 6 },
+  },
 ]
 
 const formData: TypeFormUIData[] = [
@@ -79,6 +86,14 @@ const formData: TypeFormUIData[] = [
     type: "select",
     span: 24,
   },
+  {
+    name: "lang_id",
+    label: "Language",
+    required: true,
+    type: "select",
+    url: "langs",
+    span: 24,
+  },
 ];
 
 const Tests: React.FC = (): JSX.Element => {
@@ -95,16 +110,25 @@ const Tests: React.FC = (): JSX.Element => {
     perPage: 10,
   });
 
-  const { data: examTypes, isFetching } = useGetData({
+  const { data: examTypes } = useGetData({
     queryKey: ["exams-types"],
     urlParams: { sort: "order" },
     url: "exams-types"
   });
 
   const { data, isLoading, refetch } = useGetAllData<ITestQuestion>({
-    queryKey: ["tests", urlValue.perPage, urlValue.currentPage, urlValue.filter.subject_id, urlValue.filter?.exam_type_id],
-    urlParams: { "per-page": urlValue.perPage, page: urlValue.currentPage, filter: { subject_id: urlValue.filter?.subject_id, exam_type_id: urlValue.filter?.exam_type_id, type: 2 } },
-    url: `tests?sort=-id&expand=options,examsType,subject`,
+    queryKey: ["tests", urlValue.perPage, urlValue.currentPage, urlValue.filter.subject_id, urlValue.filter?.exam_type_id, urlValue.filter?.lang_id],
+    urlParams: { 
+      "per-page": urlValue.perPage, 
+      page: urlValue.currentPage, 
+      filter: { 
+        subject_id: urlValue.filter?.subject_id, 
+        exam_type_id: urlValue.filter?.exam_type_id,
+        lang_id: urlValue.filter?.lang_id,
+        type: 2 
+      }
+    },
+    url: `tests?sort=-id&expand=options,examsType,subject,testBody`,
   });
 
   const { mutate, isLoading: statusLoading } = useMutation({
@@ -120,7 +144,7 @@ const Tests: React.FC = (): JSX.Element => {
   });
 
   const { mutate: importExamTest } = useMutation({
-    mutationFn: ({ file, exam_type_id }: { file: any, exam_type_id?: number }) => importExamTestToExcel(undefined, file, exam_type_id),
+    mutationFn: ({ file, exam_type_id, subject_id, lang_id }: { file?: any, exam_type_id?: number, subject_id?: number, lang_id?: number }) => importExamTestToExcel(subject_id, file, exam_type_id, lang_id),
     onSuccess: async (res) => {
       refetch();
       Notification("success", "create", res?.message)
@@ -202,13 +226,13 @@ const Tests: React.FC = (): JSX.Element => {
                 </div>
                 <p className='flex items-center'>
                   <Avatar style={{ color: '#000', backgroundColor: '#eeeeee' }} className='mr-2'>{number_order(urlValue.currentPage, urlValue.perPage, Number(index), isLoading)}</Avatar>
-                  <p dangerouslySetInnerHTML={{ __html: item?.text ?? "" }} />
+                  <p dangerouslySetInnerHTML={{ __html: item?.testBody?.text ?? "" }} />
                 </p>
-                {item?.file ? <img width={200} className='ml-[50px] mt-4' src={FILE_URL + item?.file} alt="" /> : ""}
+                {item?.testBody?.file ? <img width={200} className='ml-[50px] mt-4' src={FILE_URL + item?.testBody?.file} alt="" /> : ""}
                 <div className='pl-5 pt-4'>
                   {
                     item?.options?.map(option => (
-                      <div key={option?.id} className={`bg-[#f0f0f0] p-3 rounded-md mb-3`}>
+                      <div key={option?.id} className={`p-3 rounded-md mb-3 ${option?.is_correct === 1 ? "bg-green-100 border-solid border-green-300" : "bg-[#f0f0f0]"}`}>
                         <p dangerouslySetInnerHTML={{ __html: option?.text ?? "" }} />
                         {option?.file ? <img width={120} className='mt-2' src={FILE_URL + option?.file} alt="" /> : ""}
                       </div>
@@ -224,13 +248,17 @@ const Tests: React.FC = (): JSX.Element => {
               currentPage={urlValue.currentPage}
               perPage={urlValue.perPage}
             />
-          ) : <Empty />}
+          ) : ""}
+          {
+            data?._meta?.totalCount === 0 ? <Empty /> : " "
+          }
         </div>
         <Modal title={t("Exam test")} open={isModalOpen} onOk={() => setIsModalOpen(false)} onCancel={() => setIsModalOpen(false)} footer={false}>
           <Form
             form={form}
             layout="vertical"
-            onFinish={(vals: any) => importExamTest({ exam_type_id: vals?.exam_type_id, file: test_file })}
+            initialValues={{lang_id: 1}}
+            onFinish={(vals: any) => importExamTest({ ...vals, file: test_file })}
             className='my-4'
           >
             <FormUIBuilder data={formData} form={form} />
@@ -241,7 +269,7 @@ const Tests: React.FC = (): JSX.Element => {
               rules={[{ required: false, message: `Please upload file` }]}
             >
               <>
-                <input type="file" accept=".xls,.xlsx" onChange={(e: any) => { settest_file(e.target.files[0]); console.log(e.target.files[0]?.name) }} className="hidden" style={{ display: "none" }} id="excel_import" />
+                <input type="file" accept=".xls,.xlsx" onChange={(e: any) => { settest_file(e.target.files[0]); console.log(e.target.files[0]) }} className="hidden" style={{ display: "none" }} id="excel_import" />
                 <label htmlFor="excel_import" className="d-f cursor-pointer text-[#52C41A] rounded-lg border border-solid border-[#52C41A] px-3 py-1" >
                   <ArrowUploadFilled fontSize={16} color="#52C41A" />&nbsp;&nbsp;Import excel
                 </label>

@@ -12,6 +12,7 @@ import StudentInfo from '../components/student_info';
 import useUrlQueryParams from 'hooks/useUrlQueryParams';
 import GroupTimeTable from '../components/group_time_table';
 import GroupStudentsTransfer from '../components/students_transfer';
+import SemesrtRegistration from '../components/semestrovka';
 
 const ViewGroup: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
@@ -84,10 +85,10 @@ const ViewGroup: React.FC = (): JSX.Element => {
             key: "group-time_table", label: t("Time table"), children:
               <GroupTimeTable dates={data?.data?.activeEduSemestr?.weeks} />
           },
-          // {
-          //   key: "semester-registration", label: t("Semester registration"), children:
-          //     <SemesrtRegistration data={data} isLoading={isLoading} />
-          // },
+          {
+            key: "semester-registration", label: t("Semester registration"), children:
+              <SemesrtRegistration data={data} isLoading={isLoading} />
+          },
         ]}
       />
 

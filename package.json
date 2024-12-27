@@ -24,6 +24,7 @@
     "antd-img-crop": "^4.12.2",
     "axios": "^0.27.2",
     "dayjs": "^1.11.7",
+    "exceljs": "^4.4.0",
     "file-saver": "^2.0.5",
     "i18next": "^22.4.14",
     "node-sass": "^9.0.0",

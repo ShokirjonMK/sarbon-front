@@ -7,7 +7,7 @@ import useGetAllData from "hooks/useGetAllData";
 import useUrlQueryParams from "hooks/useUrlQueryParams";
 import useGetData from "hooks/useGetData";
 import { IEduSemestr } from "models/education";
-// import ExcelJS from 'exceljs';
+import ExcelJS from 'exceljs';
 import { ExcelBtn } from "components/Buttons";
 
 interface GroupStudentTypeProps {
@@ -31,9 +31,9 @@ const sortStudent = (a: any, b: any) => {
 
 const SemesrtRegistration = ({data, isLoading}: GroupStudentTypeProps) => {
   
-  // const workbook = new ExcelJS.Workbook();
-  // const sheet = workbook.addWorksheet("My Sheet");
-  // sheet.properties.defaultRowHeight = 80;
+  const workbook = new ExcelJS.Workbook();
+  const sheet = workbook.addWorksheet("My Sheet");
+  sheet.properties.defaultRowHeight = 80;
 
   const {t} = useTranslation()
   const iframe_ref = useRef<HTMLIFrameElement | null>(null);

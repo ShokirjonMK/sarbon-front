@@ -40,13 +40,17 @@ export async function submitExamTestOption(id: number | undefined, data: any) {
     return response.data;
 }
 
-export async function importExamTestToExcel(subject_id: string | number | undefined, file: any, exam_type_id: string | number | undefined) {
-    if(!(subject_id && file)) return message.error("File yuklanmagan");
+export async function importExamTestToExcel(subject_id?: number | string, file?: any, exam_type_id?: number, lang_id?: number) {
+    
+    if(!file) return message.error("File yuklanmagan");
+
+    // if(!(subject_id && file)) return message.error("File yuklanmagan");
 
     const formdata = new FormData();
 
-    formdata.append("subject_id", subject_id.toString());
+    formdata.append("subject_id", String(subject_id));
     formdata.append("exam_type_id", String(exam_type_id));
+    formdata.append("lang_id", String(lang_id));
     formdata.append("upload", file);
     formdata.append("type", '2');
 

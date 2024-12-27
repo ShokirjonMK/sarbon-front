@@ -30,12 +30,12 @@ const FormTestQuestionUI = ({ data, refetch, setisEdit, isEdit }: { data: ITestQ
     form.setFieldsValue({
       level: data?.level,
     });
-    if (data?.file) {
+    if (data?.testBody?.file) {
       setFileList([{
         uid: '-1',
         name: 'image.png',
         status: 'done',
-        url: FILE_URL + data?.file,
+        url: FILE_URL + data?.testBody?.file,
       }])
     }
   }, [data])
@@ -131,11 +131,11 @@ const FormTestQuestionUI = ({ data, refetch, setisEdit, isEdit }: { data: ITestQ
                   label={"Question title"}
                   className="w-full m-0 p-0"
                   rules={[
-                    { required: true, message: `Please input content text!!!` },
+                    { required: false, message: `Please input content text!!!` },
                   ]}
                 >
                   <SunEditor
-                    setContents={data?.text}
+                    setContents={data?.testBody?.text}
                     height="100px"
                     autoFocus={true}
                     placeholder={t("Enter content text") ?? ""}
@@ -166,11 +166,11 @@ const FormTestQuestionUI = ({ data, refetch, setisEdit, isEdit }: { data: ITestQ
               </p>
               <Divider className="my-2" />
               <div className="sm:flex justify-between">
-                <p dangerouslySetInnerHTML={{ __html: data?.text ?? "" }} />
+                <p dangerouslySetInnerHTML={{ __html: data?.testBody?.text ?? "" }} />
                 <img
                   width={122}
                   className="rounded-md"
-                  src={FILE_URL + data?.file}
+                  src={FILE_URL + data?.testBody?.file}
                   alt=""
                 />
               </div>

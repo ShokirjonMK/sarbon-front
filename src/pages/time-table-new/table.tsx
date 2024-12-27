@@ -12,7 +12,7 @@ import { IGroup, IPara } from 'models/education';
 import { Delete16Filled, Eye16Filled, MoreVertical24Filled } from '@fluentui/react-icons';
 import checkPermission from 'utils/check_permission';
 import DeleteData from 'components/deleteData';
-import FilterSelect, { TypeFilterSelect } from 'components/FilterSelect';
+import useBreadCrumb from 'hooks/useBreadCrumb';
 
 type TtimeTable = {
   para_id: number, 
@@ -309,120 +309,117 @@ const TimeTableDataNew = () => {
     }))|| [])
 ]
 
+
+useBreadCrumb({pageTitle: "Time tables", breadcrumb: [
+  {name: "Home", path: '/'},
+  {name: "Time tables", path: '/time-tables-new'}
+]})
+
   return (
-    <div className="">
-        <HeaderExtraLayout 
-            breadCrumbData={[
-              {name: "Home", path: '/'},
-              {name: "Time tables", path: '/time-tables-new'}
-            ]}
-            title={t("Time tables")}
-            isBack={true}
-            backUrl='/time-tables-new'
-        />
-        <div className="p-3">
-          <Row gutter={[4, 12]}>
-            {
-              checkPermission("edu-plan_index") ? 
-              <Col xs={24} sm={24} md={12} lg={6} xl={6}>
-                <label className='mb-2 block'>{t("Edu plan")}</label>
-                <Select
-                  showSearch
-                  placeholder="Filter by edu plan"
-                  className='w-[100%]'
-                  optionFilterProp="children"
-                  filterOption={(input, option) =>
-                    (option?.label ?? '')?.toLowerCase().includes(input.toLowerCase())
-                  }
-                  onChange={(e) => {
-                    writeToUrl({ name: "edu_plan_id", value: e });
-                    writeToUrl({ name: "edu_semestr_id", value: undefined });
-                    writeToUrl({ name: "edu_week", value: undefined });
-                  }}
-                  value={urlValue?.filter?.edu_plan_id}
-                  options={eduPlans?.items?.map(item => ({value: item?.id, label: item?.name}))}
-                />
-              </Col> : ""
-            }
-            {
-              checkPermission("edu-semestr_index") ? 
-              <Col xs={24} sm={24} md={12} lg={6} xl={5}>
-                <label className='mb-2 block'>{t("Edu semestr")}</label>
-                <Select
-                  disabled={!urlValue?.filter?.edu_plan_id}
-                  placeholder="Filter by semestr"
-                  className='w-[100%]'
-                  optionFilterProp="children"
-                  onChange={(e) => {
-                    writeToUrl({ name: "edu_semestr_id", value: e });
-                    writeToUrl({ name: "edu_week", value: undefined })
-                  }}
-                  value={urlValue?.filter?.edu_semestr_id}
-                  options={eduPlans?.items?.find(i => (i.id === urlValue?.filter?.edu_plan_id))?.eduSemestrs?.map((item: any) => ({value: item?.id, label: <div className='flex items-center'>{item?.name}{item?.status === 1 ? <Tag className='ml-3' color="green">Active</Tag> : ""}</div>}))}
-                />
-              </Col> : ""
-            }
-            {
-              checkPermission("week_index") ? 
-              <Col xs={24} sm={24} md={12} lg={6} xl={6}>
-                <label className='mb-2 block'>{t("Ta'lim haftasi")}</label>
-                <Select
-                  disabled={!urlValue?.filter?.edu_semestr_id}
-                  placeholder="Filter by week"
-                  className='w-[100%]'
-                  optionFilterProp="children"
-                  onChange={(e) => writeToUrl({ name: "edu_week", value: e })}
-                  value={urlValue?.filter_like?.edu_week}
-                  options={
-                    eduPlans?.items?.find(i => (i.id === urlValue?.filter?.edu_plan_id))
-                    ?.eduSemestrs?.find((i: any) => (i.id === urlValue?.filter?.edu_semestr_id))
-                    ?.weeks?.map((item: any) => ({value: `${item?.start_date}and${item?.end_date}and${item?.week}`, 
-                    label: <div className='flex items-center'>{item?.week} - hafta / {item?.start_date} - {item?.end_date} <Tag color='warning' className='ml-3'>{item?.week % 2 === 1 ? "Toq hafta" : "Juft hafta" }</Tag></div>}))}
-                />
-              </Col> : ""
-            }
-            <Col xs={24} sm={24} md={12} lg={6} xl={4}>
-              <label className='mb-2 block'>{t("Edu type")}</label>
+    <div className="content-card">
+      <div>
+        <Row gutter={[4, 12]}>
+          {
+            checkPermission("edu-plan_index") ? 
+            <Col xs={24} sm={24} md={12} lg={6} xl={6}>
+              <label className='mb-2 block'>{t("Edu plan")}</label>
               <Select
-                placeholder="Filter by edu type"
-                className='w-[100%]'
-                optionFilterProp="children"
-                onChange={(e) => writeToUrl({ name: "edu_type_id", value: e })}
-                value={urlValue?.filter?.edu_type_id}
-                options={eduTypes?.items?.map(item => ({value: item?.id, label: item?.name}))}
-              />
-            </Col>
-            <Col xs={24} sm={24} md={12} lg={6} xl={3}>
-              <label className='mb-2 block'>{t("Group")}</label>
-              <Select
-                allowClear
                 showSearch
-                placeholder="Filter by group"
+                placeholder="Filter by edu plan"
                 className='w-[100%]'
                 optionFilterProp="children"
                 filterOption={(input, option) =>
                   (option?.label ?? '')?.toLowerCase().includes(input.toLowerCase())
                 }
-                onChange={(e) => writeToUrl({ name: "group_id", value: e })}
-                value={urlValue?.filter?.group_id}
-                options={groups?.items?.map(item => ({value: item?.id, label: item?.unical_name}))}
+                onChange={(e) => {
+                  writeToUrl({ name: "edu_plan_id", value: e });
+                  writeToUrl({ name: "edu_semestr_id", value: undefined });
+                  writeToUrl({ name: "edu_week", value: undefined });
+                }}
+                value={urlValue?.filter?.edu_plan_id}
+                options={eduPlans?.items?.map(item => ({value: item?.id, label: item?.name}))}
               />
-            </Col>
-          </Row>
-          <div className='time-table-list'>
-            <Table
-              columns={columns}
-              dataSource={(urlValue.filter?.edu_semestr_id && urlValue.filter_like?.edu_week) ? timetableData : []}
-              pagination={false}
-              loading={isFetching}
-              size="middle"
-              className="mt-3 mb-5"
-              rowClassName="py-[12px]"
-              scroll={{ x: 1600, y: "70vh" }}
-              bordered
+            </Col> : ""
+          }
+          {
+            checkPermission("edu-semestr_index") ? 
+            <Col xs={24} sm={24} md={12} lg={6} xl={5}>
+              <label className='mb-2 block'>{t("Edu semestr")}</label>
+              <Select
+                disabled={!urlValue?.filter?.edu_plan_id}
+                placeholder="Filter by semestr"
+                className='w-[100%]'
+                optionFilterProp="children"
+                onChange={(e) => {
+                  writeToUrl({ name: "edu_semestr_id", value: e });
+                  writeToUrl({ name: "edu_week", value: undefined })
+                }}
+                value={urlValue?.filter?.edu_semestr_id}
+                options={eduPlans?.items?.find(i => (i.id === urlValue?.filter?.edu_plan_id))?.eduSemestrs?.map((item: any) => ({value: item?.id, label: <div className='flex items-center'>{item?.name}{item?.status === 1 ? <Tag className='ml-3' color="green">Active</Tag> : ""}</div>}))}
+              />
+            </Col> : ""
+          }
+          {
+            checkPermission("week_index") ? 
+            <Col xs={24} sm={24} md={12} lg={6} xl={6}>
+              <label className='mb-2 block'>{t("Ta'lim haftasi")}</label>
+              <Select
+                disabled={!urlValue?.filter?.edu_semestr_id}
+                placeholder="Filter by week"
+                className='w-[100%]'
+                optionFilterProp="children"
+                onChange={(e) => writeToUrl({ name: "edu_week", value: e })}
+                value={urlValue?.filter_like?.edu_week}
+                options={
+                  eduPlans?.items?.find(i => (i.id === urlValue?.filter?.edu_plan_id))
+                  ?.eduSemestrs?.find((i: any) => (i.id === urlValue?.filter?.edu_semestr_id))
+                  ?.weeks?.map((item: any) => ({value: `${item?.start_date}and${item?.end_date}and${item?.week}`, 
+                  label: <div className='flex items-center'>{item?.week} - hafta / {item?.start_date} - {item?.end_date} <Tag color='warning' className='ml-3'>{item?.week % 2 === 1 ? "Toq hafta" : "Juft hafta" }</Tag></div>}))}
+              />
+            </Col> : ""
+          }
+          <Col xs={24} sm={24} md={12} lg={6} xl={4}>
+            <label className='mb-2 block'>{t("Edu type")}</label>
+            <Select
+              placeholder="Filter by edu type"
+              className='w-[100%]'
+              optionFilterProp="children"
+              onChange={(e) => writeToUrl({ name: "edu_type_id", value: e })}
+              value={urlValue?.filter?.edu_type_id}
+              options={eduTypes?.items?.map(item => ({value: item?.id, label: item?.name}))}
             />
-          </div>
+          </Col>
+          <Col xs={24} sm={24} md={12} lg={6} xl={3}>
+            <label className='mb-2 block'>{t("Group")}</label>
+            <Select
+              allowClear
+              showSearch
+              placeholder="Filter by group"
+              className='w-[100%]'
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                (option?.label ?? '')?.toLowerCase().includes(input.toLowerCase())
+              }
+              onChange={(e) => writeToUrl({ name: "group_id", value: e })}
+              value={urlValue?.filter?.group_id}
+              options={groups?.items?.map(item => ({value: item?.id, label: item?.unical_name}))}
+            />
+          </Col>
+        </Row>
+        <div className='time-table-list'>
+          <Table
+            columns={columns}
+            dataSource={(urlValue.filter?.edu_semestr_id && urlValue.filter_like?.edu_week) ? timetableData : []}
+            pagination={false}
+            loading={isFetching}
+            size="middle"
+            className="mt-3 mb-5"
+            rowClassName="py-[12px]"
+            scroll={{ x: 1600, y: "70vh" }}
+            bordered
+          />
         </div>
+      </div>
     </div>
   )
 }
