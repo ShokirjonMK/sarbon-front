@@ -149,6 +149,7 @@ const TimeTableDateDateUpdateModal = (
     const { mutate, isLoading } = useMutation({
         mutationFn: (newVals : any) => changeTimeTableDate(selectedItem?.ids_id, {
             ...Object(newVals),
+            old_para_id: selectedItem?.para_id,
             type: selectedItem?.two_group === 1 ? 5 : 4,
             new_date: dayjs(newVals?.date).format("YYYY-MM-DD"),
             date: selectedItem?.date,

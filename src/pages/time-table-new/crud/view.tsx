@@ -214,7 +214,7 @@ const TimeTableNewViewFirstTab = ({timetableQuery}: {timetableQuery: any}) => {
             viewPermission={'_'}
             editPermission={"timetable_update"}
             deletePermission={"timetable-date_delete"}
-          />
+          /> 
           {
             checkPermission("timetable_update") ? 
             <Button className="ml-2">
