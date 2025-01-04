@@ -14,7 +14,7 @@ const UserCountStatistika: React.FC = (): JSX.Element => {
               <Avatar style={{ backgroundColor: '#36cfc9' }} size={64} icon={<FaUsers />} />
               <div>
                 <h4 className="text-[#C0C0C0] mb-2 font-medium">{t("Jami talabalar soni")}</h4>
-                <h2 className="text-4xl font-bold">18000</h2>
+                <h2 className="text-4xl font-bold">556</h2>
               </div>
             </div>
           </div>
@@ -26,7 +26,7 @@ const UserCountStatistika: React.FC = (): JSX.Element => {
               <Avatar style={{ backgroundColor: '#597ef7' }} size={64} icon={<FaUserGraduate /> } />
               <div>
                 <h4 className="text-[#C0C0C0] mb-2 font-medium">{t("Magistr talabalar soni")}</h4>
-                <h2 className="text-4xl font-bold">18000</h2>
+                <h2 className="text-4xl font-bold">0</h2>
               </div>
             </div>
           </div>
@@ -38,7 +38,7 @@ const UserCountStatistika: React.FC = (): JSX.Element => {
               <Avatar style={{ backgroundColor: '#b37feb' }} size={64} icon={<FaUsers /> } />
               <div>
                 <h4 className="text-[#C0C0C0] mb-2 font-medium">{t("Sirtqi talabalar soni")}</h4>
-                <h2 className="text-4xl font-bold">18000</h2>
+                <h2 className="text-4xl font-bold">447</h2>
               </div>
             </div>
           </div>
@@ -50,7 +50,7 @@ const UserCountStatistika: React.FC = (): JSX.Element => {
               <Avatar style={{ backgroundColor: '#faad14' }} size={64} icon={<FaChalkboardTeacher /> } />
               <div>
                 <h4 className="text-[#C0C0C0] mb-2 font-medium">{t("O'qituvchilar soni")}</h4>
-                <h2 className="text-4xl font-bold">300</h2>
+                <h2 className="text-4xl font-bold">47</h2>
               </div>
             </div>
           </div>

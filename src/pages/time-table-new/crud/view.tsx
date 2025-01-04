@@ -198,7 +198,7 @@ const TimeTableNewViewFirstTab = ({timetableQuery}: {timetableQuery: any}) => {
     },
     {
       title: t("Actions"),
-      width: data?.data?.two_group === 0 ? 120 : 120,
+      width: data?.data?.two_group === 0 ? 200 : 200,
       align: "center",
       render: (i, e) => <div className="flex">
           <Actions
@@ -217,14 +217,16 @@ const TimeTableNewViewFirstTab = ({timetableQuery}: {timetableQuery: any}) => {
           />
           {
             checkPermission("timetable_update") ? 
-            <CalendarEdit24Regular 
-              className="w-[20px] h-[20px] cursor-pointer text-green-500 ml-2" 
-              onClick={() => {
-                setIsModalOpenUpdateData(true);
-                setselectedItem(e)
-              }} 
-            /> : ""
-          }
+            <Button className="ml-2">
+              <CalendarEdit24Regular 
+                className="w-[20px] h-[20px] cursor-pointer text-green-500 ml-2" 
+                onClick={() => {
+                  setIsModalOpenUpdateData(true);
+                  setselectedItem(e)
+                }} 
+              />
+            </Button> : ""
+          } 
       </div>,
     },
   ], [data?.data]);
