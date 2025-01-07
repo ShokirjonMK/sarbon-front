@@ -54,7 +54,7 @@ const Subjects: React.FC = (): JSX.Element => {
 
   const { data, isLoading, refetch } = useGetAllData<ISubject>({
     queryKey: ["subjects", urlValue.currentPage, urlValue.perPage, searchVal, urlValue.filter],
-    url: `subjects?sort=-id&expand=description,topicsCount,semestr,subjectType,language,parent,parent.eduForm,parent.semestr,kafedra,eduForm,eduSemestrExamsTypes,eduSemestrSubjectCategoryTimes${urlValue.q ? "&query=" + searchVal : ""}${urlValue.filter ? "&filter=" + JSON.stringify(urlValue.filter) : ""}`,
+    url: `subjects?sort=-id&expand=eduSemestrSubject.eduSemestr,eduSemestrSubject.eduSemestr.eduPlan.activeSemestr,description,topicsCount,semestr,subjectType,language,parent,parent.eduForm,parent.semestr,kafedra,eduForm,eduSemestrExamsTypes,eduSemestrSubjectCategoryTimes${urlValue.q ? "&query=" + searchVal : ""}${urlValue.filter ? "&filter=" + JSON.stringify(urlValue.filter) : ""}`,
     urlParams: { "per-page": urlValue.perPage, page: urlValue.currentPage },
     options: {
       onSuccess: (res) => {
@@ -205,6 +205,19 @@ const Subjects: React.FC = (): JSX.Element => {
         width: 100,
       },
       ...subjectCategoryTime,
+      {
+        title: t("Birikkan ta'rim rejalari"),
+        render: (e: any) => <ul>{e?.eduSemestrSubject?.map((sb: any, index: number) => (
+          <li 
+            className={` ${sb?.eduSemestr?.eduPlan?.activeSemestr?.semestr_id === e?.semestr_id ? "bg-green-200" : "bg-slate-100"} py-1 px-2 rounded-lg  ${e?.eduSemestrSubject?.length - 1 > index ? "mb-2" : ""}`} 
+            key={sb?.id}
+          >
+            {sb?.eduSemestr?.eduPlan?.name}
+          </li>
+        ))}</ul>,
+        // align: "center",
+        width: 400,
+      },
       width > 756 ?
       {
         title: t("Mavzular soni"),
