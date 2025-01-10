@@ -20,7 +20,7 @@ const UpdateSubjectExamTest = () => {
 
   const { data, refetch, isLoading } = useGetOneData<ITestQuestion>({
     queryKey: ["tests", test_id],
-    url: `tests/${test_id}`,
+    url: `tests/${test_id}?expand=testBody`,
     options: {
       refetchOnWindowFocus: false,
       retry: 0,
@@ -31,7 +31,7 @@ const UpdateSubjectExamTest = () => {
   const { data: optionsData, refetch: refetchOptions } = useGetAllData<ITestOption>({
     queryKey: ["options", test_id],
     url: `options`,
-    urlParams: {filter: {test_id: Number(test_id)}},
+    urlParams: { filter: { test_id: Number(test_id) } },
     options: {
       onSuccess: () => {
         setOptions([])
@@ -84,11 +84,11 @@ const UpdateSubjectExamTest = () => {
           <div className="grid grid-cols-12">
             {
               checkPermission("option_create") ?
-              <div className="lg:col-span-8 col-span-12 lg:col-start-3">
-                {
-                  test_id != "0" && options?.length < 1 ? <Button onClick={() => setOptions([...options, 'prev']) } className='w-[100%]' >+ {t("Add option")}</Button> : ""
-                }
-              </div> : ""
+                <div className="lg:col-span-8 col-span-12 lg:col-start-3">
+                  {
+                    test_id != "0" && options?.length < 1 ? <Button onClick={() => setOptions([...options, 'prev'])} className='w-[100%]' >+ {t("Add option")}</Button> : ""
+                  }
+                </div> : ""
             }
           </div>
         </div>
