@@ -1,11 +1,12 @@
 import { BookRegular, BuildingRegular, ClockRegular, PeopleCommunityRegular } from '@fluentui/react-icons';
 import { Calendar, Col, Row, Segmented, Select, Tag } from 'antd';
 import FilterSelect, { TypeFilterSelect } from 'components/FilterSelect';
+import dayjs from 'dayjs';
 import useGetAllData from 'hooks/useGetAllData';
 import useGetData from 'hooks/useGetData';
 import useUrlQueryParams from 'hooks/useUrlQueryParams';
 import { ISimple } from 'models/other';
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import checkPermission from 'utils/check_permission';
@@ -45,6 +46,18 @@ const TeacherDashboard: React.FC = (): JSX.Element => {
     const [activeWeek, setActiveWeek] = useState<number>(new Date().getDay());
     const { urlValue, writeToUrl } = useUrlQueryParams({});
     const { t } = useTranslation();
+
+
+    useEffect(() => {
+
+        const today = dayjs();
+
+        const startOfWeek = today.startOf('week').add(1, 'day').format('YYYY-MM-DD');
+        const endOfWeek = today.endOf('week').add(1, 'day').format('YYYY-MM-DD');
+
+        writeToUrl({ name: "edu_week", value: `${startOfWeek}and${endOfWeek}` })
+
+    }, [])
 
 
     const { data, isFetching } = useGetAllData({
@@ -90,18 +103,18 @@ const TeacherDashboard: React.FC = (): JSX.Element => {
 
         // globalConstants.lectureIdForTimeTable
 
-        _time_table?.forEach(e => {            
+        _time_table?.forEach(e => {
             const index = new_data?.findIndex(a => a?.ids_id === e?.ids_id && a?.time_table?.para_id === e?.para_id);
             // if (e?.isLesson) {
             if (index > -1 && e?.subject_category_id === 1) {
                 new_data[index] = { ...new_data[index], groups: [...new_data[index]?.groups, e?.group?.unical_name] }
             } else {
-                    new_data.push({
-                        ids_id: e?.ids_id,
-                        time_table: e,
-                        pear_time_table: null,
-                        groups: [e?.group?.unical_name]
-                    })
+                new_data.push({
+                    ids_id: e?.ids_id,
+                    time_table: e,
+                    pear_time_table: null,
+                    groups: [e?.group?.unical_name]
+                })
                 // }
             }
 

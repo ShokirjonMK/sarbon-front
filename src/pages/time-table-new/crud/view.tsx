@@ -10,31 +10,31 @@ import AddDayModal from "./addDayModal";
 import dayjs from "dayjs";
 import AddTimeTableGroup from "./addGroupForm";
 import DeleteData from "components/deleteData";
-import { CalendarEdit24Regular, Delete16Filled } from "@fluentui/react-icons";
+import { CalendarEdit24Regular, Checkmark20Regular, Delete16Filled } from "@fluentui/react-icons";
 import { useParams } from "react-router-dom";
 import TimeTableDateDateUpdateModal from "./tableDateUpdateDateModal";
 
 interface DataType {
-    name: string;
-    value: ReactNode;
-    value2?: ReactNode;
-    value3?: ReactNode;
+  name: string;
+  value: ReactNode;
+  value2?: ReactNode;
+  value3?: ReactNode;
 }
 
 const sharedOnCell = (_: DataType, index: number | undefined) => {
   if (index || index == 0) {
-      if (index < 1) {
+    if (index < 1) {
       return { colSpan: 0 };
-      }
+    }
   }
   return {};
 };
 
-const TimeTableNewViewFirstTab = ({timetableQuery}: {timetableQuery: any}) => {
+const TimeTableNewViewFirstTab = ({ timetableQuery }: { timetableQuery: any }) => {
 
-  const {isLoading, data, refetch} = timetableQuery;  
-  const { time_table_id } = useParams()  
-    
+  const { isLoading, data, refetch } = timetableQuery;
+  const { time_table_id } = useParams()
+
   const { t } = useTranslation();
   const [isModalOpenUpdate, setIsModalOpenUpdate] = useState<boolean>(false);
   const [isModalOpenUpdateData, setIsModalOpenUpdateData] = useState<boolean>(false);
@@ -67,12 +67,12 @@ const TimeTableNewViewFirstTab = ({timetableQuery}: {timetableQuery: any}) => {
     },
   ];
 
-  
+
   const successUrl = (timeTableId: number | string) => {
 
-    if(timeTableId != time_table_id) return ``;
-        
-    if(data?.data?.allGroup?.length > 1 && timeTableId == time_table_id) return `/time-tables-new/view/table/${data?.data?.allGroup?.filter((e: any) => e?.id != time_table_id)[0]?.id}`
+    if (timeTableId != time_table_id) return ``;
+
+    if (data?.data?.allGroup?.length > 1 && timeTableId == time_table_id) return `/time-tables-new/view/table/${data?.data?.allGroup?.filter((e: any) => e?.id != time_table_id)[0]?.id}`
 
     return `/time-tables-new/${data?.data?.course_id}/${data?.data?.edu_form_id}?edu_plan_id=${data?.data?.edu_plan_id}&edu_semestr_id=${data?.data?.edu_semestr_id}`
 
@@ -82,19 +82,19 @@ const TimeTableNewViewFirstTab = ({timetableQuery}: {timetableQuery: any}) => {
     {
       name: t("Group"),
       value: <div>
-          {
-            data?.data?.allGroup?.map((i: any, index: number) => <Tag key={index + 12000} className="py-2 w-max items-start text-sm">{i?.group?.unical_name} 
-              <DeleteData
-                className="cursor-pointer ml-4"
-                permission={'timetable_delete-one'}
-                refetch={refetch}
-                url={'timetables/delete-one'}
-                id={i?.id}
-                navigateUrl={successUrl(i?.id)}
-              >
-                <Delete16Filled className="delete text-[#595959]" />
-              </DeleteData></Tag>)
-          }
+        {
+          data?.data?.allGroup?.map((i: any, index: number) => <Tag key={index + 12000} className="py-2 w-max items-start text-sm">{i?.group?.unical_name}
+            <DeleteData
+              className="cursor-pointer ml-4"
+              permission={'timetable_delete-one'}
+              refetch={refetch}
+              url={'timetables/delete-one'}
+              id={i?.id}
+              navigateUrl={successUrl(i?.id)}
+            >
+              <Delete16Filled className="delete text-[#595959]" />
+            </DeleteData></Tag>)
+        }
         <AddTimeTableGroup data={data} refetch={refetch} />
       </div>,
     },
@@ -126,7 +126,7 @@ const TimeTableNewViewFirstTab = ({timetableQuery}: {timetableQuery: any}) => {
           {data?.data?.createdBy?.first_name} {data?.data?.createdBy?.last_name}{" "}
           (
           {data?.data?.createdBy?.role.map((item: string, index: number) => {
-            return <span key={index+200}>{item}</span>;
+            return <span key={index + 200}>{item}</span>;
           })}
           )
           <p>
@@ -181,7 +181,7 @@ const TimeTableNewViewFirstTab = ({timetableQuery}: {timetableQuery: any}) => {
       render: (e: any) => <p>{renderFullName(e?.user?.profile)}</p>,
     },
     {
-      title: t('Building') + " - " +  t('Room'),
+      title: t('Building') + " - " + t('Room'),
       render: (i) => `${i?.building?.name} - ${i?.room?.name}`,
     },
     {
@@ -201,57 +201,67 @@ const TimeTableNewViewFirstTab = ({timetableQuery}: {timetableQuery: any}) => {
       width: data?.data?.two_group === 0 ? 200 : 200,
       align: "center",
       render: (i, e) => <div className="flex">
-          <Actions
-            key={e?.id}
-            refetch={refetch}
-            id={e?.id}
-            url={'timetable-dates'}
-            onClickEdit={() => {
-              setIsModalOpenUpdate(true);
-              setselectedItem(e)
-            }}
-            onClickView={() => console.log(`view`)}
-            viewPermission={'_'}
-            editPermission={"timetable_update"}
-            deletePermission={"timetable-date_delete"}
-          /> 
-          {
-            checkPermission("timetable_update") ? 
-            <Button className="ml-2">
-              <CalendarEdit24Regular 
-                className="w-[20px] h-[20px] cursor-pointer text-green-500 ml-2" 
-                onClick={() => {
-                  setIsModalOpenUpdateData(true);
+        {
+          e?.attend_status !== 1 ?
+            <>
+              <Actions
+                key={e?.id}
+                refetch={refetch}
+                id={e?.id}
+                url={'timetable-dates'}
+                onClickEdit={() => {
+                  setIsModalOpenUpdate(true);
                   setselectedItem(e)
-                }} 
+                }}
+                onClickView={() => console.log(`view`)}
+                viewPermission={'_'}
+                editPermission={"timetable_update"}
+                deletePermission={"timetable-date_delete"}
               />
-            </Button> : ""
-          } 
+              {
+                checkPermission("timetable_update") ?
+                  <Button onClick={() => {
+                    setIsModalOpenUpdateData(true);
+                    setselectedItem(e)
+                  }}
+                    className="ml-2">
+                    <CalendarEdit24Regular
+                      className="w-[20px] h-[20px] cursor-pointer text-green-500 "
+
+                    />
+                  </Button> : ""
+              }
+            </>
+            : <>
+              <p className="mr-2" >Davomat</p>
+              <Checkmark20Regular className="text-green-500" />
+            </>
+        }
       </div>,
     },
   ], [data?.data]);
 
-  return(
+  return (
     <div>
       <div>
         <div className="px-[24px] pb-[20px]">
           <div className="table-none-hover">
             <h3 className="mb-2">Umumiy ma'lumot</h3>
-              <Table
-                  columns={columnsMainData}
-                  bordered
-                  dataSource={tableData}
-                  showHeader={false}
-                  pagination={false}
-                  className="mb-4"
-              />
-              <Divider />
-              <div className="flex justify-between items-center">
-                <h3>Dars ma'lumot</h3>
-                {checkPermission("timetable_add-day") ? <Button onClick={() => setIsModalOpenAddDay(true)} >Para qo'shish</Button> : ""}
-              </div>
-              {
-                data?.data?.two_group === 0 ?
+            <Table
+              columns={columnsMainData}
+              bordered
+              dataSource={tableData}
+              showHeader={false}
+              pagination={false}
+              className="mb-4"
+            />
+            <Divider />
+            <div className="flex justify-between items-center">
+              <h3>Dars ma'lumot</h3>
+              {checkPermission("timetable_add-day") ? <Button onClick={() => setIsModalOpenAddDay(true)} >Para qo'shish</Button> : ""}
+            </div>
+            {
+              data?.data?.two_group === 0 ?
                 <Table
                   columns={columns}
                   dataSource={data?.data?.timeTableDate}
@@ -264,64 +274,64 @@ const TimeTableNewViewFirstTab = ({timetableQuery}: {timetableQuery: any}) => {
                   bordered
                 />
                 : data?.data?.two_group === 1 ?
-                <div className="grid xl:grid-cols-2 grid-cols-1 gap-4">
-                  <div>
-                    <h3>1 - patok</h3>
-                    <Table
-                      columns={columns}
-                      dataSource={data?.data?.timeTableDate}
-                      pagination={false}
-                      loading={isLoading}
-                      size="middle"
-                      className="mt-3 mb-5"
-                      rowClassName="py-[12px]"
-                      scroll={{ x: 800, y: "70vh" }}
-                      bordered
-                    />
-                  </div>
-                  <div>
-                    <h3>2 - patok</h3>
-                    <Table
-                      columns={columns}
-                      dataSource={data?.data?.secondGroup?.timeTableDate}
-                      pagination={false}
-                      loading={isLoading}
-                      size="middle"
-                      className="mt-3 mb-5"
-                      rowClassName="py-[12px]"
-                      scroll={{ x: 800, y: "70vh" }}
-                      bordered
-                    />
-                  </div>
-                </div> : ""
-              }
+                  <div className="grid xl:grid-cols-2 grid-cols-1 gap-4">
+                    <div>
+                      <h3>1 - patok</h3>
+                      <Table
+                        columns={columns}
+                        dataSource={data?.data?.timeTableDate}
+                        pagination={false}
+                        loading={isLoading}
+                        size="middle"
+                        className="mt-3 mb-5"
+                        rowClassName="py-[12px]"
+                        scroll={{ x: 800, y: "70vh" }}
+                        bordered
+                      />
+                    </div>
+                    <div>
+                      <h3>2 - patok</h3>
+                      <Table
+                        columns={columns}
+                        dataSource={data?.data?.secondGroup?.timeTableDate}
+                        pagination={false}
+                        loading={isLoading}
+                        size="middle"
+                        className="mt-3 mb-5"
+                        rowClassName="py-[12px]"
+                        scroll={{ x: 800, y: "70vh" }}
+                        bordered
+                      />
+                    </div>
+                  </div> : ""
+            }
           </div>
         </div>
       </div>
-      <TimeTableDateUpdateModal 
-        isModalOpen={isModalOpenUpdate} 
-        setIsModalOpen={setIsModalOpenUpdate} 
-        selectedItem={selectedItem} 
-        setselectedItem={setselectedItem} 
+      <TimeTableDateUpdateModal
+        isModalOpen={isModalOpenUpdate}
+        setIsModalOpen={setIsModalOpenUpdate}
+        selectedItem={selectedItem}
+        setselectedItem={setselectedItem}
         subjectCategoryTime={data?.data?.subjectCategoryTime}
         dates={data?.data?.timeTableDate}
         refetch={refetch}
       />
       {
-        isModalOpenUpdateData ? 
-        <TimeTableDateDateUpdateModal
-          isModalOpen={isModalOpenUpdateData} 
-          setIsModalOpen={setIsModalOpenUpdateData} 
-          selectedItem={selectedItem} 
-          setselectedItem={setselectedItem} 
-          subjectCategoryTime={data?.data?.subjectCategoryTime}
-          mainData={data?.data}
-          refetch={refetch}
-        /> : ""
+        isModalOpenUpdateData ?
+          <TimeTableDateDateUpdateModal
+            isModalOpen={isModalOpenUpdateData}
+            setIsModalOpen={setIsModalOpenUpdateData}
+            selectedItem={selectedItem}
+            setselectedItem={setselectedItem}
+            subjectCategoryTime={data?.data?.subjectCategoryTime}
+            mainData={data?.data}
+            refetch={refetch}
+          /> : ""
       }
-      <AddDayModal 
-        isModalOpen={isModalOpenAddDay} 
-        setIsModalOpen={setIsModalOpenAddDay} 
+      <AddDayModal
+        isModalOpen={isModalOpenAddDay}
+        setIsModalOpen={setIsModalOpenAddDay}
         refetch={refetch}
         freeHour={data?.data?.freeHour}
         ids={data?.data?.ids}
