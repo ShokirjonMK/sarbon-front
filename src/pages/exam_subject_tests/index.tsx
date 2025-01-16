@@ -41,6 +41,7 @@ const SubjectExamTest: React.FC = (): JSX.Element => {
   const [testId, settestId] = useState<number>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedLangId, setselectedLangId] = useState<number | undefined>(1);
+  const [selectedExamTypeId, setSelectedExamTypeId] = useState<number | undefined>();
   const [test_file, settest_file] = useState<any>();
   const [form] = Form.useForm();
 
@@ -104,14 +105,20 @@ const SubjectExamTest: React.FC = (): JSX.Element => {
 
   const { mutate: deleteAllMutation, isLoading: deleteloadingAllTest } = useMutation({
     mutationFn: async () => {
+      if (!selectedLangId || !selectedExamTypeId) {
+        message.error("Test tilini va imtihon turini tanlang");
+        throw new Error("Test tilini va imtihon turini tanlang");
+      }
       const formdata = new FormData();
       formdata.append("lang_id", String(selectedLangId));
+      formdata.append("exam_type_id", String(selectedExamTypeId));
       const response = await instance({ url: `/tests/all-delete/${id}`, method: "PUT", data: formdata });
       return response.data;
     },
     onSuccess: () => {
-      refetch();  
-      setselectedLangId(1)
+      refetch();
+      setselectedLangId(1);
+      setSelectedExamTypeId(undefined);
     }
   });
 
@@ -120,27 +127,37 @@ const SubjectExamTest: React.FC = (): JSX.Element => {
       <div className="px-6 pb-5 pt-2">
         <div className="flex justify-end items-center mb-3 gap-3">
           {
-            checkPermission("test_all-delete") ? 
-            <Popconfirm
-              title="Ma’lumotni o’chirmoqchimisiz?"
-              description={<>
-                <label className='block'>Test tilini tanlang</label>
-                <Select
-                  className='w-full'
-                  value={selectedLangId}
-                  onChange={(e) => setselectedLangId(e)}
-                  options={
-                    langs?.items?.map((item) => ({value: item?.id, label: item?.name}))
-                  }
-                />
-              </>}
-              onConfirm={() => deleteAllMutation()}
-              okText="O'chirish"
-              okButtonProps={{type:"primary", danger: true}}
-              cancelText="Yopish"
-            >
-              <Button danger type='primary' loading={deleteloadingAllTest} >Fanning barcha testini tozalash</Button>
-            </Popconfirm> : ""
+            checkPermission("test_all-delete") ?
+              <Popconfirm
+                title="Ma’lumotni o’chirmoqchimisiz?"
+                description={<div>
+                  <label className='block'>Test tilini tanlang</label>
+                  <Select
+                    className='w-full z-40'
+                    value={selectedLangId}
+                    onChange={(e) => setselectedLangId(e)}
+                    options={
+                      langs?.items?.map((item) => ({ value: item?.id, label: item?.name }))
+                    }
+                  />
+                  <div className="mt-2"></div>
+                  <label className='block'>Imtihon turini tanlang</label>
+                  <Select
+                    className='w-full'
+                    value={selectedExamTypeId}
+                    onChange={(e) => setSelectedExamTypeId(e)}
+                    options={
+                      examTypes?.items?.map((item) => ({ value: item?.id, label: item?.name }))
+                    }
+                  />
+                </div>}
+                onConfirm={() => deleteAllMutation()}
+                okText="O'chirish"
+                okButtonProps={{ type: "primary", danger: true }}
+                cancelText="Yopish"
+              >
+                <Button danger type='primary' loading={deleteloadingAllTest} >Fanning barcha testini tozalash</Button>
+              </Popconfirm> : ""
           }
 
           {
@@ -153,7 +170,7 @@ const SubjectExamTest: React.FC = (): JSX.Element => {
               />
             </> : null
           }
-          
+
         </div>
         <Row gutter={[12, 12]} className='my-4'>
           {selectData?.map((e, i) => (
@@ -224,7 +241,7 @@ const SubjectExamTest: React.FC = (): JSX.Element => {
         <Form
           form={form}
           layout="vertical"
-          initialValues={{lang_id: 1}}
+          initialValues={{ lang_id: 1 }}
           onFinish={(vals: any) => importExamTest({ exam_type_id: vals?.exam_type_id, lang_id: vals?.lang_id, file: test_file })}
           className='my-4'
         >
