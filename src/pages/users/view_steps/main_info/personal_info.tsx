@@ -1,4 +1,4 @@
-import { Avatar, Button, Divider, Form, FormInstance, Image, Modal } from "antd";
+import { Avatar, Button, Divider, Form, FormInstance, Image, Modal, Tag } from "antd";
 import { FILE_URL } from "config/utils";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -25,7 +25,7 @@ const MainInfoUserView = ({
   useEffect(() => {
     if (saveMutation.isSuccess) setIsModalOpen(false);
   }, [saveMutation.isSuccess]);
-  
+
   return (
     <>
       <div className="e-card-shadow bg-white rounded-2xl">
@@ -61,7 +61,11 @@ const MainInfoUserView = ({
               <h4 className="text-[20px] font-semibold text-[#3D434A]">
                 {renderFullName(data?.profile)}
               </h4>
-              <p>Talaba</p>
+              <div className="d-f flex-wrap mt-1">
+                {
+                  data?.role?.map((role: string) => <Tag>{role}</Tag>)
+                }
+              </div>
             </div>
           </div>
           <ViewInput

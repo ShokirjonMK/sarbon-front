@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.b1095c5b.css",
-    "main.js": "/static/js/main.b210c6da.js",
+    "main.css": "/static/css/main.988a4c90.css",
+    "main.js": "/static/js/main.203ba628.js",
     "static/js/787.81fdb1ca.chunk.js": "/static/js/787.81fdb1ca.chunk.js",
     "static/media/login-bg.jpg": "/static/media/login-bg.ddf61fa14a1040e26481.jpg",
     "static/media/sarbon_wh_logo.svg": "/static/media/sarbon_wh_logo.adc4c7a3a0c7f05dbbf1d7fbd7b16d61.svg",
@@ -10,12 +10,12 @@
     "index.html": "/index.html",
     "static/media/user.svg": "/static/media/user.ef0521b523f2206eb6a0156180891fba.svg",
     "static/media/sarbon_icon_wt.svg": "/static/media/sarbon_icon_wt.c77df45aa932a4b1cb8ef50af1e90dbe.svg",
-    "main.b1095c5b.css.map": "/static/css/main.b1095c5b.css.map",
-    "main.b210c6da.js.map": "/static/js/main.b210c6da.js.map",
+    "main.988a4c90.css.map": "/static/css/main.988a4c90.css.map",
+    "main.203ba628.js.map": "/static/js/main.203ba628.js.map",
     "787.81fdb1ca.chunk.js.map": "/static/js/787.81fdb1ca.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.b1095c5b.css",
-    "static/js/main.b210c6da.js"
+    "static/css/main.988a4c90.css",
+    "static/js/main.203ba628.js"
   ]
 }
