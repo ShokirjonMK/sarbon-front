@@ -35,7 +35,7 @@ interface RowProps extends React.HTMLAttributes<HTMLTableRowElement> {
 }
 
 const Row = ({ children, ...props }: RowProps) => {
-  const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition, isDragging,} = useSortable({ id: props["data-row-key"],});
+  const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition, isDragging, } = useSortable({ id: props["data-row-key"], });
 
   const style: React.CSSProperties = {
     ...props.style,
@@ -86,7 +86,7 @@ const SubjectTopic: React.FC = (): JSX.Element => {
   const user = useAppSelector(s => s.auth.user);
 
   console.log("user", user);
-  
+
 
   const { data, refetch, isFetching } = useGetAllData<ISubjectTopic>({
     queryKey: ["subject-topics", urlValue.perPage, urlValue.currentPage, searchVal, lang_id, category],
@@ -214,7 +214,12 @@ const SubjectTopic: React.FC = (): JSX.Element => {
         {
           title: <span></span>,
           dataIndex: 'subject_id',
-          render: (i, e) => checkPermission("subject-content_index") ? user?.active_role === "teacher" ? <Link to={`/subjects/${e?.subject_id}/topics/${e?.id}/contents/${teacher_id}`}>{t("Content")}</Link> : <Link to={`/subjects/${e?.subject_id}/topics/${e?.id}/teachers`}>{t("Content")}</Link> : null
+          render: (i, e) => checkPermission("subject-content_index") ?
+            // user?.active_role === "teacher" ?
+            <Link to={`/subjects/${e?.subject_id}/topics/${e?.id}/contents`}>{t("Content")}</Link>
+            // <Link to={`/subjects/${e?.subject_id}/topics/${e?.id}/contents/${teacher_id}`}>{t("Content")}</Link>
+            // : <Link to={`/subjects/${e?.subject_id}/topics/${e?.id}/teachers`}>{t("Content")}</Link>
+            : null
         }
       ]
     },
@@ -331,12 +336,12 @@ const SubjectTopic: React.FC = (): JSX.Element => {
         className="mb-5"
         buttons={
           checkPermission("subject-topic_create") ?
-          <>
-            <input type="file" accept=".xls,.xlsx" onChange={(e) => importTopic({id: subject_id ?? "", file: e?.target?.files ? e.target.files[0] ?? "" : ""})} className="hidden" style={{ display: "none" }} id="excel_import" />
-            <label htmlFor="excel_import" className="d-f cursor-pointer text-[#52C41A] rounded-lg border border-solid border-[#52C41A] px-3 py-1" >
-            <ArrowUploadFilled fontSize={16} color="#52C41A" />&nbsp;&nbsp;Import excel
-            </label>
-          </> : ""
+            <>
+              <input type="file" accept=".xls,.xlsx" onChange={(e) => importTopic({ id: subject_id ?? "", file: e?.target?.files ? e.target.files[0] ?? "" : "" })} className="hidden" style={{ display: "none" }} id="excel_import" />
+              <label htmlFor="excel_import" className="d-f cursor-pointer text-[#52C41A] rounded-lg border border-solid border-[#52C41A] px-3 py-1" >
+                <ArrowUploadFilled fontSize={16} color="#52C41A" />&nbsp;&nbsp;Import excel
+              </label>
+            </> : ""
         }
       />
 

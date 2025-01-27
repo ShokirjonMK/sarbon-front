@@ -978,6 +978,16 @@ export const prived_routes: Array<TypeRoutes> = [
           isMenu: false,
         },
       },
+      {
+        name: "Subject content",
+        path: "/subjects/:subject_id/topics/:topic_id/contents",
+        component: SubjectContent,
+        config: {
+          permission: "subject-content_index",
+          structure: "layout",
+          isMenu: false,
+        },
+      },
 
       {
         name: "Subject content teacher",
@@ -1259,7 +1269,7 @@ export const prived_routes: Array<TypeRoutes> = [
           isMenu: true,
         }
       },
-      
+
       //student mark
       {
         name: "Marks",
@@ -1449,7 +1459,7 @@ export const prived_routes: Array<TypeRoutes> = [
       },
     ]
   },
-  
+
   // imtihonlar
   {
     name: "Exams",
