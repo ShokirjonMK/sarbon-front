@@ -22,6 +22,6 @@ jobs:
         username: ${{ secrets.SERVER_USERNAME }}
         password: ${{ secrets.SERVER_PASSWORD }}
         script: |
-          cd /home/apps/sarbon-front/
+          cd /home/dev-1/apps/sarbon/sarbon-front/
           git reset --hard
           git pull origin main
