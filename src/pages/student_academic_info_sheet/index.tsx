@@ -317,7 +317,7 @@ const StudentAcademicInfo = () => {
                             <strong>{data?.data?.eduPlan?.faculty?.name} {data?.data?.eduPlan?.faculty?.id === 6 || data?.data?.eduPlan?.faculty?.id === 5 ? "bo'lim boshlig'i" : "fakultet dekani"} </strong>
                         </div>
                         <div style={{ textAlign: "left" }}>
-                            <strong>___________  M.D.Vapayev </strong><br /><br />
+                            <strong>___________  I.I. SHAHRIYOROV </strong><br /><br />
                             <strong>___________ {data?.data?.eduPlan?.faculty?.leader?.first_name[0]}.{data?.data?.eduPlan?.faculty?.leader?.middle_name[0]}.{data?.data?.eduPlan?.faculty?.leader?.last_name}</strong>
                         </div>
                         <div style={{ textAlign: "right", marginLeft: "auto" }}>
