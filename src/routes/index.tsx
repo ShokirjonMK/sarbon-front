@@ -162,6 +162,7 @@ import TimeTableView from "pages/time-table/crud/view";
 import ControlExam from "pages/control_exam";
 import NewExamControlUpdate from "pages/control_exam/crud/update";
 import NewControlExamView from "pages/control_exam/crud/view";
+import StudentAcademicInfo from "pages/student_academic_info_sheet";
 
 export const public_routes: Array<TypeRoutes> = [
   {
@@ -776,6 +777,16 @@ export const prived_routes: Array<TypeRoutes> = [
         name: "Student study sheet",
         path: "students/:student_id/student-study-sheet",
         component: StudentStudySheet,
+        config: {
+          permission: "student_view",
+          structure: "layout",
+          isMenu: false,
+        },
+      },
+      {
+        name: "Student study sheet",
+        path: "students/:student_id/student-academic-info-sheet",
+        component: StudentAcademicInfo,
         config: {
           permission: "student_view",
           structure: "layout",

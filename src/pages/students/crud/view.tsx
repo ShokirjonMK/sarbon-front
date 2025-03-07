@@ -98,11 +98,13 @@ const ViewStudent = () => {
     }
   })
 
-  useBreadCrumb({pageTitle: "Student view", breadcrumb: [
-    {name: "Home", path: '/'},
-    {name: "Students", path: '/students'},
-    {name: renderFullName(data?.data?.profile), path: '/students'},
-  ]})
+  useBreadCrumb({
+    pageTitle: "Student view", breadcrumb: [
+      { name: "Home", path: '/' },
+      { name: "Students", path: '/students' },
+      { name: renderFullName(data?.data?.profile), path: '/students' },
+    ]
+  })
 
   const saveMutation = useMutation({
     mutationFn: (data) => submitData(user_id, data),
@@ -131,8 +133,14 @@ const ViewStudent = () => {
           <div className="lg:col-span-8 col-span-12">
             <div className="e-card-shadow bg-white rounded-2xl">
               <div className="px-6 py-4 flex justify-between items-center">
-                <h3 className="text-[20px] font-semibold" style={{letterSpacing: '0.6px'}}>{t("Identity document")}</h3>
+                <h3 className="text-[20px] font-semibold" style={{ letterSpacing: '0.6px' }}>{t("Identity document")}</h3>
                 <div className="d-f">
+                  {
+                    checkPermission("student-semestr-subject_index") ?
+                      <Link to={`/students/${user_id}/student-academic-info-sheet?edu_plan_id=${data?.data?.edu_plan_id}`}>
+                        <Button className="me-2" >{t("Academic reference")}</Button>
+                      </Link> : null
+                  }
                   {true ? <Link to={`/students/${user_id}/student-study-sheet?edu_plan_id=${data?.data?.edu_plan_id}`}><Button className="me-2" onClick={() => { navigate(`/students/${user_id}/student-study-sheet?edu_plan_id=${data?.data?.edu_plan_id}`) }} >{t("Study sheet")}</Button></Link> : null}
                   {checkPermission("student-mark_index") ? <Link to={`/students/${user_id}/${data?.data?.edu_plan_id}/mark`}><Button className="me-2" onClick={() => { navigate(`/students/${user_id}/${data?.data?.edu_plan_id}/mark`) }} >{t("Grades")}</Button></Link> : null}
                   {checkPermission("student-attend_index") ? <Link to={`/students/${user_id}/attends`}><Button className="me-2" onClick={() => { navigate(`/students/${user_id}/attends`) }} >{t("Attendance")}</Button></Link> : null}

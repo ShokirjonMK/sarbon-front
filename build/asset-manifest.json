@@ -1,21 +1,22 @@
 {
   "files": {
-    "main.css": "/static/css/main.8795678f.css",
-    "main.js": "/static/js/main.e277ae78.js",
+    "main.css": "/static/css/main.4dff9071.css",
+    "main.js": "/static/js/main.686601ae.js",
     "static/js/787.81fdb1ca.chunk.js": "/static/js/787.81fdb1ca.chunk.js",
     "static/media/login-bg.jpg": "/static/media/login-bg.ddf61fa14a1040e26481.jpg",
+    "static/media/logo-academic-sheet.png": "/static/media/logo-academic-sheet.c337ceff911b57be506d.png",
     "static/media/sarbon_wh_logo.svg": "/static/media/sarbon_wh_logo.adc4c7a3a0c7f05dbbf1d7fbd7b16d61.svg",
     "static/media/logo-sarbon.svg": "/static/media/logo-sarbon.c35b14e2189ac877005998083c4a11d6.svg",
     "static/media/no_data.svg": "/static/media/no_data.856da9b6768ad54f17722eca5d3c5d1d.svg",
     "index.html": "/index.html",
     "static/media/user.svg": "/static/media/user.ef0521b523f2206eb6a0156180891fba.svg",
     "static/media/sarbon_icon_wt.svg": "/static/media/sarbon_icon_wt.c77df45aa932a4b1cb8ef50af1e90dbe.svg",
-    "main.8795678f.css.map": "/static/css/main.8795678f.css.map",
-    "main.e277ae78.js.map": "/static/js/main.e277ae78.js.map",
+    "main.4dff9071.css.map": "/static/css/main.4dff9071.css.map",
+    "main.686601ae.js.map": "/static/js/main.686601ae.js.map",
     "787.81fdb1ca.chunk.js.map": "/static/js/787.81fdb1ca.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.8795678f.css",
-    "static/js/main.e277ae78.js"
+    "static/css/main.4dff9071.css",
+    "static/js/main.686601ae.js"
   ]
 }

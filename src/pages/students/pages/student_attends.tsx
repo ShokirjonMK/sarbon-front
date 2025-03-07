@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Drawer, Tag } from 'antd';
+import { Drawer, Segmented, Tag } from 'antd';
 import Table, { ColumnsType } from 'antd/es/table';
 import HeaderExtraLayout from 'components/HeaderPage/headerExtraLayout';
 import { TitleModal } from 'components/Titles';
@@ -9,6 +9,7 @@ import { IAttend } from 'models/student';
 import { useTranslation } from 'react-i18next';
 import { IoClose } from 'react-icons/io5';
 import { useParams } from 'react-router-dom';
+import useUrlQueryParams from 'hooks/useUrlQueryParams';
 
 type TypeSubjectAttend = {
   subject_id: number
@@ -23,6 +24,7 @@ const StudentAttends: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const { student_id } = useParams();
   const [acttiveSubject, setActtiveSubject] = useState<number>()
+  const { urlValue, writeToUrl } = useUrlQueryParams({});
 
   // const { data, isFetching } = useGetAllData<IAttend>({
   //   queryKey: ["student-attends", student_id],
@@ -33,14 +35,34 @@ const StudentAttends: React.FC = (): JSX.Element => {
   //   }
   // });
 
+  const { data: studentGroups, isLoading } = useGetAllData({
+    queryKey: ["student-groups", student_id],
+    url: "student-groups",
+    urlParams: {
+      "per-page": 0,
+      filter: JSON.stringify({ student_id: student_id }),
+    },
+    options: {
+      refetchOnWindowFocus: false,
+      retry: 0,
+      onSuccess(data) {
+        const lastSem = data?.items?.sort((a: any, b: any) => a?.semestr_id - b?.semestr_id)[data?.items?.length - 1]
+        writeToUrl({ name: "semestr_id", value: lastSem?.semestr_id })
+      },
+    }
+  })
+
 
 
   const { data, isFetching } = useGetAllData<IAttend>({
-    queryKey: ["timetable-attends", student_id],
+    queryKey: ["timetable-attends", student_id, urlValue.filter?.semestr_id],
     url: "/timetable-attends?expand=timeTableDate.para,timeTableDate.week,subjectCategory,subject,student,student.profile",
     urlParams: {
       "per-page": 0,
-      filter: { student_id }
+      filter: { student_id, semestr_id: urlValue.filter?.semestr_id }
+    },
+    options: {
+      enabled: !!urlValue.filter?.semestr_id
     }
   });
 
@@ -49,10 +71,10 @@ const StudentAttends: React.FC = (): JSX.Element => {
 
     data?.items?.forEach(e => {
       const i = attends?.findIndex(a => a?.subject_id === e?.subject?.id)
-      if(attends[i]){
+      if (attends[i]) {
         attends[i].attends.push(e);
         attends[i].count++;
-        if(e?.reason) attends[i].cause++;
+        if (e?.reason) attends[i].cause++;
         else attends[i].uncause++;
       } else {
         attends.push({
@@ -79,21 +101,21 @@ const StudentAttends: React.FC = (): JSX.Element => {
       },
       {
         title: t("Subject"),
-        render: (e) => <span className='text-blue-600 cursor-pointer' onClick={() => {setActtiveSubject(e?.subject_id)}} >{e?.subject_name}</span>,
+        render: (e) => <span className='text-blue-600 cursor-pointer' onClick={() => { setActtiveSubject(e?.subject_id) }} >{e?.subject_name}</span>,
       },
       {
         title: t("Sababli(soat)"),
-        render: (e) => <span style={{ opacity: e?.cause ? 1 : 0.25}} >{Number(e?.cause)*2}</span>,
+        render: (e) => <span style={{ opacity: e?.cause ? 1 : 0.25 }} >{Number(e?.cause) * 2}</span>,
         align: "center",
       },
       {
         title: t("Sababsiz(soat)"),
-        render: (e) => <span style={{ opacity: e?.uncause ? 1 : 0.25}} >{Number(e?.uncause)*2}</span>,
+        render: (e) => <span style={{ opacity: e?.uncause ? 1 : 0.25 }} >{Number(e?.uncause) * 2}</span>,
         align: "center",
       },
       {
         title: t("Umumiy(soat)"),
-        render: (e) => <span style={{ opacity: e?.count ? 1 : 0.25}} >{Number(e?.count)*2}</span>,
+        render: (e) => <span style={{ opacity: e?.count ? 1 : 0.25 }} >{Number(e?.count) * 2}</span>,
         align: "center",
       },
     ],
@@ -104,7 +126,7 @@ const StudentAttends: React.FC = (): JSX.Element => {
     () => [
       {
         title: t("Date"),
-        render: (_, e, i) => <span>{i+1}.&nbsp;{e?.date}&nbsp;&nbsp;<span className='text-black text-opacity-40' >({e?.subjectCategory?.name}) {e?.timeTableDate?.para?.name} / {e?.timeTableDate?.week?.name}</span></span>,
+        render: (_, e, i) => <span>{i + 1}.&nbsp;{e?.date}&nbsp;&nbsp;<span className='text-black text-opacity-40' >({e?.subjectCategory?.name}) {e?.timeTableDate?.para?.name} / {e?.timeTableDate?.week?.name}</span></span>,
       },
       {
         title: t("Status"),
@@ -127,6 +149,16 @@ const StudentAttends: React.FC = (): JSX.Element => {
         title={t(`Student attends`)}
         isBack={true}
       />
+
+      <div className="flex justify-end items-center p-4">
+        <span className="text-black text-opacity-40 text-sm font-normal leading-snug max-sm:hidden">Semestr:</span>&nbsp;&nbsp;
+        <Segmented
+          value={urlValue.filter?.semestr_id}
+          options={(studentGroups?.items ?? [])?.sort((a: any, b: any) => a?.semestr_id - b?.semestr_id)?.map(e => ({ label: e?.semestr_id, value: e?.semestr_id }))}
+          onChange={(e) => { writeToUrl({ name: "semestr_id", value: e }) }}
+        />
+      </div>
+
       <div className="px-6 pt-3">
         <Table
           columns={subject_columns}

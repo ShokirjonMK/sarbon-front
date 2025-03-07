@@ -52,7 +52,8 @@ export interface IStudent extends IBasic {
   edu_language_id: number | null;
   form_of_payment_id: number | null;
   status: number;
-  studentAttendReasonCount?: number | null | any
+  studentAttendReasonCount?: number | null | any;
+  qrAcademikReference?: string | null;
 
   father_fio?: string | null;
   father_number?: number | null;
@@ -85,7 +86,7 @@ export interface IStudent extends IBasic {
   eduYear?: IEduYear;
   group?: IGroup;
   eduForm?: IEduForm;
-  tutor?: IUsers
+  tutor?: IUsers;
   // studentAttends?: IStudentAttend[],
   // eduPlan?: IEducationPlan
   // eduType?: IEducationType
@@ -100,7 +101,7 @@ export interface IAttend extends IBasic {
   edu_semestr_id: number;
   edu_year_id: number;
   faculty_id: number;
-  reason: number | null
+  reason: number | null;
   id: number;
   order: number;
   status: number;
@@ -109,27 +110,27 @@ export interface IAttend extends IBasic {
   subject_id: number;
   time_table_id: number;
   type: number;
-  student?: any,
+  student?: any;
   timeTable?: ISimple;
   subject?: ISubject;
   subjectCategory?: ISubjectCategory;
-  timeTableDate?: any
+  timeTableDate?: any;
 }
 
 export interface IStudentAttendReason extends IBasic {
-  description: string
-  edu_plan_id: number
-  edu_year_id: number
-  end: number
-  faculty_id: number
-  file: string
-  id: number
-  is_confirmed: 0 | 1 | 2
-  order: number
-  start: number
-  status: number
-  student_id: number
-  subject_id:any
-  student: IStudent,
-  eduSemestr?: IEduSemestr
+  description: string;
+  edu_plan_id: number;
+  edu_year_id: number;
+  end: number;
+  faculty_id: number;
+  file: string;
+  id: number;
+  is_confirmed: 0 | 1 | 2;
+  order: number;
+  start: number;
+  status: number;
+  student_id: number;
+  subject_id: any;
+  student: IStudent;
+  eduSemestr?: IEduSemestr;
 }
